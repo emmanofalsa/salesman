@@ -41,20 +41,20 @@ dependencies:
   path_provider: ^2.0.2
   image_picker: ^0.8.3+3
   carousel_pro: ^1.0.0
-  sqflite: ^2.0.0+3
+  sqflite: ^2.0.0+4
   flutter_launcher_icons: ^0.9.1
   retry: ^3.1.0
   timezone: ^0.7.0
   # device_info: ^2.0.2
-  network_to_file_image: ^3.0.0
-  encrypt: ^5.0.0
+  network_to_file_image: ^3.0.3
+  encrypt: ^5.0.1
   # root_check: ^0.0.2+1
-  archive: ^3.1.2
+  archive: ^3.1.5
   flutter_phone_direct_caller: ^2.0.0
-  permission_handler: ^8.1.4+2
+  permission_handler: ^8.1.6
   package_info: ^2.0.2
   url_launcher: ^6.0.9
-  get: ^4.3.0
+  get: ^4.3.8
   avatar_view: ^1.0.1
   # image_picker: ^0.6.3+1
   # path_provider:
