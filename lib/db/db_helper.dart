@@ -12,7 +12,7 @@ import 'package:crypto/crypto.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._();
-  static Database _database;
+  static Database? _database;
   // static final _dbName = 'DISTAPPDB72.db'; //TEST VERSION
   static final _dbName = 'DISTAPPDBB67.db';
   // static final _dbName = 'DISTAPPDB9.db';
@@ -28,10 +28,10 @@ class DatabaseHelper {
   }
 
   Future<Database> get db async {
-    if (_database != null) return _database;
+    if (_database != null) return _database!;
 
     _database = await init();
-    return _database;
+    return _database!;
   }
 
   Future<Database> init() async {
@@ -1447,6 +1447,7 @@ class DatabaseHelper {
     double totDiscAmt = 0;
     double totAmt = 0.00;
     var client = await db;
+    var x;
 
     List<Map> res = await client.rawQuery(
         'SELECT * FROM tb_tran_line WHERE tran_no ="$tranNo" AND itm_code ="$itemCode" AND  uom = "$itemUom"',
@@ -1458,8 +1459,16 @@ class DatabaseHelper {
         totDiscAmt = (double.parse(element['discounted_amount'])) -
             (double.parse(element['discounted_amount']) /
                 double.parse(element['del_qty']));
-
-        return client.update(
+        // return client.update(
+        //     'tb_tran_line',
+        //     {
+        //       'del_qty': itemQty,
+        //       'tot_amt': totAmt,
+        //       'discounted_amount': totDiscAmt,
+        //     },
+        //     where: 'tran_no = ?  AND itm_code = ? AND uom = ?',
+        //     whereArgs: [tranNo, itemCode, itemUom]);
+        x = client.update(
             'tb_tran_line',
             {
               'del_qty': itemQty,
@@ -1468,6 +1477,7 @@ class DatabaseHelper {
             },
             where: 'tran_no = ?  AND itm_code = ? AND uom = ?',
             whereArgs: [tranNo, itemCode, itemUom]);
+        return x;
       });
     }
   }
@@ -1478,6 +1488,7 @@ class DatabaseHelper {
     double totDiscAmt = 0;
     double totAmt = 0.00;
     var client = await db;
+    var x;
 
     List<Map> res = await client.rawQuery(
         'SELECT * FROM tb_tran_line WHERE tran_no ="$tranNo" AND itm_code ="$itemCode" AND  uom = "$itemUom"',
@@ -1491,7 +1502,16 @@ class DatabaseHelper {
             (double.parse(element['discounted_amount']) /
                 double.parse(element['del_qty']));
 
-        return client.update(
+        // return client.update(
+        //     'tb_tran_line',
+        //     {
+        //       'del_qty': qty,
+        //       'tot_amt': totAmt,
+        //       'discounted_amount': totDiscAmt,
+        //     },
+        //     where: 'tran_no = ?  AND itm_code = ? AND uom = ?',
+        //     whereArgs: [tranNo, itemCode, itemUom]);
+        x = client.update(
             'tb_tran_line',
             {
               'del_qty': qty,
@@ -1500,13 +1520,14 @@ class DatabaseHelper {
             },
             where: 'tran_no = ?  AND itm_code = ? AND uom = ?',
             whereArgs: [tranNo, itemCode, itemUom]);
+        return x;
       });
     }
   }
 
   Future deleteQtytoLog(tranNo, itemCode, itemUom, itemQty) async {
     String qty = '';
-
+    var x;
     var client = await db;
 
     List<Map> res = await client.rawQuery(
@@ -1516,17 +1537,30 @@ class DatabaseHelper {
       res.forEach((element) {
         if (int.parse(element['qty']) - int.parse(itemQty) > 0) {
           qty = (int.parse(element['qty']) - int.parse(itemQty)).toString();
-          return client.update(
+
+          // return client.update(
+          //     'tb_unserved_items',
+          //     {
+          //       'qty': qty,
+          //     },
+          //     where: 'tran_no = ? AND itm_code = ? AND uom = ?',
+          //     whereArgs: [tranNo, itemCode, itemUom]);
+          x = client.update(
               'tb_unserved_items',
               {
                 'qty': qty,
               },
               where: 'tran_no = ? AND itm_code = ? AND uom = ?',
               whereArgs: [tranNo, itemCode, itemUom]);
+          return x;
         } else {
-          return client.rawQuery(
+          // return client.rawQuery(
+          //     'DELETE FROM tb_unserved_items WHERE tran_no ="$tranNo" AND itm_code ="$itemCode" AND  uom = "$itemUom"',
+          //     null);
+          x = client.rawQuery(
               'DELETE FROM tb_unserved_items WHERE tran_no ="$tranNo" AND itm_code ="$itemCode" AND  uom = "$itemUom"',
               null);
+          return x;
         }
       });
     }
