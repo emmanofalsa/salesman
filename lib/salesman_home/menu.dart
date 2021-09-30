@@ -45,7 +45,7 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
 
   final db = DatabaseHelper();
 
-  Timer timer2;
+  Timer? timer2;
 
   int _currentIndex = 0;
   final List<Widget> _children = [
@@ -118,7 +118,7 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
           '-' +
           _deviceData['androidId'].toString();
       var resp =
-          await db.checkLoginDevice(UserData.id, GlobalVariables.deviceData);
+          await db.checkLoginDevice(UserData.id!, GlobalVariables.deviceData!);
       // print(GlobalVariables.deviceData);
       if (resp.isEmpty && !stopTimer) {
         stopTimer = true;

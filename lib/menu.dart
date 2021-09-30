@@ -43,7 +43,7 @@ class _MenuState extends State<Menu> {
 
   bool viewPol = true;
 
-  Timer timer;
+  Timer? timer;
 
   final List<Widget> _children = [
     Home(),

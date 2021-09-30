@@ -29,7 +29,7 @@ class _ForgetPassState extends State<ForgetPass> {
   final yellowColor = Colors.amber;
   final blueColor = Colors.blue;
 
-  Timer timer;
+  Timer? timer;
 
   // static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
 
@@ -42,9 +42,9 @@ class _ForgetPassState extends State<ForgetPass> {
   final passwordController = TextEditingController();
   bool viewSpinkit = true;
   // bool _obscureText = true;
-  String message = '';
-  String mobile;
-  String usercode;
+  String? message = '';
+  String? mobile;
+  String? usercode;
 
   @override
   void initState() {
@@ -206,7 +206,7 @@ class _ForgetPassState extends State<ForgetPass> {
           ElevatedButton(
             style: raisedButtonLoginStyle,
             onPressed: () async {
-              if (_formKey.currentState.validate()) {
+              if (_formKey.currentState!.validate()) {
                 var username = usernameController.text;
 
                 if (!NetworkData.connected) {
@@ -214,21 +214,21 @@ class _ForgetPassState extends State<ForgetPass> {
                     showGlobalSnackbar(
                         'Connectivity',
                         'Please connect to internet.',
-                        Colors.red[900],
+                        Colors.red.shade900,
                         Colors.white);
                   }
                   if (NetworkData.errorNo == '2') {
                     showGlobalSnackbar(
                         'Connectivity',
                         'API Problem. Please contact admin.',
-                        Colors.red[900],
+                        Colors.red.shade900,
                         Colors.white);
                   }
                   if (NetworkData.errorNo == '3') {
                     showGlobalSnackbar(
                         'Connectivity',
                         'Cannot connect to server. Try again later.',
-                        Colors.red[900],
+                        Colors.red.shade900,
                         Colors.white);
                   }
                 } else {
@@ -255,12 +255,13 @@ class _ForgetPassState extends State<ForgetPass> {
                       usercode = rsp['user_code'];
                       var gstr = generateString();
                       print(gstr);
-                      var resp = await db.addSmsCode(username, gstr, mobile);
+                      var resp = await db.addSmsCode(
+                          username, gstr, mobile.toString());
 
                       if (resp != null) {
                         GlobalVariables.fpassUsername = username;
-                        GlobalVariables.fpassmobile = mobile;
-                        GlobalVariables.fpassusercode = usercode;
+                        GlobalVariables.fpassmobile = mobile.toString();
+                        GlobalVariables.fpassusercode = usercode.toString();
                         Navigator.pop(context);
                         showDialog(
                             barrierDismissible: false,
@@ -287,13 +288,13 @@ class _ForgetPassState extends State<ForgetPass> {
                       usercode = rsp['user_code'];
                       var gstr = generateString();
                       print(gstr);
-                      var resp =
-                          await db.addHepeSmsCode(username, gstr, mobile);
+                      var resp = await db.addHepeSmsCode(
+                          username, gstr, mobile.toString());
 
                       if (resp != null) {
                         GlobalVariables.fpassUsername = username;
-                        GlobalVariables.fpassmobile = mobile;
-                        GlobalVariables.fpassusercode = usercode;
+                        GlobalVariables.fpassmobile = mobile.toString();
+                        GlobalVariables.fpassusercode = usercode.toString();
                         Navigator.pop(context);
                         showDialog(
                             barrierDismissible: false,
@@ -322,7 +323,7 @@ class _ForgetPassState extends State<ForgetPass> {
           SizedBox(
             height: 60,
           ),
-          Text(message),
+          Text(message!),
         ],
       ),
     );
@@ -351,7 +352,7 @@ class _ForgetPassState extends State<ForgetPass> {
                 hintText: 'Enter username',
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Username cannot be empty';
                 }
                 return null;
@@ -366,7 +367,7 @@ class _ForgetPassState extends State<ForgetPass> {
 }
 
 class LoadingSpinkit extends StatefulWidget {
-  final String description;
+  final String? description;
 
   LoadingSpinkit({this.description});
   @override
@@ -408,7 +409,7 @@ class _LoadingSpinkitState extends State<LoadingSpinkit> {
               children: <Widget>[
                 Text(
                   // 'Checking username...',
-                  widget.description,
+                  widget.description.toString(),
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,
@@ -557,7 +558,7 @@ class _InputSmsCodeState extends State<InputSmsCode> {
             // hintText: 'Username',
           ),
           validator: (value) {
-            if (value.isEmpty) {
+            if (value!.isEmpty) {
               return 'SMS Code cannot be empty';
             }
             if (value.length != 6) {
@@ -577,27 +578,27 @@ class _InputSmsCodeState extends State<InputSmsCode> {
       children: [
         InkWell(
           onTap: () async {
-            if (_formKey.currentState.validate()) {
+            if (_formKey.currentState!.validate()) {
               if (!NetworkData.connected) {
                 if (NetworkData.errorNo == '1') {
                   showGlobalSnackbar(
                       'Connectivity',
                       'Please connect to internet.',
-                      Colors.red[900],
+                      Colors.red.shade900,
                       Colors.white);
                 }
                 if (NetworkData.errorNo == '2') {
                   showGlobalSnackbar(
                       'Connectivity',
                       'API Problem. Please contact admin.',
-                      Colors.red[900],
+                      Colors.red.shade900,
                       Colors.white);
                 }
                 if (NetworkData.errorNo == '3') {
                   showGlobalSnackbar(
                       'Connectivity',
                       'Cannot connect to server. Try again later.',
-                      Colors.red[900],
+                      Colors.red.shade900,
                       Colors.white);
                 }
               } else {
@@ -608,7 +609,7 @@ class _InputSmsCodeState extends State<InputSmsCode> {
                         ));
                 if (ForgetPassData.type == 'Salesman') {
                   var scode = await db.checkSmsCode(
-                      GlobalVariables.fpassUsername, smscodeController.text);
+                      GlobalVariables.fpassUsername!, smscodeController.text);
                   if (scode == null) {
                     Navigator.pop(context);
                     print('NOT FOUND!');
@@ -624,7 +625,7 @@ class _InputSmsCodeState extends State<InputSmsCode> {
                 }
                 if (ForgetPassData.type == 'Hepe') {
                   var scode = await db.checkHepeSmsCode(
-                      GlobalVariables.fpassUsername, smscodeController.text);
+                      GlobalVariables.fpassUsername!, smscodeController.text);
                   if (scode == null) {
                     Navigator.pop(context);
                     print('NOT FOUND!');
@@ -673,21 +674,21 @@ class _InputSmsCodeState extends State<InputSmsCode> {
                         showGlobalSnackbar(
                             'Connectivity',
                             'Please connect to internet.',
-                            Colors.red[900],
+                            Colors.red.shade900,
                             Colors.white);
                       }
                       if (NetworkData.errorNo == '2') {
                         showGlobalSnackbar(
                             'Connectivity',
                             'API Problem. Please contact admin.',
-                            Colors.red[900],
+                            Colors.red.shade900,
                             Colors.white);
                       }
                       if (NetworkData.errorNo == '3') {
                         showGlobalSnackbar(
                             'Connectivity',
                             'Cannot connect to server. Try again later.',
-                            Colors.red[900],
+                            Colors.red.shade900,
                             Colors.white);
                       }
                     } else {
@@ -699,9 +700,9 @@ class _InputSmsCodeState extends State<InputSmsCode> {
                       var gstr = generateString();
                       print(gstr);
                       var resp = await db.addSmsCode(
-                          GlobalVariables.fpassUsername,
+                          GlobalVariables.fpassUsername!,
                           gstr,
-                          GlobalVariables.fpassmobile);
+                          GlobalVariables.fpassmobile!);
                       if (resp != null) {
                         Navigator.pop(context);
                       }

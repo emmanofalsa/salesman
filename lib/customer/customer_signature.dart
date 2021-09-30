@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () async {
                     if (_controller.isNotEmpty) {
                       var data = await _controller.toPngBytes();
-                      var signData = base64.encode(data);
+                      var signData = base64.encode(data!);
                       OrderData.signature = signData;
                       final action = await WarningDialogs.openDialog(
                         context,

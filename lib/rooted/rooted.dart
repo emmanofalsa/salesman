@@ -18,7 +18,7 @@ class RootedScreen extends StatefulWidget {
 class _RootedScreenState extends State<RootedScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  Timer timer;
+  Timer? timer;
 
   String notice =
       'We are sorry but due to security concerns. This app cannot be used on rooted devices. Application will now exit.';
@@ -31,7 +31,7 @@ class _RootedScreenState extends State<RootedScreen> {
 
   @override
   void dispose() {
-    timer.cancel();
+    timer!.cancel();
     super.dispose();
   }
 

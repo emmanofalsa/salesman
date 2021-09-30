@@ -13,12 +13,12 @@ class CaptureImage extends StatefulWidget {
 
 class _CaptureImageState extends State<CaptureImage> {
   static final String uploadEndpoint = UrlAddress.url + '/uploadchequeimg';
-  Future<File> file;
+  Future<File>? file;
   String status = "";
-  String base64Image;
-  File tmpFile;
+  String? base64Image;
+  File? tmpFile;
   String errMessage = 'Error Uploading Image';
-  String fileName;
+  String? fileName;
 
   chooseImage() async {
     // setState(() {
@@ -40,11 +40,11 @@ class _CaptureImageState extends State<CaptureImage> {
     final uri = Uri.parse(uploadEndpoint);
     var request = http.MultipartRequest('POST', uri);
     request.fields['name'] = fileName.toString();
-    var pic = await http.MultipartFile.fromPath('image', tmpFile.path);
+    var pic = await http.MultipartFile.fromPath('image', tmpFile!.path);
     request.files.add(pic);
     var response = await request.send();
     print(fileName);
-    print(tmpFile.path);
+    print(tmpFile!.path);
     if (response.statusCode == 200) {
       print('Image Upload');
       ChequeData.imgName = fileName.toString();
@@ -84,11 +84,11 @@ class _CaptureImageState extends State<CaptureImage> {
         if (snapshot.connectionState == ConnectionState.done &&
             null != snapshot.data) {
           tmpFile = snapshot.data;
-          base64Image = base64Encode(snapshot.data.readAsBytesSync());
-          fileName = tmpFile.path.split('/').last;
+          base64Image = base64Encode(snapshot.data!.readAsBytesSync());
+          fileName = tmpFile!.path.split('/').last;
           return Flexible(
             child: Image.file(
-              snapshot.data,
+              snapshot.data!,
               fit: BoxFit.fill,
             ),
           );

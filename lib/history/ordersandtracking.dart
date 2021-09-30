@@ -140,7 +140,7 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
         ChequeData.imgName = element['image'];
       });
     });
-    double num = double.parse(ChequeData.chequeAmt);
+    double num = double.parse(ChequeData.chequeAmt!);
     int peso = num.toInt();
     int cent = ((num - peso) * 100).toInt();
     if (cent <= 0) {
@@ -435,7 +435,7 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                     SizedBox(
                       height: 5,
                     ),
-                    buildListViewCont(),
+                    buildListViewCont()!,
                   ],
                 ),
               ),
@@ -588,7 +588,7 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                               children: <Widget>[
                                 SizedBox(height: 32),
                                 Text(
-                                  OrderData.trans,
+                                  OrderData.trans!,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontSize: 12,
@@ -598,7 +598,7 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                                   height: 5,
                                 ),
                                 Text(
-                                  OrderData.pmeth,
+                                  OrderData.pmeth!,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontSize: 12,
@@ -724,7 +724,7 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                                         child: ElevatedButton(
                                           style: raisedButtonStyleBlackOut,
                                           onPressed: () => {
-                                            if (OrderData.signature.isNotEmpty)
+                                            if (OrderData.signature!.isNotEmpty)
                                               {
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(
@@ -739,7 +739,7 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                                                                 child: Image.memory(
                                                                     base64Decode(
                                                                         OrderData
-                                                                            .signature)))),
+                                                                            .signature!)))),
                                                       );
                                                     },
                                                   ),
@@ -953,7 +953,7 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
     );
   }
 
-  Container buildListViewCont() {
+  Container? buildListViewCont() {
     if (remPressed == true) {
       if (viewRemSpinkit == true) {
         return Container(
@@ -3102,7 +3102,7 @@ class _OrderTrackingState extends State<OrderTracking> {
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text(
-            'Order # ' + OrderData.trans,
+            'Order # ' + OrderData.trans!,
             style: TextStyle(
               color: ColorsTheme.mainColor,
               fontSize: 14,
@@ -3145,7 +3145,7 @@ class _OrderTrackingState extends State<OrderTracking> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  OrderData.dateReq,
+                  OrderData.dateReq!,
                   style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[700],
@@ -3175,7 +3175,7 @@ class _OrderTrackingState extends State<OrderTracking> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      OrderData.dateReq,
+                      OrderData.dateReq!,
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[700],
@@ -3205,7 +3205,7 @@ class _OrderTrackingState extends State<OrderTracking> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      OrderData.dateApp,
+                      OrderData.dateApp!,
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[700],
@@ -3237,7 +3237,7 @@ class _OrderTrackingState extends State<OrderTracking> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      OrderData.dateReq,
+                      OrderData.dateReq!,
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[700],
@@ -3267,7 +3267,7 @@ class _OrderTrackingState extends State<OrderTracking> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      OrderData.dateApp,
+                      OrderData.dateApp!,
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[700],
@@ -3297,7 +3297,7 @@ class _OrderTrackingState extends State<OrderTracking> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      OrderData.dateDel,
+                      OrderData.dateDel!,
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[700],
@@ -3307,7 +3307,7 @@ class _OrderTrackingState extends State<OrderTracking> {
                       width: 20,
                     ),
                     Text(
-                      OrderData.status,
+                      OrderData.status!,
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[700],

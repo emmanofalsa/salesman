@@ -93,17 +93,17 @@ class ReceivedDialog extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width / 2 + 50,
                     child: Text(
-                      OrderData.name,
+                      OrderData.name!,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: Colors.grey[850]),
                     ),
                   ),
                   Text(
-                    CustomerData.district +
+                    CustomerData.district! +
                         ', ' +
-                        CustomerData.city +
+                        CustomerData.city! +
                         ', ' +
-                        CustomerData.province,
+                        CustomerData.province!,
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -143,7 +143,7 @@ class ReceivedDialog extends StatelessWidget {
                 children: [
                   Text('Payment Method',
                       style: TextStyle(color: Colors.grey[800])),
-                  Text(OrderData.pmtype,
+                  Text(OrderData.pmtype!,
                       style: TextStyle(color: Colors.grey, fontSize: 12)),
                 ],
               )),
@@ -161,7 +161,7 @@ class ReceivedDialog extends StatelessWidget {
           onTap: () {
             OrderData.returnOrder = false;
             OrderData.setSign = false;
-            if (OrderData.signature.isNotEmpty) {
+            if (OrderData.signature!.isNotEmpty) {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return ViewSignature();
               }));

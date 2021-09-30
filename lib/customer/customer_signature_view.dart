@@ -26,7 +26,7 @@ class _ViewSignatureState extends State<ViewSignature> {
             height: MediaQuery.of(context).size.height / 2,
             width: MediaQuery.of(context).size.width,
             color: Colors.grey[100],
-            child: Image.memory(base64Decode(OrderData.signature)),
+            child: Image.memory(base64Decode(OrderData.signature!)),
           ),
           Center(
             child: Container(

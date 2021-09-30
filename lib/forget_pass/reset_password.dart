@@ -42,7 +42,7 @@ class _ResetPassState extends State<ResetPass> {
   final yellowColor = Colors.amber;
   final blueColor = Colors.blue;
 
-  Timer timer;
+  Timer? timer;
 
   // static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   // Map<String, dynamic> _deviceData = <String, dynamic>{};
@@ -179,34 +179,34 @@ class _ResetPassState extends State<ResetPass> {
                   print(hasUppercase);
                 }
               });
-              if (_formKey.currentState.validate()) {
+              if (_formKey.currentState!.validate()) {
                 var npass = newPassController.text;
                 if (!NetworkData.connected) {
                   if (NetworkData.errorNo == '1') {
                     showGlobalSnackbar(
                         'Connectivity',
                         'Please connect to internet.',
-                        Colors.red[900],
+                        Colors.red.shade900,
                         Colors.white);
                   }
                   if (NetworkData.errorNo == '2') {
                     showGlobalSnackbar(
                         'Connectivity',
                         'API Problem. Please contact admin.',
-                        Colors.red[900],
+                        Colors.red.shade900,
                         Colors.white);
                   }
                   if (NetworkData.errorNo == '3') {
                     showGlobalSnackbar(
                         'Connectivity',
                         'Cannot connect to server. Try again later.',
-                        Colors.red[900],
+                        Colors.red.shade900,
                         Colors.white);
                   }
                 } else {
                   if (ForgetPassData.type == 'Salesman') {
                     var getP = await db.getSMPasswordHistory(
-                        GlobalVariables.fpassusercode, npass);
+                        GlobalVariables.fpassusercode!, npass);
                     pass = getP;
                     if (pass.isNotEmpty) {
                       showGlobalSnackbar(
@@ -221,7 +221,7 @@ class _ResetPassState extends State<ResetPass> {
                                 description: 'Resetting Password...',
                               ));
                       var cPass = await db.changeSalesmanPassword(
-                          GlobalVariables.fpassusercode, npass);
+                          GlobalVariables.fpassusercode!, npass);
                       if (cPass != 'failed') {
                         Navigator.pop(context);
                         await db.updateSalesmanPassword(
@@ -246,7 +246,7 @@ class _ResetPassState extends State<ResetPass> {
                   }
                   if (ForgetPassData.type == 'Hepe') {
                     var getP = await db.getHEPEPasswordHistory(
-                        GlobalVariables.fpassusercode, npass);
+                        GlobalVariables.fpassusercode!, npass);
                     pass = getP;
                     if (pass.isNotEmpty) {
                       showGlobalSnackbar(
@@ -261,7 +261,7 @@ class _ResetPassState extends State<ResetPass> {
                                 description: 'Resetting Password...',
                               ));
                       var cPass = await db.changeHepePassword(
-                          GlobalVariables.fpassusercode, npass);
+                          GlobalVariables.fpassusercode!, npass);
                       if (cPass != 'failed') {
                         Navigator.pop(context);
                         await db.updateHepePassword(
@@ -363,7 +363,7 @@ class _ResetPassState extends State<ResetPass> {
                 // ),
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Field cannot be empty';
                 }
                 passReq = isPasswordCompliant(value);
@@ -416,7 +416,7 @@ class _ResetPassState extends State<ResetPass> {
                 // ),
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Field cannot be empty';
                 }
                 if (value != newPassController.text) {
@@ -488,7 +488,7 @@ class _ResetPassState extends State<ResetPass> {
 }
 
 class LoadingSpinkit extends StatefulWidget {
-  final String description;
+  final String? description;
 
   LoadingSpinkit({this.description});
   @override
@@ -530,7 +530,7 @@ class _LoadingSpinkitState extends State<LoadingSpinkit> {
               children: <Widget>[
                 Text(
                   // 'Checking username...',
-                  widget.description,
+                  widget.description.toString(),
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,

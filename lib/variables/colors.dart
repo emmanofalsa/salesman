@@ -4,6 +4,6 @@ import 'package:flutter/material.dart';
 
 class ColorsTheme {
   static Color mainColor = Colors.deepOrange;
-  static Color mainColorLight = Colors.deepOrange[400];
-  static Color mainColorDark = Colors.deepOrange[700];
+  static Color mainColorLight = Colors.deepOrange.shade400;
+  static Color mainColorDark = Colors.deepOrange.shade700;
 }

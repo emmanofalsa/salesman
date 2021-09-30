@@ -18,7 +18,7 @@ class ChatBox extends StatefulWidget {
 }
 
 class _ChatBoxState extends State<ChatBox> {
-  Timer timer;
+  Timer? timer;
   bool viewspinkit = true;
   bool online = false;
   bool abletoSend = false;
@@ -128,7 +128,7 @@ class _ChatBoxState extends State<ChatBox> {
   _callNumber(String phone) async {
     // const number = '08592119XXXX'; //set the number here
     print(phone);
-    bool res = await FlutterPhoneDirectCaller.callNumber(phone);
+    bool? res = await FlutterPhoneDirectCaller.callNumber(phone);
     print(res);
   }
 
@@ -148,10 +148,10 @@ class _ChatBoxState extends State<ChatBox> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(child: Container(child: Text(ChatData.accountName))),
+              Expanded(child: Container(child: Text(ChatData.accountName!))),
               GestureDetector(
                 onTap: () {
-                  String _phone = '0' + ChatData.accountNum;
+                  String _phone = '0' + ChatData.accountNum!;
                   _callNumber(_phone);
                 },
                 child: Icon(

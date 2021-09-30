@@ -5,7 +5,7 @@ import 'package:salesman/variables/colors.dart';
 import 'package:salesman/widgets/elevated_button.dart';
 
 class ConfirmUpload extends StatefulWidget {
-  final String title, description1, description2;
+  final String? title, description1, description2;
   final db = SyncSalesman();
 
   ConfirmUpload({this.title, this.description1, this.description2});
@@ -67,7 +67,7 @@ class _ConfirmUploadState extends State<ConfirmUpload> {
                     ),
                     Container(
                       child: Text(
-                        widget.title,
+                        widget.title.toString(),
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                         textAlign: TextAlign.center,
@@ -80,12 +80,12 @@ class _ConfirmUploadState extends State<ConfirmUpload> {
                       child: Column(
                         children: [
                           Text(
-                            widget.description1,
+                            widget.description1.toString(),
                             style: TextStyle(fontSize: 12),
                             textAlign: TextAlign.justify,
                           ),
                           Text(
-                            widget.description2,
+                            widget.description2.toString(),
                             style: TextStyle(fontSize: 12),
                             textAlign: TextAlign.justify,
                           ),

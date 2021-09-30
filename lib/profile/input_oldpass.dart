@@ -95,7 +95,7 @@ class _InputPassDialogState extends State<InputPassDialog> {
                             // maxLines: 5,
                             // minLines: 3,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return 'Password cannot be empty';
                               }
                               return null;
@@ -119,7 +119,7 @@ class _InputPassDialogState extends State<InputPassDialog> {
                   ElevatedButton(
                     style: raisedButtonDialogStyle,
                     onPressed: () async {
-                      if (_formKey.currentState.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         var pass = oldPassController.text;
                         if (!NetworkData.connected) {
                           print('CLICKED!');
@@ -161,7 +161,7 @@ class _InputPassDialogState extends State<InputPassDialog> {
                                   ));
                           if (UserData.position == 'Salesman') {
                             var rsp =
-                                await db.loginUser(UserData.username, pass);
+                                await db.loginUser(UserData.username!, pass);
                             if (rsp == 'failed password') {
                               Navigator.pop(context);
                               print("Wrong Password!");
@@ -187,7 +187,7 @@ class _InputPassDialogState extends State<InputPassDialog> {
                           }
                           if (UserData.position == 'Jefe de Viaje') {
                             var rsp =
-                                await db.loginHepe(UserData.username, pass);
+                                await db.loginHepe(UserData.username!, pass);
                             if (rsp == 'failed password') {
                               Navigator.pop(context);
                               print("Wrong Password!");
@@ -245,7 +245,7 @@ class _InputPassDialogState extends State<InputPassDialog> {
 }
 
 class LoadingSpinkit extends StatefulWidget {
-  final String description;
+  final String? description;
 
   LoadingSpinkit({this.description});
   @override
@@ -287,7 +287,7 @@ class _LoadingSpinkitState extends State<LoadingSpinkit> {
               children: <Widget>[
                 Text(
                   // 'Checking username...',
-                  widget.description,
+                  widget.description.toString(),
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,

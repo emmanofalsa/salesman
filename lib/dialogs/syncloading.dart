@@ -9,7 +9,7 @@ class LoadingSpinkit extends StatefulWidget {
 
 class _LoadingSpinkitState extends State<LoadingSpinkit>
     with SingleTickerProviderStateMixin {
-  AnimationController animationController;
+  AnimationController? animationController;
 
   void initState() {
     super.initState();

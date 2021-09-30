@@ -25,7 +25,7 @@ class _ViewChequeImgState extends State<ViewChequeImg> {
             height: MediaQuery.of(context).size.height / 2,
             width: MediaQuery.of(context).size.width,
             color: Colors.grey[100],
-            child: Image.network(UrlAddress.chequeImg + ChequeData.imgName),
+            child: Image.network(UrlAddress.chequeImg + ChequeData.imgName!),
           ),
           Center(
             child: Container(

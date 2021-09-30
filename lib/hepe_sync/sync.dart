@@ -52,7 +52,7 @@ class _SyncHepeState extends State<SyncHepe> {
 
   final String today = DateFormat("yyyy-MM-dd").format(new DateTime.now());
 
-  Timer timer;
+  Timer? timer;
 
   final formatCurrencyTot =
       new NumberFormat.currency(locale: "en_US", symbol: "Php ");
@@ -405,7 +405,7 @@ class _SyncHepeState extends State<SyncHepe> {
       //           buttonText: 'Okay',
       //         ));
       showGlobalSnackbar('Connectivity', 'Please connect to internet.',
-          Colors.red[900], Colors.white);
+          Colors.red.shade900, Colors.white);
     }
   }
 
@@ -582,7 +582,7 @@ class _SyncHepeState extends State<SyncHepe> {
                                         showGlobalSnackbar(
                                             'Connectivity',
                                             'Please connect to internet.',
-                                            Colors.red[900],
+                                            Colors.red.shade900,
                                             Colors.white);
                                       }
                                     },
@@ -747,7 +747,7 @@ class _SyncHepeState extends State<SyncHepe> {
                                         showGlobalSnackbar(
                                             'Connectivity',
                                             'Please connect to internet.',
-                                            Colors.red[900],
+                                            Colors.red.shade900,
                                             Colors.white);
                                       }
                                     },
@@ -923,7 +923,7 @@ class _SyncHepeState extends State<SyncHepe> {
                                         showGlobalSnackbar(
                                             'Connectivity',
                                             'Please connect to internet.',
-                                            Colors.red[900],
+                                            Colors.red.shade900,
                                             Colors.white);
                                       }
                                     },
@@ -1085,7 +1085,7 @@ class _SyncHepeState extends State<SyncHepe> {
                                         showGlobalSnackbar(
                                             'Connectivity',
                                             'Please connect to internet.',
-                                            Colors.red[900],
+                                            Colors.red.shade900,
                                             Colors.white);
                                       }
                                     },
@@ -1241,7 +1241,7 @@ class _SyncHepeState extends State<SyncHepe> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: Colors.deepOrange[50],
-                border: Border.all(color: Colors.deepOrange[50]),
+                border: Border.all(color: Colors.deepOrange.shade50),
                 borderRadius: BorderRadius.circular(0)),
             child: SingleChildScrollView(
               child: Stack(
@@ -1386,19 +1386,19 @@ class _SyncHepeState extends State<SyncHepe> {
                                       DateFormat.yMMMd().add_jm().format(x);
                                   if (_updateLog[index]['tb_categ'] ==
                                       'Transactions') {
-                                    contColor = Colors.orange[300];
+                                    contColor = Colors.orange.shade300;
                                   }
                                   if (_updateLog[index]['tb_categ'] ==
                                       'Item Masterfile') {
-                                    contColor = Colors.blue[300];
+                                    contColor = Colors.blue.shade300;
                                   }
                                   if (_updateLog[index]['tb_categ'] ==
                                       'Customer Masterfile') {
-                                    contColor = Colors.green[300];
+                                    contColor = Colors.green.shade300;
                                   }
                                   if (_updateLog[index]['tb_categ'] ==
                                       'Salesman Masterfile') {
-                                    contColor = Colors.purple[300];
+                                    contColor = Colors.purple.shade300;
                                   }
                                   return Container(
                                     child: Column(
@@ -1834,7 +1834,7 @@ class _SyncHepeState extends State<SyncHepe> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                NetworkData.errorMsg,
+                NetworkData.errorMsg!,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
@@ -1871,7 +1871,7 @@ class _SyncHepeState extends State<SyncHepe> {
 }
 
 class ConfirmDialog extends StatefulWidget {
-  final String title, description, buttonText;
+  final String? title, description, buttonText;
 
   ConfirmDialog({this.title, this.description, this.buttonText});
 
@@ -2068,8 +2068,9 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
   Future<String> networkImageToBase64(String imageUrl) async {
     var imgUri = Uri.parse(imageUrl);
     http.Response response = await http.get(imgUri);
-    final bytes = response?.bodyBytes;
-    return (bytes != null ? base64Encode(bytes) : null);
+    final bytes = response.bodyBytes;
+    // return (bytes != null ? base64Encode(bytes) : null);
+    return (base64Encode(bytes));
   }
 
   updateCustomer() async {
@@ -2219,7 +2220,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
                     ),
                     Container(
                       child: Text(
-                        widget.title,
+                        widget.title.toString(),
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                         textAlign: TextAlign.center,
@@ -2230,7 +2231,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
                     ),
                     Container(
                       child: Text(
-                        widget.description,
+                        widget.description.toString(),
                         style: TextStyle(fontSize: 12),
                         textAlign: TextAlign.center,
                       ),
@@ -2267,7 +2268,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
                         }
                       },
                       child: Text(
-                        widget.buttonText,
+                        widget.buttonText.toString(),
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

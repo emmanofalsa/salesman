@@ -23,7 +23,7 @@ class _AddDialogState extends State<AddDialog> {
   TextEditingController qtyController = TextEditingController()..text = '1';
 
   // String _qtyController = "";
-  String imgPath;
+  String? imgPath;
   bool noImage = true;
   bool viewSpinkit = true;
 
@@ -49,7 +49,7 @@ class _AddDialogState extends State<AddDialog> {
       _setlist.forEach((element) {
         CartData.itmAmt = (element['list_price_wtax']);
         CartData.itmTotal =
-            (double.parse(CartData.itmAmt) * double.parse(CartData.itmQty))
+            (double.parse(CartData.itmAmt!) * double.parse(CartData.itmQty!))
                 .toString();
         CartData.imgpath = (element['image']);
         CartData.itmDesc = (element['product_name']);
@@ -82,10 +82,10 @@ class _AddDialogState extends State<AddDialog> {
 
   totalchanged() {
     CartData.totalAmount =
-        (double.parse(CartData.totalAmount) + double.parse(CartData.itmTotal))
+        (double.parse(CartData.totalAmount) + double.parse(CartData.itmTotal!))
             .toStringAsFixed(2);
     CartData.itmNo =
-        (int.parse(CartData.itmNo) + int.parse(CartData.itmQty)).toString();
+        (int.parse(CartData.itmNo) + int.parse(CartData.itmQty!)).toString();
   }
 
   @override
@@ -168,7 +168,7 @@ class _AddDialogState extends State<AddDialog> {
                           margin: EdgeInsets.only(left: 10, right: 10),
                           width: MediaQuery.of(context).size.width - 100,
                           child: Text(
-                            CartData.itmDesc,
+                            CartData.itmDesc!,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -190,7 +190,7 @@ class _AddDialogState extends State<AddDialog> {
                             children: <Widget>[
                               Text(
                                 formatCurrencyAmt
-                                    .format(double.parse(CartData.itmAmt)),
+                                    .format(double.parse(CartData.itmAmt!)),
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
@@ -218,21 +218,20 @@ class _AddDialogState extends State<AddDialog> {
                                   alignedDropdown: true,
                                   child: DropdownButton<String>(
                                     value: CartData.itmUom,
-                                    items: _tolist?.map((item) {
-                                          return new DropdownMenuItem(
-                                            child: new Text(
-                                              item['uom'],
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            value: item['uom'].toString(),
-                                          );
-                                        })?.toList() ??
-                                        [],
-                                    onChanged: (String newValue) {
+                                    items: _tolist.map((item) {
+                                      return new DropdownMenuItem(
+                                        child: new Text(
+                                          item['uom'],
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        value: item['uom'].toString(),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
                                       setState(() {
-                                        CartData.itmUom = newValue;
+                                        CartData.itmUom = newValue!;
                                         uomonChanged();
                                       });
                                     },
@@ -271,16 +270,16 @@ class _AddDialogState extends State<AddDialog> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    if (int.parse(CartData.itmQty) > 0) {
+                                    if (int.parse(CartData.itmQty!) > 0) {
                                       int i = 0;
-                                      i = int.parse(CartData.itmQty) - 1;
+                                      i = int.parse(CartData.itmQty!) - 1;
                                       CartData.itmQty = i.toString();
-                                      CartData.itmTotal =
-                                          (double.parse(CartData.itmAmt) *
-                                                  double.parse(CartData.itmQty))
-                                              .toString();
+                                      CartData.itmTotal = (double.parse(
+                                                  CartData.itmAmt!) *
+                                              double.parse(CartData.itmQty!))
+                                          .toString();
                                       // print(CartData.itmTotal);
-                                      qtyController.text = CartData.itmQty;
+                                      qtyController.text = CartData.itmQty!;
                                     }
                                   });
                                 },
@@ -305,14 +304,15 @@ class _AddDialogState extends State<AddDialog> {
                                   onChanged: (text) {
                                     setState(() {
                                       CartData.itmQty = qtyController.text;
-                                      if (double.parse(CartData.itmQty) > 100) {
+                                      if (double.parse(CartData.itmQty!) >
+                                          100) {
                                         qtyController.text = '100';
                                         CartData.itmQty = '100';
                                       }
-                                      CartData.itmTotal =
-                                          (double.parse(CartData.itmAmt) *
-                                                  double.parse(CartData.itmQty))
-                                              .toStringAsFixed(2);
+                                      CartData.itmTotal = (double.parse(
+                                                  CartData.itmAmt!) *
+                                              double.parse(CartData.itmQty!))
+                                          .toStringAsFixed(2);
                                       // print(CartData.itmTotal);
                                     });
                                   },
@@ -338,18 +338,18 @@ class _AddDialogState extends State<AddDialog> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    if (double.parse(CartData.itmQty) >= 100) {
+                                    if (double.parse(CartData.itmQty!) >= 100) {
                                       qtyController.text = '100';
                                       CartData.itmQty = '100';
                                     } else {
                                       int i = 0;
-                                      i = int.parse(CartData.itmQty) + 1;
+                                      i = int.parse(CartData.itmQty!) + 1;
                                       CartData.itmQty = i.toString();
                                       CartData.itmTotal =
-                                          (double.parse(CartData.itmAmt) *
-                                                  int.parse(CartData.itmQty))
+                                          (double.parse(CartData.itmAmt!) *
+                                                  int.parse(CartData.itmQty!))
                                               .toString();
-                                      qtyController.text = CartData.itmQty;
+                                      qtyController.text = CartData.itmQty!;
                                     }
                                   });
                                 },
@@ -392,7 +392,7 @@ class _AddDialogState extends State<AddDialog> {
                                   }
                                 } else {}
                               } else {
-                                if (int.parse(CartData.itmQty) <= 0) {
+                                if (int.parse(CartData.itmQty!) <= 0) {
                                   // print(CartData.itmQty);
                                   // showDialog(
                                   //     context: context,
@@ -478,7 +478,7 @@ class _AddDialogState extends State<AddDialog> {
               ),
               width: 180,
               height: 150,
-              child: Image.file(File(imgPath + CartData.imgpath)),
+              child: Image.file(File(imgPath! + CartData.imgpath!)),
               // child: Image.memory(base64Decode(CartData.imgpath)),
               // child:
               //     Image(image: AssetImage('assets/images/no_image_item.jpg')),

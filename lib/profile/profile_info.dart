@@ -29,15 +29,15 @@ class ProfileInfo extends StatefulWidget {
 
 class _ProfileInfoState extends State<ProfileInfo> {
   static final String uploadEndpoint = UrlAddress.url + 'uploaduserimg';
-  Future<File> file;
+  Future<File>? file;
   String status = "";
-  String base64Image;
-  File tmpFile;
+  String? base64Image;
+  File? tmpFile;
   String errMessage = 'Error Uploading Image';
-  String fileName;
-  int result;
+  String? fileName;
+  int? result;
 
-  File _image;
+  File? _image;
   final picker = ImagePicker();
   final txtController = TextEditingController();
 
@@ -61,9 +61,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
-      _image = File(pickedFile.path);
+      _image = File(pickedFile!.path);
       showImage();
-      fileName = _image.path.split('/').last;
+      fileName = _image!.path.split('/').last;
       print(fileName);
     });
   }
@@ -72,9 +72,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     setState(() {
-      _image = File(pickedFile.path);
+      _image = File(pickedFile!.path);
       showImage();
-      fileName = _image.path.split('/').last;
+      fileName = _image!.path.split('/').last;
       print(fileName);
     });
   }
@@ -83,11 +83,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
     final uri = Uri.parse(uploadEndpoint);
     var request = http.MultipartRequest('POST', uri);
     request.fields['name'] = fileName.toString();
-    var pic = await http.MultipartFile.fromPath('image', _image.path);
+    var pic = await http.MultipartFile.fromPath('image', _image!.path);
     request.files.add(pic);
     var response = await request.send();
     print(request.fields['name']);
-    print(_image.path);
+    print(_image!.path);
     print(_image);
     if (response.statusCode == 200) {
       print('Image Upload');
@@ -100,7 +100,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
       if (UserData.position == 'Salesman') {
         print(UserData.id);
         print(UserData.img);
-        var changeImg = await db.updateSalesmanImg(UserData.id, UserData.img);
+        var changeImg = await db.updateSalesmanImg(UserData.id!, UserData.img!);
         print(changeImg);
         setState(() {
           result = changeImg;
@@ -119,7 +119,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
           }
         }
       } else {
-        var changeImg = await db.updateHepeImg(UserData.id, UserData.img);
+        var changeImg = await db.updateHepeImg(UserData.id!, UserData.img!);
         print(changeImg);
         setState(() {
           result = changeImg;
@@ -150,12 +150,12 @@ class _ProfileInfoState extends State<ProfileInfo> {
         if (snapshot.connectionState == ConnectionState.done &&
             null != snapshot.data) {
           _image = snapshot.data;
-          base64Image = base64Encode(snapshot.data.readAsBytesSync());
-          fileName = _image.path.split('/').last;
-          print('PRINT FILE NAME: ' + fileName);
+          base64Image = base64Encode(snapshot.data!.readAsBytesSync());
+          fileName = _image!.path.split('/').last;
+          print('PRINT FILE NAME: ' + fileName!);
           return Flexible(
             child: Image.file(
-              snapshot.data,
+              snapshot.data!,
               fit: BoxFit.fill,
             ),
           );
@@ -245,10 +245,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
                           radius: 75,
                           backgroundImage: (_image != null)
                               ? Image.file(
-                                  _image,
+                                  _image!,
                                   fit: BoxFit.cover,
                                 ).image
-                              : NetworkImage(UrlAddress.userImg + UserData.img),
+                              : NetworkImage(
+                                  UrlAddress.userImg + UserData.img!),
 
                           // backgroundImage:
                           //     NetworkImage(UrlAddress.userImg + UserData.img),
@@ -412,7 +413,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      UserData.firstname + " " + UserData.lastname,
+                      UserData.firstname! + " " + UserData.lastname!,
                       style: TextStyle(
                           color: Colors.grey[850],
                           fontSize: 18,
@@ -438,11 +439,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      UserData.position +
+                      UserData.position! +
                           '(' +
-                          UserData.department +
+                          UserData.department! +
                           ' - ' +
-                          UserData.division +
+                          UserData.division! +
                           ')',
                       style: TextStyle(
                           color: Colors.grey[700],
@@ -469,7 +470,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      UserData.address + ', ' + UserData.postal,
+                      UserData.address! + ', ' + UserData.postal!,
                       style: TextStyle(
                           color: Colors.grey[700],
                           fontSize: 14,
@@ -526,7 +527,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     width: 10,
                                   ),
                                   Text(
-                                    UserData.contact,
+                                    UserData.contact!,
                                     style: TextStyle(
                                         color: Colors.grey[850],
                                         fontSize: 12,
@@ -600,7 +601,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                   width: 10,
                                 ),
                                 Text(
-                                  UserData.email,
+                                  UserData.email!,
                                   style: TextStyle(
                                       color: Colors.grey[850],
                                       fontSize: 12,

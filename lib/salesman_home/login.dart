@@ -34,7 +34,7 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
   final yellowColor = Colors.amber;
   final blueColor = Colors.blue;
 
-  Timer timer;
+  Timer? timer;
 
   // static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
@@ -46,7 +46,7 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
   bool viewSpinkit = true;
   bool _obscureText = true;
   String message = '';
-  String imgPath;
+  String? imgPath;
 
   // @override
   // void initState() {
@@ -290,7 +290,7 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
           ElevatedButton(
             style: raisedButtonLoginStyle,
             onPressed: () async {
-              if (_formKey.currentState.validate()) {
+              if (_formKey.currentState!.validate()) {
                 checkFailureAttempts();
                 var username = usernameController.text;
                 var password = passwordController.text;
@@ -388,7 +388,7 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
                     UserData.routes = _userdata[0]['area'];
                     UserData.passwordAge = _userdata[0]['password_date'];
                     UserData.img = _userdata[0]['img'];
-                    UserData.imgPath = imgPath + _userdata[0]['img'];
+                    UserData.imgPath = imgPath.toString() + _userdata[0]['img'];
                     UserData.username = username;
 
                     //CHECK FOR DEVICE LOGIN
@@ -400,14 +400,14 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
                             _deviceData['androidId'].toString();
                     if (NetworkData.connected) {
                       var setDev = await db.setLoginDevice(
-                          UserData.id, GlobalVariables.deviceData);
+                          UserData.id!, GlobalVariables.deviceData!);
                       print(setDev);
                     }
 
                     viewSpinkit = false;
                     if (viewSpinkit == false) {
                       dispose();
-                      DateTime a = DateTime.parse(UserData.passwordAge);
+                      DateTime a = DateTime.parse(UserData.passwordAge!);
                       final date1 = DateTime(a.year, a.month, a.day);
 
                       final date2 = DateTime.now();
@@ -478,7 +478,7 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
                 hintText: 'Username',
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Username cannot be empty';
                 }
                 return null;
@@ -524,7 +524,7 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
                 ),
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Password cannot be empty';
                 }
                 return null;
@@ -559,7 +559,7 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
                 showGlobalSnackbar(
                     'Connectivity',
                     'Please connect to internet.',
-                    Colors.red[900],
+                    Colors.red.shade900,
                     Colors.white);
               }
               // ForgetPassData.type = 'Salesman';

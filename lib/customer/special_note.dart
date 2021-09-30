@@ -12,7 +12,7 @@ class _SpecialNoteState extends State<SpecialNote> {
   final txtController = TextEditingController();
   void initState() {
     super.initState();
-    txtController.text = OrderData.specialInstruction;
+    txtController.text = OrderData.specialInstruction!;
   }
 
   @override

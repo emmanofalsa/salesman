@@ -17,7 +17,7 @@ class History extends StatefulWidget {
 class _HistoryState extends State<History> {
   final searchController = TextEditingController();
   String _searchController = "";
-  String tranStatus;
+  String? tranStatus;
   bool viewSpinkit = true;
   bool emptyTranHistory = true;
   bool emptyTranSearch = false;
@@ -574,7 +574,7 @@ class _HistoryState extends State<History> {
                                           height: 5,
                                         ),
                                         Text(
-                                          tranStatus,
+                                          tranStatus.toString(),
                                           textAlign: TextAlign.right,
                                           style: TextStyle(
                                               color: ColorsTheme.mainColor,
@@ -929,7 +929,7 @@ class _HistoryState extends State<History> {
                                           height: 5,
                                         ),
                                         Text(
-                                          tranStatus,
+                                          tranStatus.toString(),
                                           textAlign: TextAlign.right,
                                           style: TextStyle(
                                               color: ColorsTheme.mainColor,
@@ -1273,7 +1273,7 @@ class _HistoryState extends State<History> {
                                           height: 5,
                                         ),
                                         Text(
-                                          tranStatus,
+                                          tranStatus.toString(),
                                           textAlign: TextAlign.right,
                                           style: TextStyle(
                                               color: ColorsTheme.mainColor,

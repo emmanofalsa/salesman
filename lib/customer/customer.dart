@@ -30,7 +30,7 @@ class _CustomerState extends State<Customer> {
 
   loadCustomers() async {
     if (_custList.isEmpty) {
-      var getC = await db.viewCustomersList(UserData.id);
+      var getC = await db.viewCustomersList(UserData.id!);
       _custList = getC;
 
       setState(() {
@@ -45,35 +45,34 @@ class _CustomerState extends State<Customer> {
 
   checkCustInfo() {
     incInfo = false;
-    if (CustomerData.accountCode == '' || CustomerData.accountCode == null) {
+    if (CustomerData.accountCode == '') {
       incInfo = true;
     }
-    if (CustomerData.accountName == '' || CustomerData.accountName == null) {
+    if (CustomerData.accountName == '') {
       incInfo = true;
     }
-    if (CustomerData.accountDescription == '' ||
-        CustomerData.accountDescription == null) {
+    if (CustomerData.accountDescription == '') {
       incInfo = true;
     }
-    if (CustomerData.province == '' || CustomerData.province == null) {
+    if (CustomerData.province == '') {
       incInfo = true;
     }
-    if (CustomerData.city == '' || CustomerData.city == null) {
+    if (CustomerData.city == '') {
       incInfo = true;
     }
-    if (CustomerData.district == '' || CustomerData.district == null) {
+    if (CustomerData.district == '') {
       incInfo = true;
     }
-    if (CustomerData.groupCode == '' || CustomerData.groupCode == null) {
+    if (CustomerData.groupCode == '') {
       incInfo = true;
     }
-    if (CustomerData.paymentType == '' || CustomerData.paymentType == null) {
+    if (CustomerData.paymentType == '') {
       incInfo = true;
     }
-    if (CustomerData.status == '' || CustomerData.status == null) {
+    if (CustomerData.status == '') {
       incInfo = true;
     }
-    if (CustomerData.colorCode == '' || CustomerData.colorCode == null) {
+    if (CustomerData.colorCode == '') {
       incInfo = true;
     }
     // if (CustomerData.contactNo == '' || CustomerData.contactNo == null) {
@@ -126,7 +125,7 @@ class _CustomerState extends State<Customer> {
         break;
       case "493":
         {
-          CustomerData.custColor = Colors.blue[300];
+          CustomerData.custColor = Colors.blue.shade300;
         }
         break;
       case "495":
@@ -136,7 +135,7 @@ class _CustomerState extends State<Customer> {
         break;
       default:
         {
-          CustomerData.custColor = Colors.grey[200];
+          CustomerData.custColor = Colors.grey.shade200;
           CustomerData.placeOrder = false;
         }
         break;

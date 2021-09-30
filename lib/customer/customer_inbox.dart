@@ -17,7 +17,7 @@ class CustomerInbox extends StatefulWidget {
 class _CustomerInboxState extends State<CustomerInbox> {
   CustomerProfile customerProfile = CustomerProfile();
 
-  Timer timer;
+  Timer? timer;
 
   List test = [];
   List msgList = [];

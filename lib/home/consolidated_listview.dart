@@ -491,7 +491,7 @@ class _ConsolidatedListViewState extends State<ConsolidatedListView> {
                       height: 5,
                     ),
                     Text(
-                      OrderData.pmeth,
+                      OrderData.pmeth!,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           fontSize: 12,
@@ -1550,7 +1550,7 @@ class _ConsolidatedListViewState extends State<ConsolidatedListView> {
             alignment: Alignment.center,
             // color: Colors.lightGreen,
             child: Text(
-              UserData.sname + "'S ORDER",
+              UserData.sname! + "'S ORDER",
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 23,

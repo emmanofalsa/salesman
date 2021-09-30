@@ -44,7 +44,7 @@ class _ChangePassState extends State<ChangePass> {
   final yellowColor = Colors.amber;
   final blueColor = Colors.blue;
 
-  Timer timer;
+  Timer? timer;
 
   // static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   // Map<String, dynamic> _deviceData = <String, dynamic>{};
@@ -191,28 +191,28 @@ class _ChangePassState extends State<ChangePass> {
                   print(hasUppercase);
                 }
               });
-              if (_formKey.currentState.validate()) {
+              if (_formKey.currentState!.validate()) {
                 var npass = newPassController.text;
                 if (!NetworkData.connected) {
                   if (NetworkData.errorNo == '1') {
                     showGlobalSnackbar(
                         'Connectivity',
                         'Please connect to internet.',
-                        Colors.red[900],
+                        Colors.red.shade900,
                         Colors.white);
                   }
                   if (NetworkData.errorNo == '2') {
                     showGlobalSnackbar(
                         'Connectivity',
                         'API Problem. Please contact admin.',
-                        Colors.red[900],
+                        Colors.red.shade900,
                         Colors.white);
                   }
                   if (NetworkData.errorNo == '3') {
                     showGlobalSnackbar(
                         'Connectivity',
                         'Cannot connect to server. Try again later.',
-                        Colors.red[900],
+                        Colors.red.shade900,
                         Colors.white);
                   }
                 } else {
@@ -223,7 +223,7 @@ class _ChangePassState extends State<ChangePass> {
                   //         ));
                   if (UserData.position == 'Salesman') {
                     var getP = await db.getSMPasswordHistory(
-                        UserData.id, newPassController.text);
+                        UserData.id!, newPassController.text);
                     pass = getP;
                     if (pass.isNotEmpty) {
                       showGlobalSnackbar(
@@ -238,7 +238,7 @@ class _ChangePassState extends State<ChangePass> {
                                 description: 'Changing Password...',
                               ));
                       var cPass =
-                          await db.changeSalesmanPassword(UserData.id, npass);
+                          await db.changeSalesmanPassword(UserData.id!, npass);
                       print(cPass);
                       if (cPass != 'failed') {
                         Navigator.pop(context);
@@ -265,7 +265,7 @@ class _ChangePassState extends State<ChangePass> {
                   }
                   if (UserData.position == 'Jefe de Viaje') {
                     var getP = await db.getHEPEPasswordHistory(
-                        UserData.id, newPassController.text);
+                        UserData.id!, newPassController.text);
                     pass = getP;
                     if (pass.isNotEmpty) {
                       showGlobalSnackbar(
@@ -280,7 +280,7 @@ class _ChangePassState extends State<ChangePass> {
                                 description: 'Changing Password...',
                               ));
                       var cPass =
-                          await db.changeHepePassword(UserData.id, npass);
+                          await db.changeHepePassword(UserData.id!, npass);
                       if (cPass != 'failed') {
                         Navigator.pop(context);
                         await db.updateHepePassword(
@@ -380,7 +380,7 @@ class _ChangePassState extends State<ChangePass> {
                 // ),
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Field cannot be empty';
                 }
                 passReq = isPasswordCompliant(value);
@@ -433,7 +433,7 @@ class _ChangePassState extends State<ChangePass> {
                 // ),
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Field cannot be empty';
                 }
                 if (value != newPassController.text) {
@@ -525,7 +525,7 @@ class _ChangePassState extends State<ChangePass> {
 }
 
 class LoadingSpinkit extends StatefulWidget {
-  final String description;
+  final String? description;
 
   LoadingSpinkit({this.description});
   @override
@@ -567,7 +567,7 @@ class _LoadingSpinkitState extends State<LoadingSpinkit> {
               children: <Widget>[
                 Text(
                   // 'Checking username...',
-                  widget.description,
+                  widget.description.toString(),
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,

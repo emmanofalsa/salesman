@@ -32,7 +32,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // showPerformanceOverlay: true,
       theme: ThemeData(
-        primarySwatch: ColorsTheme.mainColor,
+        primaryColor: ColorsTheme.mainColor,
+        primarySwatch: Colors.deepOrange,
+        // primarySwatch: ColorsTheme.mainColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // home: new HomeScreen(),

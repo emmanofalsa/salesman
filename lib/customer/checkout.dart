@@ -82,7 +82,7 @@ class _CheckOutState extends State<CheckOut> {
     final String date =
         DateFormat("yyyy-MM-dd HH:mm:ss").format(new DateTime.now());
     final String date2 = DateFormat("Mdy").format(new DateTime.now());
-    final String tranNo = date2 + 'TEMP' + CustomerData.accountCode;
+    final String tranNo = date2 + 'TEMP' + CustomerData.accountCode!;
 
     var getTranHead = await db.addTempTranHead(
         tranNo,
@@ -109,7 +109,7 @@ class _CheckOutState extends State<CheckOut> {
       viewSpinkit = false;
       if (tranSaved == true && viewSpinkit == false) {
         String msg = 'Your Order #' +
-            GlobalVariables.tranNo +
+            GlobalVariables.tranNo! +
             ' is being processed right now.' +
             'View Transactions to check order status.';
         final action = await WarningDialogs.openDialog(
@@ -318,7 +318,7 @@ class _CheckOutState extends State<CheckOut> {
                           fontWeight: FontWeight.bold),
                     ),
                     OrderData.note
-                        ? Text(OrderData.specialInstruction)
+                        ? Text(OrderData.specialInstruction!)
                         : Text(
                             'Place any special instruction here',
                             style: TextStyle(
@@ -398,7 +398,7 @@ class _CheckOutState extends State<CheckOut> {
                 fontSize: 16,
                 fontWeight: FontWeight.bold),
           ),
-          Text(CartData.itmLineNo + ' lines, ' + CartData.itmNo + ' items'),
+          Text(CartData.itmLineNo! + ' lines, ' + CartData.itmNo + ' items'),
           Row(
             children: [
               Expanded(child: Text('Goods')),
@@ -520,25 +520,25 @@ class _CheckOutState extends State<CheckOut> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          CustomerData.accountName,
+                          CustomerData.accountName!,
                           style: TextStyle(
                               color: Colors.grey[850],
                               fontSize: 14,
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          CustomerData.district +
+                          CustomerData.district! +
                               ', ' +
-                              CustomerData.city +
+                              CustomerData.city! +
                               ', ' +
-                              CustomerData.province,
+                              CustomerData.province!,
                           style: TextStyle(
                             color: Colors.grey[700],
                             fontSize: 12,
                           ),
                         ),
                         Text(
-                          'Mobile: ' + '0' + CustomerData.contactNo,
+                          'Mobile: ' + '0' + CustomerData.contactNo!,
                           style: TextStyle(
                             color: Colors.grey[700],
                             fontSize: 12,

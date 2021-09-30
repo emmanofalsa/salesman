@@ -38,7 +38,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
   List salestypeList = [];
   List bankList = [];
 
-  String imageData;
+  String? imageData;
 
   bool dataLoaded = false;
   bool processing = false;
@@ -49,8 +49,8 @@ class _MyOptionPageState extends State<MyOptionPage> {
   bool imgLoad = true;
 
   // bool _downloading;
-  String _dir;
-  List<String> _images, _tempImages;
+  String? _dir;
+  List<String>? _images, _tempImages;
   String _zipPath = UrlAddress.itemImg + 'img.zip';
   String _localZipFileName = 'img.zip';
 
@@ -72,8 +72,10 @@ class _MyOptionPageState extends State<MyOptionPage> {
   void initState() {
     super.initState();
     createDatabase();
-    _images = List();
-    _tempImages = List();
+    // _images = List();
+    _images = [];
+    // _tempImages = List();
+    _tempImages = [];
     // _downloading = false;
     _initDir();
   }
@@ -189,14 +191,14 @@ class _MyOptionPageState extends State<MyOptionPage> {
       GlobalVariables.statusCaption = 'Downloading Images...';
     });
 
-    _images.clear();
-    _tempImages.clear();
+    _images!.clear();
+    _tempImages!.clear();
 
     var zippedFile = await _downloadFile(_zipPath, _localZipFileName);
     await unarchiveAndSave(zippedFile);
 
     setState(() {
-      _images.addAll(_tempImages);
+      _images!.addAll(_tempImages!);
       // _downloading = false;
       print('Download Completed!');
       GlobalVariables.statusCaption = 'Download Completed!';
@@ -219,7 +221,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
       if (file.isFile) {
         var outFile = File(fileName);
         //print('File:: ' + outFile.path);
-        _tempImages.add(outFile.path);
+        _tempImages!.add(outFile.path);
         outFile = await outFile.create(recursive: true);
         await outFile.writeAsBytes(file.content);
       }
@@ -636,8 +638,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
   Future<String> networkImageToBase64(String imageUrl) async {
     var imgUri = Uri.parse(imageUrl);
     http.Response response = await http.get(imgUri);
-    final bytes = response?.bodyBytes;
-    return (bytes != null ? base64Encode(bytes) : null);
+    final bytes = response.bodyBytes;
+    // return (bytes != null ? base64Encode(bytes) : null);
+    return (base64Encode(bytes));
   }
 
   @override

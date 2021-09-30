@@ -510,7 +510,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
                         height: 32,
                       ),
                       Text(
-                        OrderData.trans,
+                        OrderData.trans!,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w500),
@@ -519,7 +519,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
                         height: 5,
                       ),
                       Text(
-                        OrderData.pmeth,
+                        OrderData.pmeth!,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 12,
@@ -1469,7 +1469,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
             alignment: Alignment.center,
             // color: Colors.lightGreen,
             child: Text(
-              UserData.sname + "'S ORDER",
+              UserData.sname! + "'S ORDER",
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 23,

@@ -42,7 +42,7 @@ class _LoadingSpinkitState extends State<LoadingSpinkit> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  Spinkit.label,
+                  Spinkit.label!,
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,

@@ -24,7 +24,7 @@ class _ChequePageState extends State<ChequePage> {
             height: MediaQuery.of(context).size.height / 2,
             width: MediaQuery.of(context).size.width,
             color: Colors.grey[100],
-            child: Image.network(UrlAddress.chequeImg + ChequeData.imgName),
+            child: Image.network(UrlAddress.chequeImg + ChequeData.imgName!),
             // child: Container(
             //   margin: EdgeInsets.all(10),
             //   height: MediaQuery.of(context).size.height / 2 - 20,

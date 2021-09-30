@@ -98,17 +98,17 @@ class ReturnDialog extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width / 2 + 50,
                     child: Text(
-                      OrderData.name,
+                      OrderData.name!,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: Colors.grey[850]),
                     ),
                   ),
                   Text(
-                    CustomerData.district +
+                    CustomerData.district! +
                         ', ' +
-                        CustomerData.city +
+                        CustomerData.city! +
                         ', ' +
-                        CustomerData.province,
+                        CustomerData.province!,
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -165,7 +165,7 @@ class ReturnDialog extends StatelessWidget {
         GestureDetector(
           onTap: () {
             OrderData.setSign = false;
-            if (OrderData.signature.isNotEmpty) {
+            if (OrderData.signature!.isNotEmpty) {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return ViewSignature();
               }));
@@ -205,7 +205,7 @@ class ReturnDialog extends StatelessWidget {
           onTap: () async {
             print(OrderData.returnReason);
             // ScaffoldMessenger.of(context).clearSnackBars();
-            if (OrderData.returnReason.isEmpty) {
+            if (OrderData.returnReason!.isEmpty) {
               // ScaffoldMessenger.of(context).showSnackBar(getSnackBar(
               //     "Input Reason for return", Colors.black, Colors.white));
               showGlobalSnackbar('Information', 'Input Reason for return.',

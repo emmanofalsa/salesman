@@ -14,7 +14,7 @@ class ChatRoom extends StatefulWidget {
 }
 
 class _ChatRoomState extends State<ChatRoom> {
-  Timer timer;
+  Timer? timer;
   bool viewspinkit = true;
   bool online = false;
   bool isMe = false;
@@ -125,7 +125,7 @@ class _ChatRoomState extends State<ChatRoom> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(ChatData.senderName),
+              Text(ChatData.senderName!),
               Row(
                 children: [
                   Text(

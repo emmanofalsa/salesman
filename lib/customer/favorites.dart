@@ -23,7 +23,7 @@ class FavoritesPage extends StatefulWidget {
 class _FavoritesPageState extends State<FavoritesPage> {
   List _flist = [];
   bool noImage = false;
-  String imgPath;
+  String? imgPath;
   final db = DatabaseHelper();
 
   final formatCurrencyAmt =
@@ -166,10 +166,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     CartData.imgpath = _flist[index]['image'],
                     CartData.itmTotal =
                         (double.parse(_flist[index]['list_price_wtax']) *
-                                double.parse(CartData.itmQty))
+                                double.parse(CartData.itmQty!))
                             .toString(),
-                    print('Item Amount:' + CartData.itmAmt),
-                    print('Item Qty:' + CartData.itmQty),
+                    print('Item Amount:' + CartData.itmAmt!),
+                    print('Item Qty:' + CartData.itmQty!),
                     print(CartData.itmTotal),
                     print(CartData.imgpath),
                     showDialog(
@@ -198,8 +198,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               color: Colors.white,
                               child: noImage
                                   ? Image(image: AssetsValues.noImageImg)
-                                  : Image.file(
-                                      File(imgPath + _flist[index]['image'])),
+                                  : Image.file(File(imgPath.toString() +
+                                      _flist[index]['image'])),
                             ),
                           ],
                         ),
@@ -334,7 +334,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                           CartData.itmTotal = (double.parse(
                                                       _flist[index]
                                                           ['list_price_wtax']) *
-                                                  double.parse(CartData.itmQty))
+                                                  double.parse(
+                                                      CartData.itmQty!))
                                               .toString(),
                                           showDialog(
                                               context: context,
@@ -404,7 +405,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
             alignment: Alignment.center,
             // color: Colors.lightGreen,
             child: Text(
-              CustomerData.accountName + "'s Favorites",
+              CustomerData.accountName! + "'s Favorites",
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 22,
@@ -425,7 +426,7 @@ class AddDialog extends StatefulWidget {
 
 class _AddDialogState extends State<AddDialog> {
   final db = DatabaseHelper();
-  String imgPath;
+  String? imgPath;
   TextEditingController qtyController = TextEditingController()..text = '1';
   final formatCurrencyAmt =
       new NumberFormat.currency(locale: "en_US", symbol: "₱");
@@ -445,11 +446,11 @@ class _AddDialogState extends State<AddDialog> {
       _setlist.forEach((element) {
         CartData.itmAmt = (element['list_price_wtax']);
         CartData.itmTotal =
-            (double.parse(CartData.itmAmt) * double.parse(CartData.itmQty))
+            (double.parse(CartData.itmAmt!) * double.parse(CartData.itmQty!))
                 .toString();
         CartData.imgpath = (element['image']);
-        print('Item Amount:' + CartData.itmAmt);
-        print('Item Qty:' + CartData.itmQty);
+        print('Item Amount:' + CartData.itmAmt!);
+        print('Item Qty:' + CartData.itmQty!);
         print(CartData.itmTotal);
       });
     });
@@ -521,7 +522,7 @@ class _AddDialogState extends State<AddDialog> {
                           width: MediaQuery.of(context).size.width - 100,
                           // color: Colors.grey,
                           child: Text(
-                            CartData.itmDesc,
+                            CartData.itmDesc!,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -540,7 +541,7 @@ class _AddDialogState extends State<AddDialog> {
                             children: <Widget>[
                               Text(
                                 formatCurrencyAmt
-                                    .format(double.parse(CartData.itmAmt)),
+                                    .format(double.parse(CartData.itmAmt!)),
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
@@ -568,21 +569,20 @@ class _AddDialogState extends State<AddDialog> {
                                   alignedDropdown: true,
                                   child: DropdownButton<String>(
                                     value: CartData.itmUom,
-                                    items: _tolist?.map((item) {
-                                          return new DropdownMenuItem(
-                                            child: new Text(
-                                              item['uom'],
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            value: item['uom'].toString(),
-                                          );
-                                        })?.toList() ??
-                                        [],
-                                    onChanged: (String newValue) {
+                                    items: _tolist.map((item) {
+                                      return new DropdownMenuItem(
+                                        child: new Text(
+                                          item['uom'],
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        value: item['uom'].toString(),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
                                       setState(() {
-                                        CartData.itmUom = newValue;
+                                        CartData.itmUom = newValue!;
                                         uomonChanged();
                                       });
                                     },
@@ -621,16 +621,16 @@ class _AddDialogState extends State<AddDialog> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    if (int.parse(CartData.itmQty) > 0) {
+                                    if (int.parse(CartData.itmQty!) > 0) {
                                       int i = 0;
-                                      i = int.parse(CartData.itmQty) - 1;
+                                      i = int.parse(CartData.itmQty!) - 1;
                                       CartData.itmQty = i.toString();
-                                      CartData.itmTotal =
-                                          (double.parse(CartData.itmAmt) *
-                                                  double.parse(CartData.itmQty))
-                                              .toString();
+                                      CartData.itmTotal = (double.parse(
+                                                  CartData.itmAmt!) *
+                                              double.parse(CartData.itmQty!))
+                                          .toString();
                                       // print(CartData.itmTotal);
-                                      qtyController.text = CartData.itmQty;
+                                      qtyController.text = CartData.itmQty!;
                                     }
                                   });
                                 },
@@ -655,14 +655,15 @@ class _AddDialogState extends State<AddDialog> {
                                   onChanged: (text) {
                                     setState(() {
                                       CartData.itmQty = qtyController.text;
-                                      if (double.parse(CartData.itmQty) > 100) {
+                                      if (double.parse(CartData.itmQty!) >
+                                          100) {
                                         qtyController.text = '100';
                                         CartData.itmQty = '100';
                                       }
-                                      CartData.itmTotal =
-                                          (double.parse(CartData.itmAmt) *
-                                                  double.parse(CartData.itmQty))
-                                              .toString();
+                                      CartData.itmTotal = (double.parse(
+                                                  CartData.itmAmt!) *
+                                              double.parse(CartData.itmQty!))
+                                          .toString();
                                       print(CartData.itmTotal);
                                     });
                                   },
@@ -688,18 +689,18 @@ class _AddDialogState extends State<AddDialog> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    if (double.parse(CartData.itmQty) >= 100) {
+                                    if (double.parse(CartData.itmQty!) >= 100) {
                                       qtyController.text = '100';
                                       CartData.itmQty = '100';
                                     } else {
                                       int i = 0;
-                                      i = int.parse(CartData.itmQty) + 1;
+                                      i = int.parse(CartData.itmQty!) + 1;
                                       CartData.itmQty = i.toString();
                                       CartData.itmTotal =
-                                          (double.parse(CartData.itmAmt) *
-                                                  int.parse(CartData.itmQty))
+                                          (double.parse(CartData.itmAmt!) *
+                                                  int.parse(CartData.itmQty!))
                                               .toString();
-                                      qtyController.text = CartData.itmQty;
+                                      qtyController.text = CartData.itmQty!;
                                     }
                                   });
                                 },
@@ -739,7 +740,7 @@ class _AddDialogState extends State<AddDialog> {
                               } else {
                                 CartData.totalAmount =
                                     (double.parse(CartData.totalAmount) +
-                                            double.parse(CartData.itmTotal))
+                                            double.parse(CartData.itmTotal!))
                                         .toString();
                                 CartData.itmNo =
                                     (int.parse(CartData.itmNo) + 1).toString();
@@ -793,7 +794,7 @@ class _AddDialogState extends State<AddDialog> {
                   border: Border.all(color: ColorsTheme.mainColor, width: 2)),
               width: 180,
               height: 150,
-              child: Image.file(File(imgPath + CartData.imgpath)),
+              child: Image.file(File(imgPath.toString() + CartData.imgpath!)),
               // color: Colors.grey,
             ),
           ],

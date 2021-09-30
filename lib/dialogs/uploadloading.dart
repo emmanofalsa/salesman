@@ -46,7 +46,7 @@ class _UploadingSpinkitState extends State<UploadingSpinkit> {
               children: <Widget>[
                 Text(
                   'Uploading ' +
-                      GlobalVariables.uploadLength +
+                      GlobalVariables.uploadLength! +
                       ' transactions' +
                       '. . .',
                   style: TextStyle(

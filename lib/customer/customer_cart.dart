@@ -192,7 +192,7 @@ class _CustomerCartState extends State<CustomerCart> {
         break;
       case "493":
         {
-          CustomerData.custColor = Colors.blue[300];
+          CustomerData.custColor = Colors.blue.shade300;
         }
         break;
       case "495":
@@ -202,7 +202,7 @@ class _CustomerCartState extends State<CustomerCart> {
         break;
       default:
         {
-          CustomerData.custColor = Colors.grey[200];
+          CustomerData.custColor = Colors.grey.shade200;
         }
         break;
     }
@@ -386,7 +386,7 @@ class _CustomerCartState extends State<CustomerCart> {
                             height: 5,
                           ),
                           Text(
-                            CustomerData.paymentType,
+                            CustomerData.paymentType!,
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontSize: 12,
@@ -494,12 +494,12 @@ class _CustomerCartState extends State<CustomerCart> {
                                     } else {
                                       if (double.parse(CartData.totalAmount) <
                                           double.parse(
-                                              GlobalVariables.minOrder)) {
+                                              GlobalVariables.minOrder!)) {
                                         String msg =
                                             'Order amount did not reached the minimum amount of ' +
                                                 formatCurrencyAmt.format(
                                                     double.parse(GlobalVariables
-                                                        .minOrder)) +
+                                                        .minOrder!)) +
                                                 '.' +
                                                 ' Add more items?';
                                         final action = await Dialogs.openDialog(
@@ -594,7 +594,7 @@ class _CustomerCartState extends State<CustomerCart> {
             alignment: Alignment.center,
             // color: Colors.lightGreen,
             child: Text(
-              CustomerData.accountName + "'s Cart",
+              CustomerData.accountName! + "'s Cart",
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 21,

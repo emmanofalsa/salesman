@@ -44,9 +44,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
   bool viewSpinkit = true;
   bool _obscureText = true;
   String message = '';
-  String imgPath;
+  String? imgPath;
 
-  Timer timer;
+  Timer? timer;
 
   void initState() {
     // if (mounted) {
@@ -285,7 +285,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
             style: raisedButtonLoginStyle,
             onPressed: () async {
               if (viewSpinkit == true) {
-                if (_formKey.currentState.validate()) {
+                if (_formKey.currentState!.validate()) {
                   checkFailureAttempts();
                   var username = usernameController.text;
                   var password = passwordController.text;
@@ -379,7 +379,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                       UserData.routes = _userdata[0]['area'];
                       UserData.passwordAge = _userdata[0]['password_date'];
                       UserData.img = _userdata[0]['img'];
-                      UserData.imgPath = imgPath + _userdata[0]['img'];
+                      UserData.imgPath = imgPath! + _userdata[0]['img'];
                       UserData.username = username;
 
                       //CHECK FOR DEVICE LOGIN
@@ -391,7 +391,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                               _deviceData['androidId'].toString();
                       if (NetworkData.connected) {
                         var setDev = await db.setLoginDevice(
-                            UserData.id, GlobalVariables.deviceData);
+                            UserData.id!, GlobalVariables.deviceData!);
                         print(setDev);
                       }
 
@@ -399,7 +399,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                       viewSpinkit = false;
                       if (viewSpinkit == false) {
                         dispose();
-                        DateTime a = DateTime.parse(UserData.passwordAge);
+                        DateTime a = DateTime.parse(UserData.passwordAge!);
                         final date1 = DateTime(a.year, a.month, a.day);
 
                         final date2 = DateTime.now();
@@ -527,7 +527,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   ),
                   hintText: 'Username'),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Username cannot be empty';
                 }
                 return null;
@@ -573,7 +573,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 ),
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Password cannot be empty';
                 }
                 return null;
@@ -608,7 +608,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 showGlobalSnackbar(
                     'Connectivity',
                     'Please connect to internet.',
-                    Colors.red[900],
+                    Colors.red.shade900,
                     Colors.white);
               }
               // ForgetPassData.type = 'Hepe';

@@ -28,8 +28,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List ver = [];
   bool checking = false;
-  String imgPath;
-  String imgName;
+  String? imgPath;
+  String? imgName;
   bool loadingImg = true;
   // File _image;
   DatabaseHelper db = DatabaseHelper();
@@ -49,7 +49,7 @@ class _ProfileState extends State<Profile> {
     // getImagePath();
     checkVersion();
     GlobalVariables.dataPrivacyNoticeScrollBottom = false;
-    print(UrlAddress.userImg + UserData.img);
+    print(UrlAddress.userImg + UserData.img!);
   }
 
   // getImagePath() async {
@@ -172,8 +172,8 @@ class _ProfileState extends State<Profile> {
                           avatarType: AvatarType.CIRCLE,
                           backgroundColor: Colors.black,
                           imagePath: NetworkData.connected
-                              ? UrlAddress.userImg + UserData.img
-                              : UserData.imgPath,
+                              ? UrlAddress.userImg + UserData.img!
+                              : UserData.imgPath!,
                           placeHolder: Container(
                             child: Icon(
                               Icons.person,
@@ -194,10 +194,10 @@ class _ProfileState extends State<Profile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              UserData.firstname + " " + UserData.lastname,
+                              UserData.firstname! + " " + UserData.lastname!,
                             ),
                             Text(
-                              UserData.position,
+                              UserData.position!,
                               style: TextStyle(fontSize: 12),
                             )
                           ],
@@ -216,7 +216,7 @@ class _ProfileState extends State<Profile> {
                         showGlobalSnackbar(
                             'Connectivity',
                             'Please connect to internet.',
-                            Colors.red[900],
+                            Colors.red.shade900,
                             Colors.white);
                       }
                     },
@@ -317,7 +317,7 @@ class _ProfileState extends State<Profile> {
                 builder: (context) => MessageInbox());
           } else {
             showGlobalSnackbar('Connectivity', 'Please connect to internet.',
-                Colors.red[900], Colors.white);
+                Colors.red.shade900, Colors.white);
           }
         },
         child: Row(
@@ -385,7 +385,7 @@ class _ProfileState extends State<Profile> {
           Column(
             children: [
               Text(
-                'Version: ' + AppData.appVersion,
+                'Version: ' + AppData.appVersion!,
                 style: TextStyle(
                   color: Colors.grey[700],
                   fontSize: 12,
@@ -556,7 +556,7 @@ class _ProfileState extends State<Profile> {
             // );
             // if (action == DialogAction.yes) {}
             showGlobalSnackbar('Connectivity', 'Please connect to internet.',
-                Colors.red[900], Colors.white);
+                Colors.red.shade900, Colors.white);
           }
         },
         child: Row(
@@ -602,7 +602,7 @@ class _ProfileState extends State<Profile> {
                 builder: (context) => ProfileInfo());
           } else {
             showGlobalSnackbar('Connectivity', 'Please connect to internet.',
-                Colors.red[900], Colors.white);
+                Colors.red.shade900, Colors.white);
           }
         },
         child: Row(
@@ -620,18 +620,18 @@ class _ProfileState extends State<Profile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  UserData.firstname + " " + UserData.lastname,
+                  UserData.firstname! + " " + UserData.lastname!,
                   style: TextStyle(
                     color: Colors.grey[850],
                     fontSize: 14,
                   ),
                 ),
                 Text(
-                  UserData.position +
+                  UserData.position! +
                       '(' +
-                      UserData.department +
+                      UserData.department! +
                       ' - ' +
-                      UserData.division +
+                      UserData.division! +
                       ')',
                   style: TextStyle(
                     color: Colors.grey[700],
@@ -639,14 +639,14 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 Text(
-                  UserData.address + ', ' + UserData.postal,
+                  UserData.address! + ', ' + UserData.postal!,
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 12,
                   ),
                 ),
                 Text(
-                  UserData.contact,
+                  UserData.contact!,
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 12,
@@ -677,7 +677,7 @@ class _ProfileState extends State<Profile> {
 }
 
 class LoadingSpinkit extends StatefulWidget {
-  final String description;
+  final String? description;
 
   LoadingSpinkit({this.description});
   @override
@@ -719,7 +719,7 @@ class _LoadingSpinkitState extends State<LoadingSpinkit> {
               children: <Widget>[
                 Text(
                   // 'Checking username...',
-                  widget.description,
+                  widget.description.toString(),
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,

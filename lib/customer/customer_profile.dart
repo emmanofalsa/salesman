@@ -24,7 +24,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   List _hList = [];
   List msgList = [];
 
-  String tranStatus;
+  String? tranStatus;
   String activeMsg = '0';
 
   final db = DatabaseHelper();
@@ -74,7 +74,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   _callNumber(String phone) async {
     // const number = '08592119XXXX'; //set the number here
     print(phone);
-    bool res = await FlutterPhoneDirectCaller.callNumber(phone);
+    bool? res = await FlutterPhoneDirectCaller.callNumber(phone);
     print(res);
   }
 
@@ -108,7 +108,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
         break;
       case "493":
         {
-          CustomerData.custColor = Colors.blue[300];
+          CustomerData.custColor = Colors.blue.shade300;
         }
         break;
       case "495":
@@ -118,7 +118,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
         break;
       default:
         {
-          CustomerData.custColor = Colors.grey[200];
+          CustomerData.custColor = Colors.grey.shade200;
         }
         break;
     }
@@ -389,7 +389,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                   height: 5,
                                 ),
                                 Text(
-                                  tranStatus,
+                                  tranStatus.toString(),
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                       color: ColorsTheme.mainColor,
@@ -508,7 +508,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          CustomerData.accountName,
+                          CustomerData.accountName!,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
@@ -519,11 +519,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
                           height: 5,
                         ),
                         Text(
-                          CustomerData.district +
+                          CustomerData.district! +
                               ', ' +
-                              CustomerData.city +
+                              CustomerData.city! +
                               ', ' +
-                              CustomerData.province,
+                              CustomerData.province!,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 14,
@@ -534,7 +534,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         //   height: 5,
                         // ),
                         Text(
-                          '+63' + CustomerData.contactNo,
+                          '+63' + CustomerData.contactNo!,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 12,
@@ -597,7 +597,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                               ),
                               Text(
                                 formatCurrencyAmt.format(
-                                    double.parse(CustomerData.creditLimit)),
+                                    double.parse(CustomerData.creditLimit!)),
                                 style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: 12,
@@ -646,7 +646,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                           child: ElevatedButton(
                             style: raisedButtonStyleGreen,
                             onPressed: () {
-                              String _phone = '0' + CustomerData.contactNo;
+                              String _phone = '0' + CustomerData.contactNo!;
                               print(_phone);
                               // FlutterPhoneDirectCaller.callNumber(_phone);
                               _callNumber(_phone);
