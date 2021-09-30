@@ -770,11 +770,11 @@ class _ProductperCategoryState extends State<ProductperCategory> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return ProductPage();
-              }));
-              // Navigator.pop(context);
+              // Navigator.pushReplacement(context,
+              //     MaterialPageRoute(builder: (context) {
+              //   return ProductPage();
+              // }));
+              Navigator.pop(context);
             },
             child: Container(
               width: 50,

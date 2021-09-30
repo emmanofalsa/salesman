@@ -380,9 +380,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ProductPage();
-              }));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) {
+              //   return ProductPage();
+              // }));
+              Navigator.pop(context);
             },
             child: Container(
               width: 50,
