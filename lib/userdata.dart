@@ -60,7 +60,7 @@ class OrderData {
   static List tranLine = [];
   static bool returnOrder = false;
   static String? returnReason;
-  static String? specialInstruction;
+  static String specialInstruction = "";
   static bool note = false;
 }
 

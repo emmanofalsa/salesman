@@ -318,7 +318,7 @@ class _CheckOutState extends State<CheckOut> {
                           fontWeight: FontWeight.bold),
                     ),
                     OrderData.note
-                        ? Text(OrderData.specialInstruction!)
+                        ? Text(OrderData.specialInstruction)
                         : Text(
                             'Place any special instruction here',
                             style: TextStyle(

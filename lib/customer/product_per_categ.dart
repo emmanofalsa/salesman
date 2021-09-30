@@ -29,7 +29,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
 
   String? imgPath;
   String _searchController = "";
-  String uom = CartData.itmUom!;
+  String uom = CartData.itmUom.toString();
 
   // final db = AddDialog();
 
@@ -452,16 +452,17 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                               color: ColorsTheme.mainColor,
                             ),
                             Container(
-                                margin: EdgeInsets.only(left: 3, top: 3),
-                                width: 75,
-                                color: Colors.white,
-                                child: noImage
-                                    ? Image(image: AssetsValues.noImageImg)
-                                    // ? Image.file(File(
-                                    //     "/data/data/com.example.salesman/app_flutter/images/906782_PCS.jpg"))
-
-                                    : Image.file(File(imgPath.toString() +
-                                        _itemlist[index]['image']))),
+                              margin: EdgeInsets.only(left: 3, top: 3),
+                              width: 75,
+                              color: Colors.white,
+                              child: noImage
+                                  ? Image(image: AssetsValues.noImageImg)
+                                  // ? Image.file(File(
+                                  //     "/data/data/com.example.salesman/app_flutter/images/906782_PCS.jpg"))
+                                  : Image.file(File(
+                                      imgPath! + _itemlist[index]['image'])),
+                              // child: Image(image: AssetsValues.noImageImg),
+                            ),
                           ],
                         ),
                         Row(
