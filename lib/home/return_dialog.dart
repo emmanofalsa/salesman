@@ -205,7 +205,7 @@ class ReturnDialog extends StatelessWidget {
           onTap: () async {
             print(OrderData.returnReason);
             // ScaffoldMessenger.of(context).clearSnackBars();
-            if (OrderData.returnReason!.isEmpty) {
+            if (OrderData.returnReason.isEmpty) {
               // ScaffoldMessenger.of(context).showSnackBar(getSnackBar(
               //     "Input Reason for return", Colors.black, Colors.white));
               showGlobalSnackbar('Information', 'Input Reason for return.',

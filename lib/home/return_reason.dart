@@ -12,7 +12,7 @@ class _ReturnReasonState extends State<ReturnReason> {
   final txtController = TextEditingController();
   void initState() {
     super.initState();
-    txtController.text = OrderData.returnReason!;
+    txtController.text = OrderData.returnReason;
   }
 
   @override
