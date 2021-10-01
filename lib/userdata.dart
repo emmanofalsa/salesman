@@ -59,7 +59,7 @@ class OrderData {
   static bool setChequeImg = false;
   static List tranLine = [];
   static bool returnOrder = false;
-  static String? returnReason;
+  static String returnReason = "";
   static String specialInstruction = "";
   static bool note = false;
 }
