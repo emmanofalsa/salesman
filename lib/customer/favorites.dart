@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:salesman/api.dart';
-import 'package:salesman/customer/product_page.dart';
+// import 'package:salesman/customer/product_page.dart';
 import 'package:salesman/db/db_helper.dart';
 // import 'package:salesman/url/url.dart';
 import 'package:salesman/userdata.dart';
