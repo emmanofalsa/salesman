@@ -764,7 +764,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
             categ = true;
           }
 
-          if (_list[index]['image'] == '') {
+          if (_list[index]['image'] == '' || _list[index]['image'] == null) {
             // print(_list[index]['image']);
             noImage = true;
           } else {
