@@ -471,18 +471,26 @@ class _AddDialogState extends State<AddDialog> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: ColorsTheme.mainColor, width: 2),
-              ),
-              width: 180,
-              height: 150,
-              child: Image.file(File(imgPath! + CartData.imgpath!)),
-              // child: Image.memory(base64Decode(CartData.imgpath)),
-              // child:
-              //     Image(image: AssetImage('assets/images/no_image_item.jpg')),
-            ),
+            if (GlobalVariables.viewImg)
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: ColorsTheme.mainColor, width: 2),
+                ),
+                width: 180,
+                height: 150,
+                child: Image.file(File(imgPath! + CartData.imgpath!)),
+              )
+            else if (!GlobalVariables.viewImg)
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: ColorsTheme.mainColor, width: 2),
+                ),
+                width: 180,
+                height: 150,
+                child: Image(image: AssetsValues.noImageImg),
+              )
           ],
         ),
       ],

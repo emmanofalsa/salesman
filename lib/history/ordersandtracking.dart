@@ -1123,17 +1123,28 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                                         height: 80,
                                         color: ColorsTheme.mainColor,
                                       ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(left: 3, top: 3),
-                                        width: 75,
-                                        color: Colors.white,
-                                        child: noImage
-                                            ? Image(
-                                                image: AssetsValues.noImageImg)
-                                            : Image.file(File(imgPath +
-                                                _unservedList[index]['image'])),
-                                      ),
+                                      if (GlobalVariables.viewImg)
+                                        Container(
+                                          margin:
+                                              EdgeInsets.only(left: 3, top: 3),
+                                          width: 75,
+                                          color: Colors.white,
+                                          child: noImage
+                                              ? Image(
+                                                  image:
+                                                      AssetsValues.noImageImg)
+                                              : Image.file(File(imgPath +
+                                                  _unservedList[index]
+                                                      ['image'])),
+                                        )
+                                      else if (!GlobalVariables.viewImg)
+                                        Container(
+                                            margin: EdgeInsets.only(
+                                                left: 3, top: 3),
+                                            width: 75,
+                                            color: Colors.white,
+                                            child: Image(
+                                                image: AssetsValues.noImageImg))
                                     ],
                                   ),
                                   Row(
@@ -1528,17 +1539,28 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                                         height: 80,
                                         color: ColorsTheme.mainColor,
                                       ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(left: 3, top: 3),
-                                        width: 75,
-                                        color: Colors.white,
-                                        child: noImage
-                                            ? Image(
-                                                image: AssetsValues.noImageImg)
-                                            : Image.file(File(imgPath +
-                                                _returnedList[index]['image'])),
-                                      ),
+                                      if (GlobalVariables.viewImg)
+                                        Container(
+                                          margin:
+                                              EdgeInsets.only(left: 3, top: 3),
+                                          width: 75,
+                                          color: Colors.white,
+                                          child: noImage
+                                              ? Image(
+                                                  image:
+                                                      AssetsValues.noImageImg)
+                                              : Image.file(File(imgPath +
+                                                  _returnedList[index]
+                                                      ['image'])),
+                                        )
+                                      else if (!GlobalVariables.viewImg)
+                                        Container(
+                                            margin: EdgeInsets.only(
+                                                left: 3, top: 3),
+                                            width: 75,
+                                            color: Colors.white,
+                                            child: Image(
+                                                image: AssetsValues.noImageImg))
                                     ],
                                   ),
                                   Row(
@@ -1932,17 +1954,28 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                                         height: 80,
                                         color: ColorsTheme.mainColor,
                                       ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(left: 3, top: 3),
-                                        width: 75,
-                                        color: Colors.white,
-                                        child: noImage
-                                            ? Image(
-                                                image: AssetsValues.noImageImg)
-                                            : Image.file(File(imgPath +
-                                                _unservedList[index]['image'])),
-                                      ),
+                                      if (GlobalVariables.viewImg)
+                                        Container(
+                                          margin:
+                                              EdgeInsets.only(left: 3, top: 3),
+                                          width: 75,
+                                          color: Colors.white,
+                                          child: noImage
+                                              ? Image(
+                                                  image:
+                                                      AssetsValues.noImageImg)
+                                              : Image.file(File(imgPath +
+                                                  _unservedList[index]
+                                                      ['image'])),
+                                        )
+                                      else if (!GlobalVariables.viewImg)
+                                        Container(
+                                            margin: EdgeInsets.only(
+                                                left: 3, top: 3),
+                                            width: 75,
+                                            color: Colors.white,
+                                            child: Image(
+                                                image: AssetsValues.noImageImg))
                                     ],
                                   ),
                                   Row(
@@ -2322,17 +2355,28 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                                         height: 80,
                                         color: ColorsTheme.mainColor,
                                       ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(left: 3, top: 3),
-                                        width: 75,
-                                        color: Colors.white,
-                                        child: noImage
-                                            ? Image(
-                                                image: AssetsValues.noImageImg)
-                                            : Image.file(File(imgPath +
-                                                _returnedList[index]['image'])),
-                                      ),
+                                      if (GlobalVariables.viewImg)
+                                        Container(
+                                          margin:
+                                              EdgeInsets.only(left: 3, top: 3),
+                                          width: 75,
+                                          color: Colors.white,
+                                          child: noImage
+                                              ? Image(
+                                                  image:
+                                                      AssetsValues.noImageImg)
+                                              : Image.file(File(imgPath +
+                                                  _returnedList[index]
+                                                      ['image'])),
+                                        )
+                                      else if (!GlobalVariables.viewImg)
+                                        Container(
+                                            margin: EdgeInsets.only(
+                                                left: 3, top: 3),
+                                            width: 75,
+                                            color: Colors.white,
+                                            child: Image(
+                                                image: AssetsValues.noImageImg))
                                     ],
                                   ),
                                   Row(
@@ -2809,15 +2853,22 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                               height: 80,
                               color: ColorsTheme.mainColor,
                             ),
-                            Container(
-                              margin: EdgeInsets.only(left: 3, top: 3),
-                              width: 75,
-                              color: Colors.white,
-                              child: noImage
-                                  ? Image(image: AssetsValues.noImageImg)
-                                  : Image.file(
-                                      File(imgPath + _list[index]['image'])),
-                            ),
+                            if (GlobalVariables.viewImg)
+                              Container(
+                                margin: EdgeInsets.only(left: 3, top: 3),
+                                width: 75,
+                                color: Colors.white,
+                                child: noImage
+                                    ? Image(image: AssetsValues.noImageImg)
+                                    : Image.file(
+                                        File(imgPath + _list[index]['image'])),
+                              )
+                            else if (!GlobalVariables.viewImg)
+                              Container(
+                                  margin: EdgeInsets.only(left: 3, top: 3),
+                                  width: 75,
+                                  color: Colors.white,
+                                  child: Image(image: AssetsValues.noImageImg))
                           ],
                         ),
                         Row(

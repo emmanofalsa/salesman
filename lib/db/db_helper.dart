@@ -14,7 +14,7 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._();
   static Database? _database;
   // static final _dbName = 'DISTAPPDB72.db'; //TEST VERSION
-  static final _dbName = 'DISTAPPDBB67.db';
+  static final _dbName = 'DISTAPPDBB69.db';
   // static final _dbName = 'DISTAPPDB9.db';
   static final _dbVersion = 1;
 

@@ -119,6 +119,8 @@ class GlobalVariables {
   static bool consolidatedOrder = false;
   static String appVersion = '01';
   static String updateType = '';
+  // static String dlPercentage = '';
+  static String progressString = '';
   static bool updateSpinkit = true;
   static bool uploaded = false;
   static String tableProcessing = '';

@@ -812,15 +812,23 @@ class _CustomerCartState extends State<CustomerCart> {
                               height: 80,
                               color: ColorsTheme.mainColor,
                             ),
-                            Container(
-                              margin: EdgeInsets.only(left: 3, top: 3),
-                              width: 75,
-                              color: Colors.white,
-                              child: noImage
-                                  ? Image(image: AssetsValues.noImageImg)
-                                  : Image.file(
-                                      File(imgPath + templist[index]['image'])),
-                            ),
+                            if (GlobalVariables.viewImg)
+                              Container(
+                                margin: EdgeInsets.only(left: 3, top: 3),
+                                width: 75,
+                                color: Colors.white,
+                                child: noImage
+                                    ? Image(image: AssetsValues.noImageImg)
+                                    : Image.file(File(
+                                        imgPath + templist[index]['image'])),
+                              )
+                            else if (!GlobalVariables.viewImg)
+                              Container(
+                                margin: EdgeInsets.only(left: 3, top: 3),
+                                width: 75,
+                                color: Colors.white,
+                                child: Image(image: AssetsValues.noImageImg),
+                              )
                           ],
                         ),
                         Row(

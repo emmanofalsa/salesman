@@ -1057,17 +1057,22 @@ class _ConsolidatedListViewState extends State<ConsolidatedListView> {
                                   height: 80,
                                   color: Colors.deepOrange,
                                 ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 3, top: 3),
-                                  width: 75,
-                                  // color: Colors.grey,
-                                  // child: Image.network(UrlAddress.itemImg +
-                                  //     _list[index]['item_path']),
-                                  child: noImage
-                                      ? Image(image: AssetsValues.noImageImg)
-                                      : Image.file(File(
-                                          imgPath + _list[index]['image'])),
-                                ),
+                                if (GlobalVariables.viewImg)
+                                  Container(
+                                    margin: EdgeInsets.only(left: 3, top: 3),
+                                    width: 75,
+                                    child: noImage
+                                        ? Image(image: AssetsValues.noImageImg)
+                                        : Image.file(File(
+                                            imgPath + _list[index]['image'])),
+                                  )
+                                else if (!GlobalVariables.viewImg)
+                                  Container(
+                                      margin: EdgeInsets.only(left: 3, top: 3),
+                                      width: 75,
+                                      color: Colors.white,
+                                      child:
+                                          Image(image: AssetsValues.noImageImg))
                               ],
                             ),
                             Row(

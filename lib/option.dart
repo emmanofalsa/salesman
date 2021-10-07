@@ -160,7 +160,8 @@ class _MyOptionPageState extends State<MyOptionPage> {
       if (stat == '' || stat == null) {
         print('Checking Status');
       } else {
-        itemImage();
+        // itemImage(); // OLD PROCESS
+        checkEmpty();
       }
     });
   }
@@ -173,8 +174,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
     if (itemImgList.isEmpty) {
       var rsp = await db.getItemImgList();
       itemImgList = rsp;
-      // _asyncmethod(); //PA SAVE SA IMAGE ONLINE TO FILE
-      // _downloadZip(UrlAddress.itemImg + 'img.zip', 'img.zip');
       _downloadZip();
     } else {
       print('Image Already downloaded in phone.');

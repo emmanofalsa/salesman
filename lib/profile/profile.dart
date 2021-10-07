@@ -5,6 +5,7 @@ import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:path_provider/path_provider.dart';
 // import 'package:path_provider/path_provider.dart';
 // import 'package:path_provider/path_provider.dart';
 import 'package:salesman/db/db_helper.dart';
@@ -32,6 +33,7 @@ class _ProfileState extends State<Profile> {
   String? imgPath;
   String? imgName;
   bool loadingImg = true;
+
   // File _image;
   DatabaseHelper db = DatabaseHelper();
 
@@ -51,6 +53,7 @@ class _ProfileState extends State<Profile> {
     checkVersion();
     GlobalVariables.dataPrivacyNoticeScrollBottom = false;
     print(UrlAddress.userImg + UserData.img!);
+    // _initDir();
   }
 
   // getImagePath() async {
