@@ -12,6 +12,7 @@ import 'package:salesman/profile/input_oldpass.dart';
 import 'package:salesman/profile/message_inbox.dart';
 import 'package:salesman/profile/notice.dart';
 import 'package:salesman/profile/profile_info.dart';
+import 'package:salesman/profile/settings.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/url/url.dart';
 import 'package:salesman/userdata.dart';
@@ -264,6 +265,8 @@ class _ProfileState extends State<Profile> {
                   buildChangePass(context),
                   SizedBox(height: 3),
                   buildPrivacyNot(context),
+                  SizedBox(height: 3),
+                  buildSettings(context),
                   SizedBox(height: 30),
                   buildLogout(context),
                   SizedBox(height: 30),
@@ -295,6 +298,53 @@ class _ProfileState extends State<Profile> {
                   ],
                 ),
               ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container buildSettings(BuildContext context) {
+    return Container(
+      height: 50,
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.only(right: 15),
+      color: Colors.white,
+      child: InkWell(
+        onTap: () async {
+          if (NetworkData.connected == true) {
+            showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) => ViewSettings());
+          } else {
+            showGlobalSnackbar('Connectivity', 'Please connect to internet.',
+                Colors.red.shade900, Colors.white);
+          }
+        },
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: Icon(
+                CupertinoIcons.gear_alt_fill,
+                color: Colors.grey[700],
+                size: 24,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                'Settings',
+                style: TextStyle(
+                  color: Colors.grey[900],
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.chevron_right,
+              color: Colors.grey,
             )
           ],
         ),

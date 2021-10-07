@@ -102,6 +102,7 @@ class CartData {
 }
 
 class GlobalVariables {
+  static bool viewImg = false;
   static String? itmQty;
   static int menuKey = 0;
   static String? tranNo;
