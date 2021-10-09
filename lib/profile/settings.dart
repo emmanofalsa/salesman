@@ -1,4 +1,8 @@
+// import 'dart:io';
+
 import 'dart:io';
+
+import 'package:archive/archive_io.dart';
 import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,8 +25,11 @@ class ViewSettings extends StatefulWidget {
 }
 
 class _ViewSettingsState extends State<ViewSettings> {
-  List<String>? _images, _tempImages;
+  // List<String>? _images, _tempImages;
+  List<String> _images = [];
+  List<String> _tempImages = [];
   String? _dir;
+  // 'img.zip'
   String _zipPath = UrlAddress.itemImg + 'img.zip';
   String _localZipFileName = 'img.zip';
   bool downloading = false;
@@ -30,9 +37,6 @@ class _ViewSettingsState extends State<ViewSettings> {
   void initState() {
     super.initState();
     _initDir();
-    _images = [];
-    // _tempImages = List();
-    _tempImages = [];
   }
 
   _initDir() async {
@@ -40,6 +44,9 @@ class _ViewSettingsState extends State<ViewSettings> {
       _dir = (await getApplicationDocumentsDirectory()).path;
       print(_dir);
     }
+    _images = [];
+    // _tempImages = List();
+    _tempImages = [];
   }
 
   void handleUserInteraction([_]) {
@@ -51,14 +58,26 @@ class _ViewSettingsState extends State<ViewSettings> {
 
   checkImage() async {
     if (!GlobalVariables.viewImg) {
-      String file = '$_dir/$_localZipFileName';
+      var file = '$_dir/$_localZipFileName';
+
       if (await File(file).exists()) {
         print("File exists");
+        // String imgFile = '$_dir/' + 'no_image_item.jpg';
+        // if (await File(imgFile).exists()) {
+        //   print('FOUND!');
+        //   print(imgFile);
+        // } else {
+        //   print('IMAGE NOT FOUND!');
+        // }
       } else {
         final action = await Dialogs.openDialog(context, 'Confirmation',
             'Are you sure you want to download images?', true, 'No', 'Yes');
         if (action == DialogAction.yes) {
           print('Downloading');
+          setState(() {
+            downloading = true;
+            GlobalVariables.progressString = "Preparing Download...";
+          });
           // showDialog(
           //     barrierDismissible: false,
           //     context: context,
@@ -66,9 +85,10 @@ class _ViewSettingsState extends State<ViewSettings> {
           downloadingImage();
         } else {
           // Navigator.pop(context);
-          setState(() {
-            GlobalVariables.viewImg = false;
-          });
+          // setState(() {
+          GlobalVariables.viewImg = false;
+          Navigator.pop(context);
+          // });
         }
       }
     }
@@ -77,53 +97,58 @@ class _ViewSettingsState extends State<ViewSettings> {
   Future<void> downloadingImage() async {
     Dio dio = Dio();
     GlobalVariables.progressString = '';
-    _images!.clear();
-    _tempImages!.clear();
+    _images.clear();
+    _tempImages.clear();
     try {
-      var zippedFile = await dio.download(_zipPath, "$_dir/$_localZipFileName",
+      await dio.download(_zipPath, "$_dir/$_localZipFileName",
           onReceiveProgress: (int rec, int total) {
-        print("Rec: $rec, Total: $total");
         setState(() {
-          downloading = true;
+          print("Rec: $rec, Total: $total");
           GlobalVariables.progressString =
               "Downloading " + ((rec / total) * 100).toStringAsFixed(0) + "%";
           print(GlobalVariables.progressString);
         });
       });
-      await unarchiveAndSave(zippedFile);
+      await unarchiveAndSave();
+      setState(() {
+        _images.addAll(_tempImages);
+        downloading = false;
+        GlobalVariables.progressString = 'Completed';
+      });
     } catch (e) {
       print(e);
+      setState(() {
+        GlobalVariables.progressString = 'Error when Downloading';
+      });
     }
-
     setState(() {
-      _images!.addAll(_tempImages!);
-      // downloading = false;
-      GlobalVariables.progressString = 'Extracting zipped file...';
-      // Navigator.pop(context);
+      //   _images.addAll(_tempImages);
+      //   downloading = false;
+      // GlobalVariables.progressString = 'Extracting Zipped File...';
     });
 
-    print('Download Complete');
+    // print('Download Complete');
   }
 
-  unarchiveAndSave(var zippedFile) async {
+  unarchiveAndSave() async {
     print('NAHUMAN NAG DOWNLOAD');
+    var file = '$_dir/$_localZipFileName';
 
-    var bytes = zippedFile.readAsBytesSync();
+    GlobalVariables.progressString = 'Extracting Zipped File...';
+    var bytes = File(file).readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
     for (var file in archive) {
       var fileName = '$_dir/${file.name}';
+      print(fileName);
       if (file.isFile) {
         var outFile = File(fileName);
-        print('File:: ' + outFile.path);
-        _tempImages!.add(outFile.path);
+        // print('File: ' + outFile.path);
+        _tempImages.add(outFile.path);
         outFile = await outFile.create(recursive: true);
         await outFile.writeAsBytes(file.content);
+        // print(_tempImages);
       }
     }
-    setState(() {
-      downloading = false;
-      GlobalVariables.progressString = 'Completed';
-    });
   }
 
   // _toggle() {
