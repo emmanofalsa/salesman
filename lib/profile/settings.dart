@@ -1,7 +1,4 @@
-// import 'dart:io';
-
 import 'dart:io';
-
 import 'package:archive/archive_io.dart';
 import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
@@ -30,8 +27,8 @@ class _ViewSettingsState extends State<ViewSettings> {
   List<String> _tempImages = [];
   String? _dir;
   // 'img.zip'
-  String _zipPath = UrlAddress.itemImg + 'img.zip';
-  String _localZipFileName = 'img.zip';
+  String _zipPath = UrlAddress.itemImg + 'img10k.zip';
+  String _localZipFileName = 'img10k.zip';
   bool downloading = false;
 
   void initState() {
