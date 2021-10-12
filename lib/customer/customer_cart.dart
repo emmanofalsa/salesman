@@ -494,12 +494,12 @@ class _CustomerCartState extends State<CustomerCart> {
                                     } else {
                                       if (double.parse(CartData.totalAmount) <
                                           double.parse(
-                                              GlobalVariables.minOrder!)) {
+                                              GlobalVariables.minOrder)) {
                                         String msg =
                                             'Order amount did not reached the minimum amount of ' +
                                                 formatCurrencyAmt.format(
                                                     double.parse(GlobalVariables
-                                                        .minOrder!)) +
+                                                        .minOrder)) +
                                                 '.' +
                                                 ' Add more items?';
                                         final action = await Dialogs.openDialog(

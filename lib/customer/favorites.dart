@@ -166,10 +166,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     CartData.imgpath = _flist[index]['image'],
                     CartData.itmTotal =
                         (double.parse(_flist[index]['list_price_wtax']) *
-                                double.parse(CartData.itmQty!))
+                                double.parse(CartData.itmQty))
                             .toString(),
                     print('Item Amount:' + CartData.itmAmt!),
-                    print('Item Qty:' + CartData.itmQty!),
+                    print('Item Qty:' + CartData.itmQty),
                     print(CartData.itmTotal),
                     print(CartData.imgpath),
                     showDialog(
@@ -341,8 +341,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                           CartData.itmTotal = (double.parse(
                                                       _flist[index]
                                                           ['list_price_wtax']) *
-                                                  double.parse(
-                                                      CartData.itmQty!))
+                                                  double.parse(CartData.itmQty))
                                               .toString(),
                                           showDialog(
                                               context: context,
@@ -453,11 +452,11 @@ class _AddDialogState extends State<AddDialog> {
       _setlist.forEach((element) {
         CartData.itmAmt = (element['list_price_wtax']);
         CartData.itmTotal =
-            (double.parse(CartData.itmAmt!) * double.parse(CartData.itmQty!))
+            (double.parse(CartData.itmAmt!) * double.parse(CartData.itmQty))
                 .toString();
         CartData.imgpath = (element['image']);
         print('Item Amount:' + CartData.itmAmt!);
-        print('Item Qty:' + CartData.itmQty!);
+        print('Item Qty:' + CartData.itmQty);
         print(CartData.itmTotal);
       });
     });
@@ -628,16 +627,16 @@ class _AddDialogState extends State<AddDialog> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    if (int.parse(CartData.itmQty!) > 0) {
+                                    if (int.parse(CartData.itmQty) > 0) {
                                       int i = 0;
-                                      i = int.parse(CartData.itmQty!) - 1;
+                                      i = int.parse(CartData.itmQty) - 1;
                                       CartData.itmQty = i.toString();
-                                      CartData.itmTotal = (double.parse(
-                                                  CartData.itmAmt!) *
-                                              double.parse(CartData.itmQty!))
-                                          .toString();
+                                      CartData.itmTotal =
+                                          (double.parse(CartData.itmAmt!) *
+                                                  double.parse(CartData.itmQty))
+                                              .toString();
                                       // print(CartData.itmTotal);
-                                      qtyController.text = CartData.itmQty!;
+                                      qtyController.text = CartData.itmQty;
                                     }
                                   });
                                 },
@@ -662,15 +661,14 @@ class _AddDialogState extends State<AddDialog> {
                                   onChanged: (text) {
                                     setState(() {
                                       CartData.itmQty = qtyController.text;
-                                      if (double.parse(CartData.itmQty!) >
-                                          100) {
+                                      if (double.parse(CartData.itmQty) > 100) {
                                         qtyController.text = '100';
                                         CartData.itmQty = '100';
                                       }
-                                      CartData.itmTotal = (double.parse(
-                                                  CartData.itmAmt!) *
-                                              double.parse(CartData.itmQty!))
-                                          .toString();
+                                      CartData.itmTotal =
+                                          (double.parse(CartData.itmAmt!) *
+                                                  double.parse(CartData.itmQty))
+                                              .toString();
                                       print(CartData.itmTotal);
                                     });
                                   },
@@ -696,18 +694,18 @@ class _AddDialogState extends State<AddDialog> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    if (double.parse(CartData.itmQty!) >= 100) {
+                                    if (double.parse(CartData.itmQty) >= 100) {
                                       qtyController.text = '100';
                                       CartData.itmQty = '100';
                                     } else {
                                       int i = 0;
-                                      i = int.parse(CartData.itmQty!) + 1;
+                                      i = int.parse(CartData.itmQty) + 1;
                                       CartData.itmQty = i.toString();
                                       CartData.itmTotal =
                                           (double.parse(CartData.itmAmt!) *
-                                                  int.parse(CartData.itmQty!))
+                                                  int.parse(CartData.itmQty))
                                               .toString();
-                                      qtyController.text = CartData.itmQty!;
+                                      qtyController.text = CartData.itmQty;
                                     }
                                   });
                                 },

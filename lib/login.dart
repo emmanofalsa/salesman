@@ -99,6 +99,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
   }
 
   checkStatus() async {
+    GlobalVariables.viewImg = false;
     var stat = await db.checkStat();
     // setState(() {
     if (stat == 'Connected') {

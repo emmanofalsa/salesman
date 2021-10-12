@@ -89,12 +89,12 @@ class CartData {
   static String itmNo = '0';
   static String? itmLineNo;
   static String totalAmount = '0';
-  static String? setCateg;
+  static String setCateg = '';
   static String? itmCode;
   static String? itmDesc;
   static String? itmUom;
   static String? itmAmt;
-  static String? itmQty;
+  static String itmQty = '';
   static String? itmTotal;
   static String? cartTotal;
   static String? imgpath;
@@ -114,7 +114,7 @@ class GlobalVariables {
   static List returnList = [];
   static bool emptyFav = true;
   static bool processedPressed = false;
-  static String? minOrder;
+  static String minOrder = '0';
   static bool outofStock = false;
   static bool consolidatedOrder = false;
   static String appVersion = '01';

@@ -55,7 +55,7 @@ class _ViewSettingsState extends State<ViewSettings> {
 
   checkImage() async {
     if (!GlobalVariables.viewImg) {
-      var file = '$_dir/$_localZipFileName';
+      var file = '$_dir/' + 'no_image_item.jpg';
 
       if (await File(file).exists()) {
         print("File exists");
@@ -116,6 +116,7 @@ class _ViewSettingsState extends State<ViewSettings> {
       print(e);
       setState(() {
         GlobalVariables.progressString = 'Error when Downloading';
+        downloading = false;
       });
     }
     setState(() {
@@ -165,50 +166,53 @@ class _ViewSettingsState extends State<ViewSettings> {
       onPanDown: (details) {
         handleUserInteraction();
       },
-      child: Scaffold(
-        appBar: AppBar(
-          // automaticallyImplyLeading: false,
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Settings',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
-              ),
-            ],
+      child: WillPopScope(
+        onWillPop: () => Future.value(!downloading),
+        child: Scaffold(
+          appBar: AppBar(
+            // automaticallyImplyLeading: false,
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Settings',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                ),
+              ],
+            ),
+            // centerTitle: true,
+            elevation: 0,
+            // toolbarHeight: 50,
           ),
-          // centerTitle: true,
-          elevation: 0,
-          // toolbarHeight: 50,
-        ),
-        backgroundColor: ColorsTheme.mainColor,
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        )),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 15),
-                        buildImageOption(context),
-                        SizedBox(height: 25),
-                        Visibility(
-                            visible: downloading,
-                            child: buildDownloadProgress(context)),
-                      ],
-                    )),
-              ),
-            ],
+          backgroundColor: ColorsTheme.mainColor,
+          body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          )),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 15),
+                          buildImageOption(context),
+                          SizedBox(height: 25),
+                          Visibility(
+                              visible: downloading,
+                              child: buildDownloadProgress(context)),
+                        ],
+                      )),
+                ),
+              ],
+            ),
           ),
         ),
       ),

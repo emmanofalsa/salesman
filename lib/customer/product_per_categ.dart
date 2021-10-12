@@ -27,7 +27,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
   bool outofStock = false;
   bool noImage = true;
 
-  String? imgPath;
+  String imgPath = '';
   String _searchController = "";
   String uom = CartData.itmUom.toString();
 
@@ -238,7 +238,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                                   TextSpan(
                                       text: formatCurrencyAmt.format(
                                           double.parse(
-                                              GlobalVariables.minOrder!)),
+                                              GlobalVariables.minOrder)),
                                       style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500,
@@ -385,7 +385,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                       print(CartData.imgpath);
                       CartData.itmTotal =
                           (double.parse(_itemlist[index]['list_price_wtax']) *
-                                  double.parse(CartData.itmQty!))
+                                  double.parse(CartData.itmQty))
                               .toString();
                       if (_itemlist[index]['status'] == '0') {
                         GlobalVariables.outofStock = true;
@@ -461,7 +461,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                                     // ? Image.file(File(
                                     //     "/data/data/com.example.salesman/app_flutter/images/906782_PCS.jpg"))
                                     : Image.file(File(
-                                        imgPath! + _itemlist[index]['image'])),
+                                        imgPath + _itemlist[index]['image'])),
                                 // child: Image(image: AssetsValues.noImageImg),
                               )
                             else if (!GlobalVariables.viewImg)
@@ -637,7 +637,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                                         child: Container(
                                           // color: Colors.green,
                                           // padding: EdgeInsets.only(right: 20),
-                                          child: !favorite
+                                          child: favorite
                                               ? Icon(
                                                   Icons.favorite_border,
                                                   color: ColorsTheme.mainColor,
@@ -667,8 +667,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                                           CartData.itmTotal = (double.parse(
                                                       _itemlist[index]
                                                           ['list_price_wtax']) *
-                                                  double.parse(
-                                                      CartData.itmQty!))
+                                                  double.parse(CartData.itmQty))
                                               .toString();
                                           CartData.imgpath =
                                               _itemlist[index]['image'];
@@ -804,7 +803,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
             alignment: Alignment.centerLeft,
             // color: Colors.lightGreen,
             child: Text(
-              CartData.setCateg!,
+              CartData.setCateg,
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 26,
