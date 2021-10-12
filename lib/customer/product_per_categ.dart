@@ -637,7 +637,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                                         child: Container(
                                           // color: Colors.green,
                                           // padding: EdgeInsets.only(right: 20),
-                                          child: favorite
+                                          child: !favorite
                                               ? Icon(
                                                   Icons.favorite_border,
                                                   color: ColorsTheme.mainColor,

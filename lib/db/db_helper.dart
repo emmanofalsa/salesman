@@ -1013,7 +1013,7 @@ class DatabaseHelper {
   Future searchItems(categ, text) async {
     var client = await db;
     return client.rawQuery(
-        "SELECT * FROM item_masterfiles WHERE product_family ='$categ' AND product_name LIKE '%$text%'",
+        "SELECT * FROM item_masterfiles WHERE product_family ='$categ' AND product_name LIKE '%$text%' AND conversion_qty ='1'",
         null);
   }
 

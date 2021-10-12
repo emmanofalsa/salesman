@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:salesman/customer/customer_cart.dart';
 import 'package:salesman/customer/favorites.dart';
 import 'package:salesman/customer/product_per_categ.dart';
@@ -18,6 +21,7 @@ class _ProductPageState extends State<ProductPage> {
   final searchController = TextEditingController();
   List _categlist = [];
   String _searchController = "";
+  String categPath = '';
   // List _flist = [];
   bool viewSpinkit = true;
 
@@ -29,6 +33,10 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   loadCateg() async {
+    var documentDirectory = await getApplicationDocumentsDirectory();
+    var firstPath = documentDirectory.path + '/category/';
+    // var filePathAndName = documentDirectory.path + '/images/pic.jpg';
+    categPath = firstPath;
     var ctg = await db.ofFetchCategList();
     setState(() {
       _categlist = ctg;
@@ -250,11 +258,14 @@ class _ProductPageState extends State<ProductPage> {
                       Column(
                         children: <Widget>[
                           Container(
-                              width: MediaQuery.of(context).size.width - 20 / 2,
-                              child:
-                                  // Image.memory(base64Decode(
-                                  //     _categlist[index]['category_image'])),
-                                  Image(image: AssetsValues.noImageImg)),
+                            width: MediaQuery.of(context).size.width - 20 / 2,
+                            child:
+                                // Image.memory(base64Decode(
+                                //     _categlist[index]['category_image'])),
+                                // Image(image: AssetsValues.noImageImg)),
+                                Image.file(File(categPath +
+                                    _categlist[index]['category_image'])),
+                          ),
                         ],
                       ),
                       Column(

@@ -316,15 +316,19 @@ class _ProfileState extends State<Profile> {
       color: Colors.white,
       child: InkWell(
         onTap: () async {
-          if (NetworkData.connected == true) {
-            showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) => ViewSettings());
-          } else {
-            showGlobalSnackbar('Connectivity', 'Please connect to internet.',
-                Colors.red.shade900, Colors.white);
-          }
+          showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => ViewSettings());
+          // if (NetworkData.connected == true) {
+          //   showDialog(
+          //       barrierDismissible: false,
+          //       context: context,
+          //       builder: (context) => ViewSettings());
+          // } else {
+          //   showGlobalSnackbar('Connectivity', 'Please connect to internet.',
+          //       Colors.red.shade900, Colors.white);
+          // }
         },
         child: Row(
           children: [
