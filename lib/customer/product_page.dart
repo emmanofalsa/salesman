@@ -257,15 +257,17 @@ class _ProductPageState extends State<ProductPage> {
                     children: <Widget>[
                       Column(
                         children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width - 20 / 2,
-                            child:
-                                // Image.memory(base64Decode(
-                                //     _categlist[index]['category_image'])),
-                                // Image(image: AssetsValues.noImageImg)),
-                                Image.file(File(categPath +
-                                    _categlist[index]['category_image'])),
-                          ),
+                          if (GlobalVariables.viewImg)
+                            Container(
+                                width:
+                                    MediaQuery.of(context).size.width - 20 / 2,
+                                child: Image.file(File(categPath +
+                                    _categlist[index]['category_image'])))
+                          else if (!GlobalVariables.viewImg)
+                            Container(
+                                width:
+                                    MediaQuery.of(context).size.width - 20 / 2,
+                                child: Image(image: AssetsValues.noImageImg))
                         ],
                       ),
                       Column(
