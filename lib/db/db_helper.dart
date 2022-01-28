@@ -883,7 +883,7 @@ class DatabaseHelper {
   Future ofFetchForUploadSalesman(code) async {
     var client = await db;
     return client.rawQuery(
-        'SELECT * FROM tb_tran_head WHERE sm_code ="$code" AND tran_stat ="Pending" AND sm_upload !="TRUE" ORDER BY store_name ASC',
+        'SELECT * FROM tb_tran_head WHERE sm_code ="$code" AND tran_stat ="Pending" AND sm_upload !="TRUE" ORDER BY date_req ASC',
         null);
   }
 
@@ -1267,6 +1267,41 @@ class DatabaseHelper {
     final response = await retry(() =>
         http.post(url, headers: {"Accept": "Application/json"}, body: {}));
     var convertedDatatoJson = jsonDecode(decrypt(response.body));
+    return convertedDatatoJson;
+  }
+
+  Future saveTransactions(
+      String userId,
+      String date,
+      String custId,
+      String storeName,
+      String payment,
+      String itmcount,
+      String totamt,
+      String stat,
+      String signature,
+      String smStat,
+      String hepeStat,
+      List line) async {
+    // String url = UrlAddress.url + '/addtranhead';
+    var url = Uri.parse(UrlAddress.url + '/addtransactions');
+    final response = await retry(() => http.post(url, headers: {
+          "Accept": "Application/json"
+        }, body: {
+          'sm_code': encrypt(userId),
+          'date_req': encrypt(date),
+          'account_code': encrypt(custId),
+          'store_name': encrypt(storeName),
+          'p_meth': encrypt(payment),
+          'itm_count': encrypt(itmcount),
+          'tot_amt': encrypt(totamt),
+          'tran_stat': encrypt(stat),
+          'auth_signature': encrypt(signature),
+          'sm_upload': encrypt(smStat),
+          'hepe_upload': encrypt(hepeStat),
+          'line': jsonEncode(line),
+        }));
+    var convertedDatatoJson = jsonDecode(response.body);
     return convertedDatatoJson;
   }
 

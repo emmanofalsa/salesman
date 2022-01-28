@@ -144,7 +144,7 @@ class _SyncSalesmanState extends State<SyncSalesman> {
   upload() async {
     String tmpTranNo = '';
     String tranNo = '';
-    List _rspList = [];
+    // List _rspList = [];
     int x = 0;
     if (NetworkData.errorMsgShow == false &&
         uploading == false &&
@@ -153,7 +153,14 @@ class _SyncSalesmanState extends State<SyncSalesman> {
         NetworkData.uploaded = true;
         uploading = true;
 
-        var rsp = await db.saveTransactionHead(
+        var tmp = await db.getTransactionLine(element['tran_no']);
+        if (!mounted) return;
+        setState(() {
+          _tempList = tmp;
+        });
+        print('SEND');
+        print(_tempList);
+        var rsp = await db.saveTransactions(
             element['sm_code'],
             element['date_req'],
             element['account_code'],
@@ -164,39 +171,21 @@ class _SyncSalesmanState extends State<SyncSalesman> {
             element['tran_stat'],
             element['signature'],
             'TRUE',
-            element['hepe_upload']);
+            element['hepe_upload'],
+            _tempList);
         setState(() {
           x++;
-          _rspList = rsp;
+          // _rspList = rsp;
+          print('RETURN');
+          print(rsp);
           tmpTranNo = element['tran_no'];
-          tranNo = rsp[0]['tran_no'];
-          if (_rspList.isNotEmpty) {
+          tranNo = rsp;
+          if (rsp.isNotEmpty) {
+            //PA CHANGE STATUS SA SQLITE
             db.updateTranUploadStatSM(tmpTranNo, tranNo);
-            // print('UPDATING TRAN RETURN:' + tran.toString());
             db.updateLineUploadStat(tmpTranNo, tranNo);
-            // print('UPDATING LINE RETURN:' + line.toString());
-
-            _rspList.forEach((element) async {
-              var tmp = await db.getTransactionLine(element['tran_no']);
-              setState(() {
-                _tempList = tmp;
-                _tempList.forEach((element) async {
-                  print(element['item_desc']);
-                  await db.saveTransactionLine(
-                      element['tran_no'],
-                      element['itm_code'],
-                      element['item_desc'],
-                      element['req_qty'],
-                      element['uom'],
-                      element['amt'],
-                      element['tot_amt'],
-                      element['itm_cat'],
-                      element['account_code'],
-                      element['date_req']);
-                });
-              });
-            });
           }
+          print(x);
           if (x == _toList.length) {
             GlobalVariables.uploaded = true;
             NetworkData.uploaded = false;
@@ -210,6 +199,7 @@ class _SyncSalesmanState extends State<SyncSalesman> {
 
   loadForUpload() async {
     var getP = await db.ofFetchForUploadSalesman(UserData.id);
+    if (!mounted) return;
     setState(() {
       _toList = getP;
       if (_toList.isEmpty) {
@@ -1717,6 +1707,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       });
     } else {
       print('EMPTY RETURN LIST');
+      await db.deleteTable('tb_returned_tran');
     }
 
     //RETURNED/UNSERVED LIST
@@ -1737,6 +1728,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       });
     } else {
       print('EMPTY UNSERVED LIST');
+      await db.deleteTable('tb_unserved_items');
     }
 
     //CHEQUE DATA UPDATE
@@ -1757,6 +1749,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       });
     } else {
       print('EMPTY CHEQUE LIST');
+      await db.deleteTable('tb_cheque_data');
     }
     //LINE UPDATE
     var linersp = await db.getTranLine();
@@ -1776,6 +1769,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       });
     } else {
       print('EMPTY TRANSACTION LINE');
+      await db.deleteTable('tb_tran_line');
     }
     //TRAN UPDATE
     var thead = await db.getTranHead();
@@ -1799,6 +1793,8 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       });
     } else {
       print('EMPTY TRANSACTION HEAD');
+      await db.deleteTable('tb_tran_head');
+      GlobalVariables.updateSpinkit = true;
     }
   }
 
@@ -2093,3 +2089,72 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
     );
   }
 }
+
+
+// upload() async {
+//     String tmpTranNo = '';
+//     String tranNo = '';
+//     List _rspList = [];
+//     int x = 0;
+//     if (NetworkData.errorMsgShow == false &&
+//         uploading == false &&
+//         !GlobalVariables.uploaded) {
+//       _toList.forEach((element) async {
+//         NetworkData.uploaded = true;
+//         uploading = true;
+
+//         var rsp = await db.saveTransactionHead(
+//             element['sm_code'],
+//             element['date_req'],
+//             element['account_code'],
+//             element['store_name'],
+//             element['p_meth'],
+//             element['itm_count'],
+//             element['tot_amt'],
+//             element['tran_stat'],
+//             element['signature'],
+//             'TRUE',
+//             element['hepe_upload']);
+//         setState(() {
+//           x++;
+//           _rspList = rsp;
+//           tmpTranNo = element['tran_no'];
+//           tranNo = rsp[0]['tran_no'];
+//           if (_rspList.isNotEmpty) {
+//             db.updateTranUploadStatSM(tmpTranNo, tranNo);
+//             // print('UPDATING TRAN RETURN:' + tran.toString());
+//             db.updateLineUploadStat(tmpTranNo, tranNo);
+//             // print('UPDATING LINE RETURN:' + line.toString());
+
+//             _rspList.forEach((element) async {
+//               var tmp = await db.getTransactionLine(element['tran_no']);
+//               if (!mounted) return;
+//               setState(() {
+//                 _tempList = tmp;
+//                 _tempList.forEach((element) async {
+//                   print(element['item_desc']);
+//                   await db.saveTransactionLine(
+//                       element['tran_no'],
+//                       element['itm_code'],
+//                       element['item_desc'],
+//                       element['req_qty'],
+//                       element['uom'],
+//                       element['amt'],
+//                       element['tot_amt'],
+//                       element['itm_cat'],
+//                       element['account_code'],
+//                       element['date_req']);
+//                 });
+//               });
+//             });
+//           }
+//           if (x == _toList.length) {
+//             GlobalVariables.uploaded = true;
+//             NetworkData.uploaded = false;
+//             GlobalVariables.upload = false;
+//             Navigator.pop(context);
+//           }
+//         });
+//       });
+//     }
+//   }
