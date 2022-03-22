@@ -34,7 +34,6 @@ class _HomeState extends State<Home> {
   String nreqDate = "";
 
   List _toList = [];
-  // List _smList = [];
   List _sList = [];
   List samplist = [];
 
@@ -43,7 +42,6 @@ class _HomeState extends State<Home> {
     super.initState();
     // loadSalesmanList();
     loadProcessed();
-    // viewTranStatus();
     CustomerData.discounted = false;
     GlobalVariables.consolidatedOrder = false;
   }
@@ -97,7 +95,7 @@ class _HomeState extends State<Home> {
     setState(() {
       // _toList = getP;
       _toList = json.decode(json.encode(getP));
-      print(_toList);
+      // print(_toList);
       if (_toList.isNotEmpty) {
         emptyApprovedTran = false;
         viewSpinkit = false;
@@ -212,7 +210,7 @@ class _HomeState extends State<Home> {
           SliverAppBar(
             floating: true,
             snap: true,
-            toolbarHeight: 120,
+            toolbarHeight: ScreenData.scrHeight * .14,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
             elevation: 0,
@@ -233,50 +231,11 @@ class _HomeState extends State<Home> {
           ),
         ],
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(child: buildtranCont()),
           ],
         ),
       ),
-      // body: Stack(
-      //   children: [
-      //     Container(
-      //       height: MediaQuery.of(context).size.height,
-      //       width: MediaQuery.of(context).size.width,
-      //       child: SingleChildScrollView(
-      //         padding:
-      //             EdgeInsets.only(left: 16, right: 16, top: 180, bottom: 5),
-      //         child: Column(
-      //           children: [
-      //             buildtranCont(),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //     Container(
-      //       width: MediaQuery.of(context).size.width,
-      //       height: 178,
-      //       color: Colors.white,
-      //       child: SingleChildScrollView(
-      //         // physics: NeverScrollableScrollPhysics(),
-      //         padding: EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 5),
-      //         child: Column(
-      //           children: <Widget>[
-      //             SizedBox(
-      //               height: 15,
-      //             ),
-      //             buildHeader(),
-      //             SizedBox(
-      //               height: 10,
-      //             ),
-      //             buildOrderOption(),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 
@@ -374,6 +333,7 @@ class _HomeState extends State<Home> {
       // color: Colors.grey,
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(left: 15, right: 15, top: 0),
+      // margin: EdgeInsets.only(top: 0),
       child: RefreshIndicator(
         child: ListView.builder(
           itemCount: _toList.length,
@@ -385,7 +345,9 @@ class _HomeState extends State<Home> {
             }
             return SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.end,
+                // crossAxisAlignment: CrossAxisAlignment.end,
+                // mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   GestureDetector(
                     onTap: () async {
@@ -452,8 +414,10 @@ class _HomeState extends State<Home> {
                                   width: 5,
                                 ),
                                 Container(
-                                  width: MediaQuery.of(context).size.width / 2 +
-                                      60,
+                                  // // width: MediaQuery.of(context).size.width / 2 +
+                                  // //     60,
+                                  // color: Colors.grey,
+                                  width: ScreenData.scrWidth * .56,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
@@ -555,14 +519,14 @@ class _HomeState extends State<Home> {
   Container buildOrderOption() {
     return Container(
       height: 50,
-      width: MediaQuery.of(context).size.width - 40,
-      margin: EdgeInsets.only(top: 0, bottom: 0),
+      width: ScreenData.scrWidth * .87,
+      // margin: EdgeInsets.only(top: 0, bottom: 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           new SizedBox(
-            width: (MediaQuery.of(context).size.width - 45) / 2,
-            height: 35,
+            width: ScreenData.scrWidth * .43,
+            // height: 35,
             child: new ElevatedButton(
               style: raisedButtonStyleWhite,
               onPressed: () {
@@ -578,11 +542,13 @@ class _HomeState extends State<Home> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   RichText(
+                    // overflow: TextOverflow.ellipsis,
                     text: TextSpan(
                       text: "On-Processed Orders",
                       // recognizer: _tapGestureRecognizer,
+
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: ScreenData.scrWidth * .032,
                         fontWeight: processedPressed
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -599,8 +565,8 @@ class _HomeState extends State<Home> {
             width: 2,
           ),
           new SizedBox(
-            width: (MediaQuery.of(context).size.width - 45) / 2,
-            height: 35,
+            width: ScreenData.scrWidth * .43,
+            // height: 35,
             child: new ElevatedButton(
               style: raisedButtonStyleWhite,
               onPressed: () {
@@ -618,11 +584,12 @@ class _HomeState extends State<Home> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   RichText(
+                      // overflow: TextOverflow.ellipsis,
                       text: TextSpan(
                     text: "Consolidated Orders",
                     // recognizer: _tapGestureRecognizer,
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: ScreenData.scrWidth * .032,
                       fontWeight: processedPressed
                           ? FontWeight.normal
                           : FontWeight.bold,

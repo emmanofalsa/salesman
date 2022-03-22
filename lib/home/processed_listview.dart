@@ -1,14 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:salesman/db/db_helper.dart';
-// import 'package:salesman/home/capture_cheque.dart';
 import 'package:salesman/home/recieve_dialog.dart';
 import 'package:salesman/home/return_dialog.dart';
-// import 'package:salesman/home/view_cheque_img.dart';
 import 'package:salesman/menu.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/userdata.dart';
@@ -90,11 +86,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
       lineTotal = "0";
       orderTotal = '0';
       var lineTot = 0.00;
-      // print(UserData.trans);
-      var getAll = await db.getAll(UserData.trans);
-      print('asdasd' + getAll.toString());
       var getO = await db.getOrders(UserData.trans);
-      // print('YAWAAAA');
       OrderData.itmno = '0';
       double discAmt = 0.00;
       OrderData.grandTotal = '0';
@@ -103,7 +95,6 @@ class _ProcessedListViewState extends State<ProcessedListView> {
       OrderData.retAmt = '0';
       _remlist = json.decode(json.encode(getO));
       GlobalVariables.returnList.clear();
-      // print(_remlist);
       if (!mounted) return;
       setState(() {
         _list.clear();
@@ -120,7 +111,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
             if (double.parse(element['del_qty']) != 0) {
               _list.add(json.decode(json.encode(element)));
               GlobalVariables.returnList.add(element);
-              print(_list);
+              // print(_list);
             }
             if (element['flag'] == "1") {
               lineAmt = '0';
@@ -165,10 +156,8 @@ class _ProcessedListViewState extends State<ProcessedListView> {
       if (!mounted) return;
       setState(() {
         _list = getO;
-        // print(_list);
         orderTotal = OrderData.grandTotal;
         itmNo = _list.length.toString();
-        // print(_list);
       });
     }
   }
@@ -260,18 +249,6 @@ class _ProcessedListViewState extends State<ProcessedListView> {
     // computeTotal();
     // return null;
   }
-
-  // loadTemp() async {
-  //   var getCart = await getTemp(UserData.id, CustomerData.accountCode);
-  //   setState(() {
-  //     _list = getCart;
-  //     if (_list.isNotEmpty) {
-  //       emptyCart = false;
-  //     }
-  //     // print(UserData.trans);
-  //     computeTotal();
-  //   });
-  // }
 
   void handleUserInteraction([_]) {
     // _initializeTimer();

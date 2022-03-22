@@ -74,6 +74,7 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('Building Product Page...');
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {

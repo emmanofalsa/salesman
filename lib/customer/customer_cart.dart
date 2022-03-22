@@ -722,7 +722,9 @@ class _CustomerCartState extends State<CustomerCart> {
                       templist[index]['item_code'].toString(),
                       templist[index]['item_uom'].toString());
                   templist.removeAt(index);
+                  computeTotal();
                   refreshList();
+                  // print(templist);
                 });
               },
               child: Column(

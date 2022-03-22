@@ -713,7 +713,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                         Icon(
                                           Icons.mail,
                                           color: Colors.white,
-                                          size: 15,
+                                          // size: 15,
+                                          size: ScreenData.scrWidth * .035,
                                         ),
                                       ],
                                     ),

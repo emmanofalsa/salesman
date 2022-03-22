@@ -13,9 +13,10 @@ import 'package:crypto/crypto.dart';
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._();
   static Database? _database;
-  // static final _dbName = 'DISTAPPDB72.db'; //TEST VERSION
-  static final _dbName = 'DISTAPPDBB69.db';
-  // static final _dbName = 'DISTAPPDB9.db';
+  //TEST VERSION
+  static final _dbName = 'DISTAPPDBB75.db';
+  //LIVE VERSION
+  // static final _dbName = 'DISTRIBUTION1.db';
   static final _dbVersion = 1;
 
   String globaldate =
@@ -890,7 +891,7 @@ class DatabaseHelper {
   Future ofFetchForUploadHepe(code) async {
     var client = await db;
     return client.rawQuery(
-        'SELECT * FROM tb_tran_head WHERE (tran_stat ="Delivered" OR tran_stat ="Returned") AND hepe_upload !="TRUE" ORDER BY account_code ASC',
+        'SELECT * FROM tb_tran_head WHERE (tran_stat ="Delivered" OR tran_stat ="Returned") AND hepe_upload !="TRUE" ORDER BY date_del ASC',
         null);
   }
 
@@ -1848,8 +1849,15 @@ class DatabaseHelper {
   //////
   ///HEPE API
   ///
-  Future updateTranStat(String tranNo, String status, String itmdel, String amt,
-      String date, String hepecode, String type, String signature) async {
+  Future oldupdateTranStat(
+      String tranNo,
+      String status,
+      String itmdel,
+      String amt,
+      String date,
+      String hepecode,
+      String type,
+      String signature) async {
     // String url = UrlAddress.url + '/updatetranstat';
     var url = Uri.parse(UrlAddress.url + '/updatetranstat');
     final response = await retry(() => http.post(url, headers: {
@@ -1863,6 +1871,68 @@ class DatabaseHelper {
           'hepe_code': encrypt(hepecode),
           'pmeth_type': encrypt(type),
           'signature': encrypt(signature),
+        }));
+    var convertedDatatoJson = jsonDecode(response.body);
+    return convertedDatatoJson;
+  }
+
+  Future updateDeliveredTranStat(
+      String tranNo,
+      String status,
+      String itmdel,
+      String amt,
+      String date,
+      String hepecode,
+      String type,
+      String signature,
+      List tranLine,
+      List unsLine) async {
+    // String url = UrlAddress.url + '/updatetranstat';
+    var url = Uri.parse(UrlAddress.url + '/updatedeliveredtranstatwithline');
+    final response = await retry(() => http.post(url, headers: {
+          "Accept": "Application/json"
+        }, body: {
+          'tran_no': encrypt(tranNo),
+          'tran_stat': encrypt(status),
+          'itm_del_count': encrypt(itmdel),
+          'tot_del_amt': encrypt(amt),
+          'date_del': encrypt(date),
+          'hepe_code': encrypt(hepecode),
+          'pmeth_type': encrypt(type),
+          'signature': encrypt(signature),
+          'tranline': jsonEncode(tranLine),
+          'unsline': jsonEncode(unsLine),
+        }));
+    var convertedDatatoJson = jsonDecode(response.body);
+    return convertedDatatoJson;
+  }
+
+  Future updateReturnedTranStat(
+      String tranNo,
+      String status,
+      // String itmdel,
+      String amt,
+      String date,
+      String hepecode,
+      // String type,
+      String signature,
+      List rettran,
+      List retline) async {
+    // String url = UrlAddress.url + '/updatetranstat';
+    var url = Uri.parse(UrlAddress.url + '/updatereturnedtranstatwithline');
+    final response = await retry(() => http.post(url, headers: {
+          "Accept": "Application/json"
+        }, body: {
+          'tran_no': encrypt(tranNo),
+          'tran_stat': encrypt(status),
+          // 'itm_del_count': encrypt(itmdel),
+          'tot_del_amt': encrypt(amt),
+          'date_del': encrypt(date),
+          'hepe_code': encrypt(hepecode),
+          // 'pmeth_type': encrypt(type),
+          'signature': encrypt(signature),
+          'rettran': jsonEncode(rettran),
+          'retline': jsonEncode(retline),
         }));
     var convertedDatatoJson = jsonDecode(response.body);
     return convertedDatatoJson;

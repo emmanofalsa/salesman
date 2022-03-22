@@ -30,7 +30,7 @@ class ReceivedDialog extends StatelessWidget {
 
     final String date =
         DateFormat("yyyy-MM-dd H:mm:ss").format(new DateTime.now());
-    OrderData.pmtype = 'Cash on Delivery';
+    OrderData.pmtype = 'CASH';
     setStatus() {
       db.getStatus(UserData.trans, changeStat, OrderData.grandTotal,
           OrderData.itmno, UserData.id, OrderData.pmtype, OrderData.signature);

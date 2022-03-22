@@ -217,21 +217,19 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
       key: _scaffoldKey,
       body: Stack(
         children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              padding:
-                  EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 20),
+          SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(
-                    height: 80,
-                  ),
                   Container(
-                    margin: EdgeInsets.only(top: 24),
-                    width: 200,
-                    height: 200,
+                    // margin: EdgeInsets.only(top: 0),
+                    // width: 200,
+                    width: ScreenData.scrWidth * .55,
+                    height: ScreenData.scrWidth * .4,
                     child: Center(
                       child: Image(
                         image: AssetsValues.loginLogo,
@@ -245,16 +243,19 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(
+                    height: ScreenData.scrHeight * .030,
+                  ),
                   AnimatedContainer(
                     duration: Duration(milliseconds: 300),
-                    /*curve: Curves.easeInOutBack,*/
-                    height: 250,
-                    width: 350,
-                    margin: EdgeInsets.only(top: 10),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                    height: ScreenData.scrHeight * .27,
+                    width: ScreenData.scrWidth * .84,
                     child: SingleChildScrollView(
                       child: buildSignInTextField(),
                     ),
+                  ),
+                  SizedBox(
+                    height: ScreenData.scrHeight * .030,
                   ),
                   buildSignInButton(),
                   buildForgetPass(),
@@ -447,9 +448,8 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
             ),
           ),
           SizedBox(
-            height: 60,
+            height: ScreenData.scrHeight * .070,
           ),
-          Text(message),
         ],
       ),
     );
@@ -485,7 +485,7 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
               },
             ),
             SizedBox(
-              height: 25,
+              height: ScreenData.scrHeight * .020,
             ),
             TextFormField(
               textInputAction: TextInputAction.done,

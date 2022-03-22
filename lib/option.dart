@@ -18,6 +18,7 @@ import 'package:http/http.dart' as http;
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/assets.dart';
 import 'package:salesman/variables/colors.dart';
+import 'package:salesman/widgets/size_config.dart';
 
 class MyOptionPage extends StatefulWidget {
   @override
@@ -48,7 +49,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
   bool loadSpinkit = true;
   bool imgLoad = true;
 
-  // bool _downloading;
   String? _dir;
   List<String>? _images, _tempImages;
   String _zipPath = UrlAddress.itemImg + 'img.zip';
@@ -57,8 +57,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
   // final date = DateTime.parse(DateFormat("y-M-d").format(new DateTime.now()));
 
   String date = DateFormat("yyyy-MM-dd HH:mm:ss").format(new DateTime.now());
-
-  // String date = '2021-12-31';
 
   Future createDatabase() async {
     await db.init();
@@ -644,6 +642,12 @@ class _MyOptionPageState extends State<MyOptionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    ScreenData.scrWidth = screenWidth;
+    ScreenData.scrHeight = screenHeight;
+    // print(screenWidth);
+    // print(screenHeight);
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
@@ -663,7 +667,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width / 2 - 50,
+                  width: 40 * SizeConfig.imageSizeMultiplier,
                   child: Card(
                       // elevation: 10,
                       color: Colors.transparent,
@@ -699,30 +703,29 @@ class _MyOptionPageState extends State<MyOptionPage> {
                         // print(itemImgList);
                       },
                       child: Container(
-                        width: MediaQuery.of(context).size.width / 2 - 50,
-                        height: 130,
+                        width: ScreenData.scrWidth * .3,
+                        height: ScreenData.scrHeight * .19,
                         // color: Colors.grey,
                         decoration: BoxDecoration(
                             border: Border.all(width: 3, color: Colors.white),
                             borderRadius: BorderRadius.all(Radius.circular(5))),
-                        child: Stack(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Column(
                               children: <Widget>[
                                 Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2,
-                                    height: 80,
+                                    width: ScreenData.scrWidth * .3,
+                                    height: ScreenData.scrHeight * .09,
                                     child: Image(image: AssetsValues.smImg)),
                               ],
                             ),
                             Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              // crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Container(
-                                  width: MediaQuery.of(context).size.width -
-                                      20 / 2,
+                                  width: ScreenData.scrWidth * .3,
+                                  // height: ScreenData.scrHeight * .09,
                                   child: Card(
                                       // elevation: 10,
                                       color: Colors.transparent,
@@ -735,6 +738,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
                                                 'Salesman',
                                                 style: TextStyle(
                                                   color: Colors.white,
+                                                  fontSize: 10,
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
@@ -761,21 +765,21 @@ class _MyOptionPageState extends State<MyOptionPage> {
                         // viewSampleTable();
                       },
                       child: Container(
-                        width: MediaQuery.of(context).size.width / 2 - 50,
-                        height: 130,
+                        width: ScreenData.scrWidth * .3,
+                        height: ScreenData.scrHeight * .19,
                         // height: MediaQuery.of(context).size.width / 2 - 50,
                         // color: Colors.grey,
                         decoration: BoxDecoration(
                             border: Border.all(width: 3, color: Colors.white),
                             borderRadius: BorderRadius.all(Radius.circular(5))),
-                        child: Stack(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Column(
                               children: <Widget>[
                                 Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2,
-                                    height: 80,
+                                    width: ScreenData.scrWidth * .3,
+                                    height: ScreenData.scrHeight * .09,
                                     child: Image(image: AssetsValues.hepeImg)),
                               ],
                             ),
@@ -784,8 +788,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Container(
-                                  width: MediaQuery.of(context).size.width -
-                                      20 / 2,
+                                  width: ScreenData.scrWidth * .3,
                                   child: Card(
                                       // elevation: 10,
                                       color: Colors.transparent,
@@ -795,6 +798,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
                                           child: Text('Jefe de Viaje',
                                               style: TextStyle(
                                                 color: Colors.white,
+                                                fontSize: 10,
                                                 fontWeight: FontWeight.w500,
                                               )),
                                         ),

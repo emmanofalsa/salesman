@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:salesman/api.dart';
 import 'package:salesman/url/url.dart';
-import 'package:carousel_pro/carousel_pro.dart';
+// import 'package:carousel_pro/carousel_pro.dart';
 import 'package:salesman/variables/colors.dart';
 // import 'package:salesman/userdata.dart';
 
@@ -286,26 +286,27 @@ class _HomeState extends State<Home> {
       // width: 400,
       // color: ColorsTheme.mainColor,
       margin: EdgeInsets.only(top: 0, bottom: 0),
-      child: Carousel(
-        boxFit: BoxFit.fill,
-        autoplay: true,
-        // autoplayDuration: Duration(seconds: 1),
-        dotSize: 6.0,
-        dotColor: Colors.white,
-        dotIncreasedColor: ColorsTheme.mainColor,
-        dotBgColor: Colors.transparent,
-        // dotPosition: DotPosition.topRight,
-        dotVerticalPadding: 10.0,
-        showIndicator: true,
-        indicatorBgPadding: 7.0,
-        images: [
-          // Image.network(UrlAddress.sliderImg + 'img1.jpg'),
-          // Image.network(UrlAddress.sliderImg + 'img2.jpg'),
-          // Image.network(UrlAddress.sliderImg + 'img3.jpg'),
-          // Image.network(UrlAddress.sliderImg + 'img4.jpg'),
-          // Image.network(UrlAddress.sliderImg + 'img5.jpg'),
-        ],
-      ),
+      child: Container(),
+      // Carousel(
+      //   boxFit: BoxFit.fill,
+      //   autoplay: true,
+      //   // autoplayDuration: Duration(seconds: 1),
+      //   dotSize: 6.0,
+      //   dotColor: Colors.white,
+      //   dotIncreasedColor: ColorsTheme.mainColor,
+      //   dotBgColor: Colors.transparent,
+      //   // dotPosition: DotPosition.topRight,
+      //   dotVerticalPadding: 10.0,
+      //   showIndicator: true,
+      //   indicatorBgPadding: 7.0,
+      //   images: [
+      //     // Image.network(UrlAddress.sliderImg + 'img1.jpg'),
+      //     // Image.network(UrlAddress.sliderImg + 'img2.jpg'),
+      //     // Image.network(UrlAddress.sliderImg + 'img3.jpg'),
+      //     // Image.network(UrlAddress.sliderImg + 'img4.jpg'),
+      //     // Image.network(UrlAddress.sliderImg + 'img5.jpg'),
+      //   ],
+      // ),
     );
   }
 

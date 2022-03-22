@@ -14,6 +14,7 @@ import 'package:salesman/option.dart';
 import 'package:salesman/salesman_home/menu.dart';
 import 'package:salesman/variables/assets.dart';
 import 'package:salesman/variables/colors.dart';
+import 'package:salesman/widgets/size_config.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,28 +28,33 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
 
-    return GetMaterialApp(
-      title: 'Salesman',
-      debugShowCheckedModeBanner: false,
-      // showPerformanceOverlay: true,
-      theme: ThemeData(
-        primaryColor: ColorsTheme.mainColor,
-        primarySwatch: Colors.deepOrange,
-        // primarySwatch: ColorsTheme.mainColor,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      // home: new HomeScreen(),
-      // home: new RootedScreen(),
-      // onGenerateRoute: Routers.onGenerateRoute,
-      initialRoute: "/splash",
-      routes: {
-        "/splash": (context) => Splash(),
-        "/option": (context) => MyOptionPage(),
-        "/smmenu": (context) => SalesmanMenu(),
-        "/smcustomer": (context) => Customer(),
-        "/hepemenu": (context) => Menu(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        SizeConfig().init(constraints);
+        return GetMaterialApp(
+          title: 'Salesman',
+          debugShowCheckedModeBanner: false,
+          // showPerformanceOverlay: true,
+          theme: ThemeData(
+            primaryColor: ColorsTheme.mainColor,
+            primarySwatch: Colors.deepOrange,
+            // primarySwatch: ColorsTheme.mainColor,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          // home: new HomeScreen(),
+          // home: new RootedScreen(),
+          // onGenerateRoute: Routers.onGenerateRoute,
+          initialRoute: "/splash",
+          routes: {
+            "/splash": (context) => Splash(),
+            "/option": (context) => MyOptionPage(),
+            "/smmenu": (context) => SalesmanMenu(),
+            "/smcustomer": (context) => Customer(),
+            "/hepemenu": (context) => Menu(),
+          },
+          // home: Splash(),
+        );
       },
-      // home: Splash(),
     );
   }
 }
@@ -132,14 +138,12 @@ class _SplashState extends State<Splash> {
                 width: MediaQuery.of(context).size.width,
                 // height: 30,
                 // color: Colors.grey,
-                child: Text(
-                  'E-COMMERCE COPYRIGHT 2020',
-                  style: TextStyle(
-                      color: ColorsTheme.mainColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
+                child: Text('E-COMMERCE COPYRIGHT 2020',
+                    style: TextStyle(
+                        color: ColorsTheme.mainColor,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center),
               ),
             )
           ],

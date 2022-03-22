@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:salesman/userdata.dart';
+// import 'package:salesman/widgets/size_config.dart';
 
 class SessionTimer {
   void initializeTimer(BuildContext context) {
@@ -49,6 +50,7 @@ class SessionTimer {
                 ),
                 Text(
                   " You are inactive for 30 minutes.",
+                  style: TextStyle(fontSize: 14),
                 ),
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/colors.dart';
 
 class Collection extends StatefulWidget {
@@ -11,12 +12,13 @@ class _CollectionState extends State<Collection> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 120,
+        toolbarHeight: ScreenData.scrHeight * .10,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               "Collections",
@@ -26,11 +28,13 @@ class _CollectionState extends State<Collection> {
                   fontSize: 45,
                   fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 50),
+            // SizedBox(height: 50),
           ],
         ),
       ),
       body: Column(
+        // crossAxisAlignment: CrossAxisAlignment.end,
+        // mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Expanded(
             child: Container(
@@ -38,6 +42,7 @@ class _CollectionState extends State<Collection> {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   buildtranCont(),
                 ],
@@ -51,14 +56,12 @@ class _CollectionState extends State<Collection> {
 
   Container buildtranCont() {
     return Container(
-      padding: EdgeInsets.all(50),
+      // padding: EdgeInsets.all(50),
       margin: EdgeInsets.only(top: 0),
       // height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       // color: Colors.transparent,
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Image.asset(
             'assets/images/wip.png',

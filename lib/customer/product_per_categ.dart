@@ -148,6 +148,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
 
   @override
   Widget build(BuildContext context) {
+    print('Building Product Per Category...');
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {

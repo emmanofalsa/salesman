@@ -5,7 +5,7 @@ import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 // import 'package:path_provider/path_provider.dart';
 // import 'package:path_provider/path_provider.dart';
 import 'package:salesman/db/db_helper.dart';
@@ -70,10 +70,11 @@ class _ProfileState extends State<Profile> {
   checkVersion() async {
     if (NetworkData.connected) {
       checking = true;
+      print(AppData.updesc);
       var res = await db.checkAppversion(AppData.updesc);
-      // print(res);
+      print(res);
       // print(AppData.updesc);
-      // print(AppData.appVersion);
+      print(AppData.appVersion);
       if (!mounted) return;
       setState(() {
         ver = res;
@@ -115,34 +116,15 @@ class _ProfileState extends State<Profile> {
         handleUserInteraction();
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   toolbarHeight: 120,
-        //   automaticallyImplyLeading: false,
-        //   backgroundColor: Colors.white,
-        //   elevation: 0,
-        //   title: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Text(
-        //         "Profile",
-        //         textAlign: TextAlign.right,
-        //         style: TextStyle(
-        //             color: ColorsTheme.mainColor,
-        //             fontSize: 45,
-        //             fontWeight: FontWeight.bold),
-        //       ),
-        //       SizedBox(height: 50),
-        //     ],
-        //   ),
-        // ),
         appBar: AppBar(
-          toolbarHeight: MediaQuery.of(context).size.width / 2 - 20,
+          // toolbarHeight: 170,
+          toolbarHeight: ScreenData.scrHeight * .19,
           automaticallyImplyLeading: false,
           backgroundColor: ColorsTheme.mainColor,
           elevation: 0,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 "Profile",
@@ -152,7 +134,7 @@ class _ProfileState extends State<Profile> {
                     fontSize: 45,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              // SizedBox(height: 5),
               Row(
                 children: [
                   Expanded(
@@ -245,63 +227,87 @@ class _ProfileState extends State<Profile> {
         backgroundColor: ColorsTheme.mainColor,
         body: Stack(
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
-              decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  )),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 15,
-                  ),
-                  // buildHeader(),
-                  // buildInfo(context),
-                  SizedBox(height: 20),
-                  buildMessages(context),
-                  SizedBox(height: 3),
-                  buildChangePass(context),
-                  SizedBox(height: 3),
-                  buildPrivacyNot(context),
-                  SizedBox(height: 3),
-                  buildSettings(context),
-                  SizedBox(height: 30),
-                  buildLogout(context),
-                  SizedBox(height: 30),
-                  buildVersionUp(context),
-                  Visibility(
-                      visible: !AppData.appUptodate,
-                      child: buildUpdateButton(context))
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
+            SingleChildScrollView(
               child: Container(
+                height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
+                decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    )),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
-                      height: 5,
+                      height: 15,
                     ),
-                    Text(
-                      'E-COMMERCE(MY NETGOSYO APP)'
-                      ' COPYRIGHT 2020',
-                      style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    // buildHeader(),
+                    // buildInfo(context),
+                    SizedBox(height: 20),
+                    buildMessages(context),
+                    SizedBox(height: 3),
+                    buildChangePass(context),
+                    SizedBox(height: 3),
+                    buildPrivacyNot(context),
+                    SizedBox(height: 3),
+                    buildSettings(context),
+                    SizedBox(height: 30),
+                    buildLogout(context),
+                    SizedBox(height: 30),
+                    buildVersionUp(context),
+                    Visibility(
+                        visible: !AppData.appUptodate,
+                        child: buildUpdateButton(context)),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'E-COMMERCE(MY NETGOSYO APP)'
+                              ' COPYRIGHT 2020',
+                              style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
-            )
+            ),
+            // Align(
+            //   alignment: Alignment.bottomCenter,
+            //   child: Container(
+            //     width: MediaQuery.of(context).size.width,
+            //     child: Column(
+            //       mainAxisAlignment: MainAxisAlignment.end,
+            //       children: [
+            //         SizedBox(
+            //           height: 5,
+            //         ),
+            //         Text(
+            //           'E-COMMERCE(MY NETGOSYO APP)'
+            //           ' COPYRIGHT 2020',
+            //           style: TextStyle(
+            //               color: Colors.grey[700],
+            //               fontSize: 10,
+            //               fontWeight: FontWeight.bold),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),

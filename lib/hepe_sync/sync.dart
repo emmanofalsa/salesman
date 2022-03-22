@@ -8,6 +8,7 @@ import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/dialogs/confirmupload.dart';
 import 'package:salesman/dialogs/syncloading.dart';
 import 'package:salesman/dialogs/syncsuccess.dart';
+import 'package:salesman/dialogs/uploadloading.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/url/url.dart';
 import 'package:http/http.dart' as http;
@@ -124,28 +125,59 @@ class _SyncHepeState extends State<SyncHepe> {
   upload() async {
     GlobalVariables.upload = false;
     // String tmpTranNo = '';
-    String tranNo = '';
-    String pmeth = '';
+    // String tranNo = '';
+    // String pmeth = '';
     // String lineRsp = '';
     List _chequeList = [];
-    List _retList = [];
-    List _unsrvdList = [];
-    List _tempList = [];
+    // List _retList = [];
+    // List _unsrvdList = [];
+    // List _tempList = [];
     int z = 0;
+    int listLength = 0;
     if (NetworkData.errorMsgShow == false &&
         uploading == false &&
         !GlobalVariables.uploaded) {
+      listLength = _toList.length;
       _toList.forEach((element) async {
         uploading = true;
         //KUNG NA DELIVER
-        pmeth = element['pmeth_type'];
-        tranNo = element['tran_no'];
-        print(tranNo);
+        print(element['tran_no']);
+        var tmpTranLine = await db.getTransactionLine(element['tran_no']);
+        //pagkuha sa list sa unserved sa sqflite
+        var tmpretLine = await db.getReturnedLine(element['tran_no']);
+
+        //KUNG CHEQUE IYANG MODE OF PAYMENT
+        if (element['pmeth_type'] == 'CHEQUE') {
+          var tmpchq = await db.getChequeData(element['tran_no']);
+          _chequeList = tmpchq;
+          if (_chequeList.isNotEmpty) {
+            _chequeList.forEach((element) async {
+              //PA SAVE SA CHEQUE DATA SA SERVER
+              await db.setChequeData(
+                  element['tran_no'],
+                  element['account_code'],
+                  element['sm_code'],
+                  element['hepe_code'],
+                  element['datetime'],
+                  element['payee_name'],
+                  element['payor_name'],
+                  element['bank_name'],
+                  element['cheque_no'],
+                  element['branch_code'],
+                  element['account_no'],
+                  element['cheque_date'],
+                  element['amount'],
+                  element['status'],
+                  element['image']);
+              // print(lrsp);
+            });
+          }
+        }
+
         if (element['tran_stat'] == 'Delivered' &&
             element['hepe_upload'] != 'TRUE') {
           print('NISUD SA DELIVERED');
-
-          var rsp = await db.updateTranStat(
+          var rsp = await db.updateDeliveredTranStat(
               element['tran_no'],
               element['tran_stat'],
               element['itm_del_count'],
@@ -153,95 +185,27 @@ class _SyncHepeState extends State<SyncHepe> {
               element['date_del'],
               element['hepe_code'],
               element['pmeth_type'],
-              element['signature']);
-          print(rsp);
-          z++;
-          //pagkuha sa list sa unserved sa sqflite
-          var tmpretLine = await db.getReturnedLine(tranNo);
-          _unsrvdList = tmpretLine;
-          // print(_unsrvdList);
-          if (_unsrvdList.isNotEmpty) {
-            _unsrvdList.forEach((element) async {
-              //PA SAVE SA UNSERVED SA SERVER
-              await db.setReturnLineStatus(
-                  tranNo,
-                  element['itm_code'],
-                  element['item_desc'],
-                  element['uom'],
-                  element['amt'],
-                  element['qty'],
-                  element['tot_amt'],
-                  element['itm_cat']);
-              // print(lrsp);
-            });
-          } else {
-            print('UNSERVED LIST IS EMPTY');
-          }
-          //KUNG CHEQUE IYANG MODE OF PAYMENT
-          if (pmeth == 'CHEQUE') {
-            var tmpchq = await db.getChequeData(tranNo);
-            _chequeList = tmpchq;
-            if (_chequeList.isNotEmpty) {
-              _chequeList.forEach((element) async {
-                //PA SAVE SA CHEQUE DATA SA SERVER
-                await db.setChequeData(
-                    tranNo,
-                    element['account_code'],
-                    element['sm_code'],
-                    element['hepe_code'],
-                    element['datetime'],
-                    element['payee_name'],
-                    element['payor_name'],
-                    element['bank_name'],
-                    element['cheque_no'],
-                    element['branch_code'],
-                    element['account_no'],
-                    element['cheque_date'],
-                    element['amount'],
-                    element['status'],
-                    element['image']);
-                // print(lrsp);
-              });
-            }
-          }
+              element['signature'],
+              tmpTranLine,
+              tmpretLine);
+          print('PRINT UPDATE TRAN SA SERVER RSP: ' + rsp.toString());
 
-          await db.updateTranUploadStatHEPE(tranNo);
-
-          var tmpTranLine = await db.getTransactionLine(tranNo);
-          _tempList = tmpTranLine;
-
-          if (_tempList.isNotEmpty) {
-            _tempList.forEach((element) async {
-              print('PRINT--------> ' +
-                  tranNo.toString() +
-                  ' ' +
-                  element['tran_no'].toString() +
-                  ' ' +
-                  element['itm_code'].toString() +
-                  ' ' +
-                  element['uom'].toString() +
-                  ' ' +
-                  element['itm_stat'].toString());
-
-              var lrsp = await db.updateLineStat(
-                  tranNo,
-                  element['itm_stat'],
-                  element['del_qty'],
-                  element['tot_amt'],
-                  element['discounted_amount'],
-                  element['itm_code'],
-                  element['uom'],
-                  element['date_del']);
-              // print(lrsp);
-              if (lrsp != 'ERROR') {
-                setState(() {
-                  uploading = false;
-                  if (z == _toList.length) {
-                    setState(() {
-                      GlobalVariables.uploaded = true;
-                    });
-                  }
-                });
+          if (rsp != 0) {
+            var changestatrsp = await db.updateTranUploadStatHEPE(rsp);
+            print('CHANGESTAT RETURN: ' + changestatrsp.toString());
+            setState(() {
+              if (changestatrsp == 1) {
+                z++;
+                print('STATUS CHANGED!!!');
+                print('LIST LENGTH VALUE: ' + listLength.toString());
+                print('Z VALUE:' + z.toString());
+                if (z == listLength) {
+                  setState(() {
+                    uploading = false;
+                    GlobalVariables.uploaded = true;
+                    Navigator.pop(context);
+                  });
+                }
               }
             });
           }
@@ -249,77 +213,111 @@ class _SyncHepeState extends State<SyncHepe> {
         //KUNG NA RETURN TBOOK TRANSACTION
         if (element['tran_stat'] == 'Returned' &&
             element['hepe_upload'] != 'TRUE') {
-          print(_tempList);
-          print('NISUD SA RETURNED!');
+          // print(_tempList);
+          print('NISUD SA RETURNED TANAN!');
           print(element['tran_no']);
           print(element['tran_stat']);
-          print(element['tot_del_amt']);
-          print(element['date_del']);
-          print(element['hepe_code']);
-          // print(element['signature']);
-          var smp = await db.updateTranStat(
+
+          var retTran = await db.getReturnedTran(element['tran_no']);
+          var retLine = await db.getReturnedLine(element['tran_no']);
+
+          var smp = await db.updateReturnedTranStat(
               element['tran_no'],
               element['tran_stat'],
-              " ",
               element['tot_del_amt'],
               element['date_del'],
               element['hepe_code'],
-              " ",
-              element['signature']);
-          print('UPDATING STATUS RETURN-------> ' + smp);
-          tranNo = element['tran_no'];
-          z++;
-          //PARA SA RETURNED TRAN SA SERVER
-          var retTran = await db.getReturnedTran(tranNo);
-          _retList = retTran;
+              element['signature'],
+              retTran,
+              retLine);
+          print('PRINT UPDATE TRAN SA SERVER RETURNED RSP: ' + smp.toString());
 
-          if (_retList.isNotEmpty) {
-            _retList.forEach((element) {
-              db.setReturnStatus(
-                  element['tran_no'],
-                  element['date'],
-                  element['signature'],
-                  element['account_code'],
-                  element['store_name'],
-                  element['itm_count'],
-                  element['tot_amt'],
-                  element['hepe_code'],
-                  element['reason']);
-            });
-          }
-          ////
-          ///
-          await db.updateTranUploadStatHEPE(tranNo);
-          //pagkuha sa list sa unserved sa sqflite
-          var tmp = await db.getReturnedLine(tranNo);
-          _unsrvdList = tmp;
-          print('UNSERVED LIST:');
-          print(_unsrvdList);
-          if (_unsrvdList.isNotEmpty) {
-            _unsrvdList.forEach((element) async {
-              //PA SAVE SA UNSERVED SA SERVER
-              var lrsp = await db.setReturnLineStatus(
-                  tranNo,
-                  element['itm_code'],
-                  element['item_desc'],
-                  element['uom'],
-                  element['amt'],
-                  element['qty'],
-                  element['tot_amt'],
-                  element['itm_cat']);
-              print(lrsp);
-              if (lrsp != 'ERROR') {
-                setState(() {
-                  uploading = false;
-                  if (z == _toList.length) {
-                    setState(() {
-                      GlobalVariables.uploaded = true;
-                    });
-                  }
-                });
+          if (smp != 0) {
+            var changestatrsp = await db.updateTranUploadStatHEPE(smp);
+            print('CHANGESTAT RETURN: ' + changestatrsp.toString());
+            setState(() {
+              if (changestatrsp == 1) {
+                z++;
+                print('STATUS CHANGED!!!');
+                print('LIST LENGTH VALUE: ' + listLength.toString());
+                print('Z VALUE:' + z.toString());
+                if (z == listLength) {
+                  setState(() {
+                    uploading = false;
+                    GlobalVariables.uploaded = true;
+                    Navigator.pop(context);
+                  });
+                }
               }
             });
+          } else {
+            print("FAILED");
           }
+
+          // print(element['signature']);
+          // var smp = await db.oldupdateTranStat(
+          //     element['tran_no'],
+          //     element['tran_stat'],
+          //     " ",
+          //     element['tot_del_amt'],
+          //     element['date_del'],
+          //     element['hepe_code'],
+          //     " ",
+          //     element['signature']);
+          // print('UPDATING STATUS RETURN-------> ' + smp);
+          // // tranNo = element['tran_no'];
+          // z++;
+          // //PARA SA RETURNED TRAN SA SERVER
+          // var retTran = await db.getReturnedTran(element['tran_no']);
+          // _retList = retTran;
+
+          // if (_retList.isNotEmpty) {
+          //   _retList.forEach((element) {
+          //     db.setReturnStatus(
+          //         element['tran_no'],
+          //         element['date'],
+          //         element['signature'],
+          //         element['account_code'],
+          //         element['store_name'],
+          //         element['itm_count'],
+          //         element['tot_amt'],
+          //         element['hepe_code'],
+          //         element['reason']);
+          //   });
+          // }
+          // ////
+          // ///
+          // await db.updateTranUploadStatHEPE(element['tran_no']);
+          // //pagkuha sa list sa unserved sa sqflite
+          // var tmp = await db.getReturnedLine(element['tran_no']);
+          // // _unsrvdList = tmp;
+          // print('UNSERVED LIST:');
+          // print(_unsrvdList);
+          // if (_unsrvdList.isNotEmpty) {
+          //   _unsrvdList.forEach((element) async {
+          //     //PA SAVE SA UNSERVED SA SERVER
+          //     var lrsp = await db.setReturnLineStatus(
+          //         element['tran_no'],
+          //         element['itm_code'],
+          //         element['item_desc'],
+          //         element['uom'],
+          //         element['amt'],
+          //         element['qty'],
+          //         element['tot_amt'],
+          //         element['itm_cat']);
+          //     print(lrsp);
+          //     if (lrsp != 'ERROR') {
+          //       setState(() {
+          //         uploading = false;
+          //         if (z == _toList.length) {
+          //           setState(() {
+          //             GlobalVariables.uploaded = true;
+          //           });
+          //         }
+          //       });
+          //     }
+          //   });
+          // }
         }
       });
     }
@@ -365,22 +363,31 @@ class _SyncHepeState extends State<SyncHepe> {
     checkSpinkit();
     loadUpdateLog();
     if (!mounted) return;
-    setState(() {
-      if (NetworkData.connected == true) {
-        upload();
-      }
-    });
+    // setState(() {
+    //   if (NetworkData.connected == true) {
+    //     upload();
+    //   }
+    // });
 
     // if (GlobalVariables.upload == true) {
-    //   if (NetworkData.uploaded == false && uploading == false) {
-    //     showDialog(
-    //         barrierDismissible: false,
-    //         context: context,
-    //         builder: (context) => UploadingSpinkit());
-    //     GlobalVariables.uploadSpinkit = true;
-    //     await upload();
-    //   }
+    //   showDialog(
+    //       barrierDismissible: false,
+    //       context: context,
+    //       builder: (context) => UploadingSpinkit());
+    //   GlobalVariables.uploadSpinkit = true;
+    //   await upload();
     // }
+
+    if (GlobalVariables.upload == true) {
+      if (NetworkData.uploaded == false && uploading == false) {
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => UploadingSpinkit());
+        GlobalVariables.uploadSpinkit = true;
+        await upload();
+      }
+    }
   }
 
   uploadButtonclicked() async {
@@ -435,12 +442,14 @@ class _SyncHepeState extends State<SyncHepe> {
       },
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 120,
+          toolbarHeight: ScreenData.scrHeight * .14,
+          // toolbarHeight: 120,
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           elevation: 0,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "Sync",
@@ -460,65 +469,24 @@ class _SyncHepeState extends State<SyncHepe> {
           ),
         ),
         body: uploadPressed ? buildUploadCont() : buildDownloadCont(),
-        // body: Stack(
-        //   children: [
-        //     Container(
-        //       height: MediaQuery.of(context).size.height,
-        //       width: MediaQuery.of(context).size.width,
-        //       child: SingleChildScrollView(
-        //         padding:
-        //             EdgeInsets.only(left: 16, right: 16, top: 180, bottom: 5),
-        //         child: Column(
-        //           children: [
-        //             uploadPressed ? buildUploadCont() : buildDownloadCont(),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //     Container(
-        //       width: MediaQuery.of(context).size.width,
-        //       height: 190,
-        //       color: Colors.white,
-        //       child: SingleChildScrollView(
-        //         padding:
-        //             EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 5),
-        //         child: Column(
-        //           children: <Widget>[
-        //             SizedBox(
-        //               height: 15,
-        //             ),
-        //             buildHeader(),
-        //             SizedBox(
-        //               height: 10,
-        //             ),
-        //             Visibility(
-        //                 visible: NetworkData.errorMsgShow,
-        //                 child: buildStatusCont()),
-        //             buildOrderOption(),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        // floatingActionButton: Visibility(
-        //   visible: uploadPressed,
-        //   child: Container(
-        //     padding: EdgeInsets.only(left: 30),
-        //     child: Align(
-        //       alignment: Alignment.bottomCenter,
-        //       child: FloatingActionButton(
-        //         onPressed: () {
-        //           if (_toList.isNotEmpty) {
-        //             uploadButtonclicked();
-        //           }
-        //         },
-        //         tooltip: 'Upload',
-        //         child: Icon(Icons.file_upload),
-        //       ),
-        //     ),
-        //   ),
-        // ),
+        floatingActionButton: Visibility(
+          visible: uploadPressed,
+          child: Container(
+            padding: EdgeInsets.only(left: 30),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FloatingActionButton(
+                onPressed: () {
+                  if (_toList.isNotEmpty) {
+                    uploadButtonclicked();
+                  }
+                },
+                tooltip: 'Upload',
+                child: Icon(Icons.file_upload),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -1749,7 +1717,7 @@ class _SyncHepeState extends State<SyncHepe> {
                       text: "Upload Data",
                       // recognizer: _tapGestureRecognizer,
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: ScreenData.scrWidth * .038,
                         fontWeight:
                             uploadPressed ? FontWeight.bold : FontWeight.normal,
                         decoration: TextDecoration.underline,
@@ -1763,7 +1731,7 @@ class _SyncHepeState extends State<SyncHepe> {
                     child: Icon(
                       Icons.file_upload,
                       color: Colors.green,
-                      size: 24,
+                      size: ScreenData.scrWidth * .06,
                     ),
                   ),
                 ],
@@ -1797,7 +1765,7 @@ class _SyncHepeState extends State<SyncHepe> {
                     text: "Download Data",
                     // recognizer: _tapGestureRecognizer,
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: ScreenData.scrWidth * .038,
                       fontWeight:
                           uploadPressed ? FontWeight.normal : FontWeight.bold,
                       decoration: TextDecoration.underline,
@@ -1810,7 +1778,7 @@ class _SyncHepeState extends State<SyncHepe> {
                     child: Icon(
                       Icons.file_download,
                       color: Colors.yellowAccent,
-                      size: 24,
+                      size: ScreenData.scrWidth * .06,
                     ),
                   ),
                 ],

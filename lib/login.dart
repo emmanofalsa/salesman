@@ -212,21 +212,17 @@ class _MyLoginPageState extends State<MyLoginPage> {
       key: _scaffoldKey,
       body: Stack(
         children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              padding:
-                  EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 20),
+          SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(
-                    height: 80,
-                  ),
                   Container(
-                    margin: EdgeInsets.only(top: 24),
-                    width: 200,
-                    height: 200,
+                    width: ScreenData.scrWidth * .55,
+                    height: ScreenData.scrWidth * .4,
                     child: Center(
                       child: Image(
                         image: AssetsValues.loginLogo,
@@ -240,16 +236,22 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(
+                    height: ScreenData.scrHeight * .030,
+                  ),
                   AnimatedContainer(
                     duration: Duration(milliseconds: 300),
                     /*curve: Curves.easeInOutBack,*/
-                    height: 250,
-                    width: 350,
-                    margin: EdgeInsets.only(top: 10),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                    // height: 130,
+                    // width: 270,
+                    height: ScreenData.scrHeight * .27,
+                    width: ScreenData.scrWidth * .84,
                     child: SingleChildScrollView(
                       child: buildSignInTextField(),
                     ),
+                  ),
+                  SizedBox(
+                    height: ScreenData.scrHeight * .030,
                   ),
                   buildSignInButton(),
                   buildForgetPass(),
@@ -279,7 +281,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   Container buildSignInButton() {
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      // margin: EdgeInsets.only(top: 0),
       child: Column(
         children: [
           ElevatedButton(
@@ -292,14 +294,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   var password = passwordController.text;
 
                   var rsp = await db.hepeLogin(username, password);
-
-                  // _userdata = rsp;
-                  // print(_userdata);
-                  // if (_userdata.isEmpty) {
-                  //   loginDialog = 'Account not Found!';
-                  // } else {
-                  //   loginDialog = 'Found!';
-                  // }
 
                   if (rsp == '') {
                     loginDialog = 'Account not Found!';
@@ -347,15 +341,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     );
                   } else {
                     if (_userdata[0]['status'] == '0') {
-                      // showDialog(
-                      //     barrierDismissible: false,
-                      //     context: context,
-                      //     builder: (context) => LockAccount(
-                      //           title: 'Account Locked',
-                      //           description:
-                      //               'This account has been locked due to excessive login failures. Please contact your administrator.',
-                      //           buttonText: 'Okay',
-                      //         ));
                       showGlobalSnackbar(
                           'Information',
                           'This account has been locked due to excessive login failures. Please contact your administrator.',
@@ -422,69 +407,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     }
                   }
                 }
-                //   var rsp = await loginHepe(username, password);
-                //   // print(rsp);
-
-                //   if (rsp == 'failed username') {
-                //     print("Invalid username or Password");
-                //     _scaffoldKey.currentState.showSnackBar(
-                //       SnackBar(
-                //           backgroundColor: Colors.red,
-                //           content: Text("Invalid username or Password")),
-                //     );
-                //   } else if (rsp == 'failed password') {
-                //     print("Invalid username or Password");
-                //     _scaffoldKey.currentState.showSnackBar(
-                //       SnackBar(
-                //           backgroundColor: Colors.red,
-                //           content: Text("Invalid username or Password")),
-                //     );
-                //   } else {
-                //     if (rsp['status'] == '0') {
-                //       showDialog(
-                //           context: context,
-                //           builder: (context) => ConfirmBox(
-                //                 title: 'Invalid',
-                //                 description:
-                //                     'Your account has been disabled. Please contact Administrator.',
-                //                 buttonText: 'Okay',
-                //               ));
-                //     } else {
-                //       showDialog(
-                //           barrierDismissible: false,
-                //           context: context,
-                //           builder: (context) => LoggingInBox());
-                //       UserData.id = rsp['user_code'];
-                //       UserData.firstname = rsp['first_name'];
-                //       UserData.lastname = rsp['last_name'];
-                //       UserData.department = rsp['department'];
-                //       UserData.division = rsp['division'];
-                //       UserData.district = rsp['district'];
-                //       UserData.position = rsp['title'];
-                //       UserData.contact = rsp['mobile'];
-                //       UserData.postal = rsp['postal_code'];
-                //       UserData.email = rsp['email'];
-                //       UserData.address = rsp['address'];
-                //       UserData.routes = rsp['area'];
-                //       UserData.username = username;
-
-                //       // var getP = await getProcessed(UserData.id);
-
-                //       print("Login Successful!");
-                //       viewSpinkit = false;
-                //       if (viewSpinkit == false) {
-                //         Navigator.push(context,
-                //             MaterialPageRoute(builder: (context) {
-                //           return Menu();
-                //         }));
-                //       }
-                //     }
-                //   }
-                // }
               }
             },
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
@@ -498,9 +423,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
             ),
           ),
           SizedBox(
-            height: 60,
+            height: ScreenData.scrHeight * .070,
           ),
-          Text(message),
+          // Text(message),
         ],
       ),
     );
@@ -535,7 +460,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
               },
             ),
             SizedBox(
-              height: 25,
+              height: ScreenData.scrHeight * .020,
             ),
             TextFormField(
               textInputAction: TextInputAction.done,

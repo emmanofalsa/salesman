@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 
 class AppData {
@@ -8,6 +7,11 @@ class AppData {
   static String appYear = ' COPYRIGHT 2021';
   static bool appUptodate = true;
   static String updesc = 'SMAPP';
+}
+
+class ScreenData {
+  static double scrWidth = 0.00;
+  static double scrHeight = 0.00;
 }
 
 class UserData {

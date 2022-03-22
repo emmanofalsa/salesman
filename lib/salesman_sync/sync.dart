@@ -142,8 +142,8 @@ class _SyncSalesmanState extends State<SyncSalesman> {
   }
 
   upload() async {
-    String tmpTranNo = '';
-    String tranNo = '';
+    // String tmpTranNo = '';
+    // String tranNo = '';
     // List _rspList = [];
     int x = 0;
     if (NetworkData.errorMsgShow == false &&
@@ -155,9 +155,9 @@ class _SyncSalesmanState extends State<SyncSalesman> {
 
         var tmp = await db.getTransactionLine(element['tran_no']);
         if (!mounted) return;
-        setState(() {
-          _tempList = tmp;
-        });
+        // setState(() {
+        //   _tempList = tmp;
+        // });
         print('SEND');
         print(_tempList);
         var rsp = await db.saveTransactions(
@@ -172,18 +172,18 @@ class _SyncSalesmanState extends State<SyncSalesman> {
             element['signature'],
             'TRUE',
             element['hepe_upload'],
-            _tempList);
+            tmp);
         setState(() {
           x++;
           // _rspList = rsp;
           print('RETURN');
-          print(rsp);
-          tmpTranNo = element['tran_no'];
-          tranNo = rsp;
+          print('RETURN FROM SAVING TRANSACTIONS: ' + rsp.toString());
+          // tmpTranNo = element['tran_no'];
+          // tranNo = rsp;
           if (rsp.isNotEmpty) {
             //PA CHANGE STATUS SA SQLITE
-            db.updateTranUploadStatSM(tmpTranNo, tranNo);
-            db.updateLineUploadStat(tmpTranNo, tranNo);
+            db.updateTranUploadStatSM(element['tran_no'], rsp);
+            db.updateLineUploadStat(element['tran_no'], rsp);
           }
           print(x);
           if (x == _toList.length) {
@@ -1533,7 +1533,8 @@ class _SyncSalesmanState extends State<SyncSalesman> {
                       text: "Upload Data",
                       // recognizer: _tapGestureRecognizer,
                       style: TextStyle(
-                        fontSize: 15,
+                        // fontSize: 15,
+                        fontSize: ScreenData.scrWidth * .038,
                         fontWeight:
                             uploadPressed ? FontWeight.bold : FontWeight.normal,
                         decoration: TextDecoration.underline,
@@ -1547,7 +1548,7 @@ class _SyncSalesmanState extends State<SyncSalesman> {
                     child: Icon(
                       Icons.file_upload,
                       color: Colors.green,
-                      size: 24,
+                      size: ScreenData.scrWidth * .06,
                     ),
                   ),
                 ],
@@ -1581,7 +1582,8 @@ class _SyncSalesmanState extends State<SyncSalesman> {
                     text: "Download Data",
                     // recognizer: _tapGestureRecognizer,
                     style: TextStyle(
-                      fontSize: 15,
+                      // fontSize: 15,
+                      fontSize: ScreenData.scrWidth * .038,
                       fontWeight:
                           uploadPressed ? FontWeight.normal : FontWeight.bold,
                       decoration: TextDecoration.underline,
@@ -1594,7 +1596,8 @@ class _SyncSalesmanState extends State<SyncSalesman> {
                     child: Icon(
                       Icons.file_download,
                       color: Colors.yellowAccent,
-                      size: 24,
+                      // size: 24,
+                      size: ScreenData.scrWidth * .06,
                     ),
                   ),
                 ],

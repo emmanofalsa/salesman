@@ -240,12 +240,13 @@ class _HistoryState extends State<History> {
                 pinned: true,
                 floating: true,
                 snap: true,
-                toolbarHeight: 70,
+                toolbarHeight: ScreenData.scrHeight * .08,
                 automaticallyImplyLeading: false,
                 backgroundColor: Colors.white,
                 elevation: 0,
                 title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "History",

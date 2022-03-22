@@ -24,12 +24,12 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
   // static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
 
-  PackageInfo _packageInfo = PackageInfo(
-    appName: 'Unknown',
-    packageName: 'Unknown',
-    version: 'Unknown',
-    buildNumber: 'Unknown',
-  );
+  // PackageInfo _packageInfo = PackageInfo(
+  //   appName: 'Unknown',
+  //   packageName: 'Unknown',
+  //   version: 'Unknown',
+  //   buildNumber: 'Unknown',
+  // );
 
   ScrollController _scrollController = ScrollController();
   String err1 = 'No Internet Connection';
@@ -79,17 +79,17 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
     String version = packageInfo.version;
     // String apn = packageInfo.appName;
     // String buildNumber = packageInfo.buildNumber;
-    _initPackageInfo();
+    // _initPackageInfo();
     print(version);
     AppData.appVersion = version;
   }
 
-  Future<void> _initPackageInfo() async {
-    final PackageInfo info = await PackageInfo.fromPlatform();
-    setState(() {
-      _packageInfo = info;
-    });
-  }
+  // Future<void> _initPackageInfo() async {
+  //   final PackageInfo info = await PackageInfo.fromPlatform();
+  //   setState(() {
+  //     _packageInfo = info;
+  //   });
+  // }
 
   void onTappedBar(int index) {
     _currentIndex = index;

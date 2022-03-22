@@ -469,7 +469,7 @@ class DataPrivacyNotice extends StatelessWidget {
                 style: TextStyle(fontSize: 12),
                 textAlign: TextAlign.justify,
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Text(
                 "Data Privacy Officer:",
                 style: TextStyle(fontSize: 12),
