@@ -745,7 +745,7 @@ class _AddDialogState extends State<AddDialog> {
                               } else {
                                 CartData.totalAmount =
                                     (double.parse(CartData.totalAmount) +
-                                            double.parse(CartData.itmTotal!))
+                                            double.parse(CartData.itmTotal))
                                         .toString();
                                 CartData.itmNo =
                                     (int.parse(CartData.itmNo) + 1).toString();

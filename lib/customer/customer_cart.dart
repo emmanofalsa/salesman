@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:salesman/customer/checkout.dart';
 import 'package:salesman/customer/customer_profile.dart';
@@ -232,48 +234,86 @@ class _CustomerCartState extends State<CustomerCart> {
         handleUserInteraction();
       },
       child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 5),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 15,
-                    ),
-                    // buildHeaderCont(),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    buildListViewCont(),
-                  ],
-                ),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: AppBar(
+            automaticallyImplyLeading: true,
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.deepOrange),
+            elevation: 0,
+            title: Text(
+              CustomerData.accountName! + "'s Cart",
+              // "EMAMASD ASDADASD's CART",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 21,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            Container(
-              height: 160,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.white,
-              child: SingleChildScrollView(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 5),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 15,
-                    ),
-                    buildHeaderCont(),
-                  ],
-                ),
-              ),
+            leading: GestureDetector(
+              child: Icon(CupertinoIcons.arrow_left),
+              onTap: () {
+                GlobalVariables.menuKey = 0;
+                GlobalVariables.viewPolicy = false;
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.leftToRight,
+                        child: CustomerProfile()));
+              },
             ),
-            // buildSummaryCont(context),
-          ],
+          ),
         ),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 15),
+          child: Column(
+            children: [
+              Expanded(child: buildListViewCont()),
+            ],
+          ),
+        ),
+        // body: Stack(
+        //   children: [
+        //     Container(
+        //       height: MediaQuery.of(context).size.height,
+        //       width: MediaQuery.of(context).size.width,
+        //       child: SingleChildScrollView(
+        //         padding:
+        //             EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 5),
+        //         child: Column(
+        //           children: [
+        //             SizedBox(
+        //               height: 15,
+        //             ),
+        //             // buildHeaderCont(),
+        //             SizedBox(
+        //               height: 5,
+        //             ),
+        //             buildListViewCont(),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //     Container(
+        //       height: 160,
+        //       width: MediaQuery.of(context).size.width,
+        //       color: Colors.white,
+        //       child: SingleChildScrollView(
+        //         padding:
+        //             EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 5),
+        //         child: Column(
+        //           children: <Widget>[
+        //             SizedBox(
+        //               height: 15,
+        //             ),
+        //             buildHeaderCont(),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //     // buildSummaryCont(context),
+        //   ],
+        // ),
         floatingActionButton: Container(
           padding: EdgeInsets.only(left: 50),
           child: Align(
@@ -611,7 +651,7 @@ class _CustomerCartState extends State<CustomerCart> {
     if (viewSpinkit == true) {
       return Container(
         // height: 620,
-        height: MediaQuery.of(context).size.height - 100,
+        // height: MediaQuery.of(context).size.height - 100,
         width: MediaQuery.of(context).size.width,
         color: Colors.white10,
         child: Center(
@@ -635,8 +675,8 @@ class _CustomerCartState extends State<CustomerCart> {
     if (emptyCart == true) {
       return Container(
         padding: EdgeInsets.all(50),
-        margin: EdgeInsets.only(top: 200),
-        height: MediaQuery.of(context).size.width,
+        // margin: EdgeInsets.only(top: 200),
+        // height: MediaQuery.of(context).size.width,
         width: MediaQuery.of(context).size.width,
         // color: Colors.deepOrange,
         child: Column(
@@ -662,10 +702,10 @@ class _CustomerCartState extends State<CustomerCart> {
       );
     }
     return Container(
-      margin: EdgeInsets.only(top: 110),
+      // margin: EdgeInsets.only(top: 110),
       // color: Colors.amber,
       // height: 510,
-      height: MediaQuery.of(context).size.height - botmHeight * 2,
+      // height: MediaQuery.of(context).size.height - botmHeight * 2,
       width: MediaQuery.of(context).size.width,
       child: ListView.builder(
         padding: const EdgeInsets.only(top: 1),
@@ -714,8 +754,6 @@ class _CustomerCartState extends State<CustomerCart> {
                   var itmtot = templist[index]['item_total'].toString();
                   var itmcat = templist[index]['item_cat'].toString();
                   var itmImg = templist[index]['image'].toString();
-                  showSnackBar(context, itmcode, itmdesc, itmuom, itmamt,
-                      itmqty, itmtot, itmcat, itmImg);
 
                   db.deleteItem(
                       CustomerData.accountCode,
@@ -723,7 +761,11 @@ class _CustomerCartState extends State<CustomerCart> {
                       templist[index]['item_uom'].toString());
                   templist.removeAt(index);
                   computeTotal();
-                  refreshList();
+                  // refreshList();
+
+                  showSnackBar(context, itmcode, itmdesc, itmuom, itmamt,
+                      itmqty, itmtot, itmcat, itmImg);
+
                   // print(templist);
                 });
               },

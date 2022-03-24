@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:salesman/db/db_helper.dart';
+import 'package:salesman/providers/cart_items.dart';
+import 'package:salesman/providers/cart_total.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/assets.dart';
 import 'package:salesman/variables/colors.dart';
@@ -82,7 +85,7 @@ class _AddDialogState extends State<AddDialog> {
 
   totalchanged() {
     CartData.totalAmount =
-        (double.parse(CartData.totalAmount) + double.parse(CartData.itmTotal!))
+        (double.parse(CartData.totalAmount) + double.parse(CartData.itmTotal))
             .toStringAsFixed(2);
     CartData.itmNo =
         (int.parse(CartData.itmNo) + int.parse(CartData.itmQty)).toString();
@@ -426,6 +429,13 @@ class _AddDialogState extends State<AddDialog> {
                                       CartData.itmTotal,
                                       CartData.setCateg,
                                       CartData.imgpath);
+                                  Provider.of<CartItemCounter>(context,
+                                          listen: false)
+                                      .addTotal(int.parse(CartData.itmQty));
+                                  Provider.of<CartTotalCounter>(context,
+                                          listen: false)
+                                      .addTotal(
+                                          double.parse(CartData.itmTotal));
                                   setState(() {
                                     totalchanged();
                                   });

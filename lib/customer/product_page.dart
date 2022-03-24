@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:salesman/customer/customer_cart.dart';
 import 'package:salesman/customer/favorites.dart';
 import 'package:salesman/customer/product_per_categ.dart';
 import 'package:salesman/db/db_helper.dart';
+import 'package:salesman/providers/cart_items.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/assets.dart';
@@ -30,6 +32,8 @@ class _ProductPageState extends State<ProductPage> {
   void initState() {
     super.initState();
     loadCateg();
+    Provider.of<CartItemCounter>(context, listen: false)
+        .setTotal(int.parse(CartData.itmNo));
   }
 
   loadCateg() async {
@@ -75,6 +79,7 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     print('Building Product Page...');
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -382,7 +387,10 @@ class _ProductPageState extends State<ProductPage> {
                               shape: BoxShape.circle,
                               color: ColorsTheme.mainColor),
                           child: Text(
-                            CartData.itmNo,
+                            // CartData.itmNo,
+                            Provider.of<CartItemCounter>(context)
+                                .itmNo
+                                .toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,

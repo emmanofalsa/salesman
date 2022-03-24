@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:salesman/customer/add_dialog.dart';
 import 'package:salesman/customer/customer_cart.dart';
 // import 'package:salesman/customer/product_page.dart';
 import 'package:salesman/db/db_helper.dart';
+import 'package:salesman/providers/cart_total.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/assets.dart';
@@ -62,6 +64,8 @@ class _ProductperCategoryState extends State<ProductperCategory> {
   // }
 
   loadProducts() async {
+    Provider.of<CartTotalCounter>(context, listen: false)
+        .setTotal(double.parse(CartData.totalAmount));
     // int x = 1;
     var documentDirectory = await getApplicationDocumentsDirectory();
     var firstPath = documentDirectory.path + '/';
@@ -237,9 +241,15 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                                     color: Colors.black),
                                 children: [
                                   TextSpan(
+                                      // text: formatCurrencyAmt.format(
+                                      //     double.parse(
+                                      //         GlobalVariables.minOrder)),
                                       text: formatCurrencyAmt.format(
                                           double.parse(
-                                              GlobalVariables.minOrder)),
+                                              Provider.of<CartTotalCounter>(
+                                                      context)
+                                                  .totalAmt
+                                                  .toString())),
                                       style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:salesman/customer/customer_cart.dart';
 import 'package:salesman/customer/customer_profile.dart';
 import 'package:salesman/db/db_helper.dart';
@@ -318,10 +319,11 @@ class _CustomerState extends State<Customer> {
                           checkCustInfo();
 
                           if (!incInfo) {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return CustomerProfile();
-                            }));
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.rightToLeft,
+                                    child: CustomerProfile()));
                           }
                         },
                         child: Container(

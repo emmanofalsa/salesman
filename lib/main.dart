@@ -3,12 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:root_check/root_check.dart';
 import 'package:salesman/customer/customer.dart';
 // import 'package:salesman/homescreen.dart';
 import 'package:salesman/menu.dart';
 import 'package:salesman/option.dart';
+import 'package:salesman/providers/caption_provider.dart';
+import 'package:salesman/providers/cart_items.dart';
+import 'package:salesman/providers/cart_total.dart';
 // import 'package:salesman/rooted/rooted.dart';
 // import 'package:salesman/router/router.dart';
 import 'package:salesman/salesman_home/menu.dart';
@@ -17,7 +21,11 @@ import 'package:salesman/variables/colors.dart';
 import 'package:salesman/widgets/size_config.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => Caption()),
+    ChangeNotifierProvider(create: (_) => CartItemCounter()),
+    ChangeNotifierProvider(create: (_) => CartTotalCounter()),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

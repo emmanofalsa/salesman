@@ -8,16 +8,19 @@ import 'package:http/http.dart';
 // import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 // import 'package:http/http.dart' show Client, Request, get;
 import 'package:retry/retry.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/login.dart';
+import 'package:salesman/providers/caption_provider.dart';
 import 'package:salesman/salesman_home/login.dart';
 import 'package:salesman/url/url.dart';
 import 'package:http/http.dart' as http;
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/assets.dart';
 import 'package:salesman/variables/colors.dart';
+import 'package:salesman/widgets/dialogs.dart';
 import 'package:salesman/widgets/size_config.dart';
 
 class MyOptionPage extends StatefulWidget {
@@ -92,7 +95,10 @@ class _MyOptionPageState extends State<MyOptionPage> {
   }
 
   load() {
-    GlobalVariables.statusCaption = 'Creating/Updating Database...';
+    // GlobalVariables.statusCaption = 'Creating/Updating Database...';
+    // context.read().changeCap('Creating/Updating Database...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Creating/Updating Database...');
     GlobalVariables.spinProgress = 0;
 
     if (loadSpinkit == true) {
@@ -185,7 +191,10 @@ class _MyOptionPageState extends State<MyOptionPage> {
     setState(() {
       // _downloading = true;
       print('Downloading Images');
-      GlobalVariables.statusCaption = 'Downloading Images...';
+      // GlobalVariables.statusCaption = 'Downloading Images...';
+      // context.read().changeCap('Downloading Images...');
+      Provider.of<Caption>(context, listen: false)
+          .changeCap('Downloading Images...');
     });
 
     _images!.clear();
@@ -226,6 +235,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
   }
 
   downloadSalesmanImage() {
+    // context.read().changeCap('Downloading Salesman Images...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Downloading Salesman Images...');
     int x = 1;
     // imgLoad = true;
     // print(
@@ -259,6 +271,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
   }
 
   downloadHepeImage() {
+    // context.read().changeCap('Downloading Hepe Images...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Downloading Hepe Images...');
     int x = 1;
     // imgLoad = true;
     // print(
@@ -296,6 +311,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var sm = await db.ofFetchSalesmanList();
     salesmanList = sm;
     if (salesmanList.isEmpty) {
+      // context.read().changeCap('Creating Salesman List...');
+      Provider.of<Caption>(context, listen: false)
+          .changeCap('Creating Salesman List...');
       var rsp = await db.getSalesmanList();
       salesmanList = rsp;
       // print(salesmanList);
@@ -303,42 +321,58 @@ class _MyOptionPageState extends State<MyOptionPage> {
       await db.addUpdateTable('salesman_lists ', 'SALESMAN', date.toString());
       print('Salesman List Created');
 
-      setState(() {
-        GlobalVariables.processList.add('Salesman List Created');
-        GlobalVariables.statusCaption = 'SalesmanList Created';
-      });
+      // setState(() {
+      //   GlobalVariables.processList.add('Salesman List Created');
+      //   GlobalVariables.statusCaption = 'SalesmanList Created';
+      // });
       loadHepe();
     } else {
-      String updateType = 'Salesman';
-      if (NetworkData.connected == true) {
-        // print('NISUD SA CONNECTED!!');
-        var resp = await db.getSalesmanList();
-        if (!mounted) return;
-        setState(() {
-          salesmanList = resp;
-          // print(salesmanList);
-          int y = 1;
-          salesmanList.forEach((element) async {
-            if (y < salesmanList.length) {
-              // print(salesmanList.length);
-              y++;
-              if (y == salesmanList.length) {
-                await db.deleteTable('salesman_lists');
-                await db.insertTable(salesmanList, 'salesman_lists');
-                await db.updateTable('salesman_lists ', date.toString());
-                await db.addUpdateTableLog(date.toString(),
-                    'Salesman Masterfile', 'Completed', updateType);
-                print('Salesman List Updated');
-                GlobalVariables.updateSpinkit = true;
-                downloadSalesmanImage();
-                // loadHepe();
+      final action = await Dialogs.openDialog(
+          context,
+          'Confirmation',
+          'Update data? It may take a while please secure a stable connection.',
+          false,
+          'No',
+          'Yes');
+      if (action == DialogAction.yes) {
+        // context.read().changeCap('Updating Salesman List...');
+        Provider.of<Caption>(context, listen: false)
+            .changeCap('Updating Salesman List...');
+        String updateType = 'Salesman';
+        if (NetworkData.connected == true) {
+          // print('NISUD SA CONNECTED!!');
+          var resp = await db.getSalesmanList();
+          if (!mounted) return;
+          setState(() {
+            salesmanList = resp;
+            // print(salesmanList);
+            int y = 1;
+            salesmanList.forEach((element) async {
+              if (y < salesmanList.length) {
+                // print(salesmanList.length);
+                y++;
+                if (y == salesmanList.length) {
+                  await db.deleteTable('salesman_lists');
+                  await db.insertTable(salesmanList, 'salesman_lists');
+                  await db.updateTable('salesman_lists ', date.toString());
+                  await db.addUpdateTableLog(date.toString(),
+                      'Salesman Masterfile', 'Completed', updateType);
+                  print('Salesman List Updated');
+                  GlobalVariables.updateSpinkit = true;
+                  downloadSalesmanImage();
+                  // loadHepe();
+                }
               }
-            }
+            });
           });
-        });
+        } else {
+          print('NIDERETSO!!');
+          loadHepe();
+        }
       } else {
-        print('NIDERETSO!!');
-        loadHepe();
+        Provider.of<Caption>(context, listen: false)
+            .changeCap('Updated Successfuly!');
+        unloadSpinkit();
       }
     }
   }
@@ -391,6 +425,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var ctg = await db.ofFetchCategList();
     categList = ctg;
     if (categList.isEmpty) {
+      // context.read().changeCap('Creating Category...');
+      Provider.of<Caption>(context, listen: false)
+          .changeCap('Creating Categories...');
       var rsp = await db.getCategList();
       categList = rsp;
       int x = 1;
@@ -414,12 +451,15 @@ class _MyOptionPageState extends State<MyOptionPage> {
             setState(() {
               GlobalVariables.statusCaption = 'Category List Created';
             });
-
+            Provider.of<Caption>(context, listen: false)
+                .changeCap('All Database Created Successfuly!');
             unloadSpinkit();
           }
         }
       });
     } else {
+      Provider.of<Caption>(context, listen: false)
+          .changeCap('All Database Created Successfuly!');
       setState(() {
         unloadSpinkit();
       });
@@ -428,6 +468,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
 
   //ITEM IMAGE (ALL IMAGE PATH)
   loadItemImgPath() async {
+    // context.read().changeCap('Creating Image Path...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Creating Image Path...');
     var itmImg = await db.ofFetchItemImgList();
     itemAllImgList = itmImg;
     if (itemAllImgList.isEmpty) {
@@ -448,6 +491,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
 
 //ITEM MASTERFILE
   loadItemMasterfile() async {
+    // context.read().changeCap('Creating Item Masterfile...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Creating Item Masterfile...');
     var itm = await db.ofFetchItemList();
     itemList = itm;
     if (itemList.isEmpty) {
@@ -468,6 +514,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
 
 //BANK LIST
   loadBankList() async {
+    // context.read().changeCap('Creating Bank List...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Creating Bank List...');
     var blist = await db.ofFetchBankList();
     bankList = blist;
     // print(bankList);
@@ -498,6 +547,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
 
   //SALES TYPE LIST
   loadSalesType() async {
+    // context.read().changeCap('Creating Sales Type...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Creating Sales Type...');
     var stlist = await db.ofSalesTypeList();
     salestypeList = stlist;
     if (salestypeList.isEmpty) {
@@ -527,6 +579,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
 
   //CUSTOMER_DISCOUNT
   loadCustomerDiscount() async {
+    // context.read().changeCap('Creating Customer Discount...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Creating Customer Discount...');
     var disc = await db.ofFetchDiscountList();
     discountList = disc;
     if (discountList.isEmpty) {
@@ -556,6 +611,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
 
   //CUSTOMER
   loadCustomer() async {
+    // context.read().changeCap('Creating Customer List...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Creating Customer List...');
     var cust = await db.ofFetchCustomerList();
     customerList = cust;
     if (customerList.isEmpty) {
@@ -587,6 +645,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var hepe = await db.ofFetchHepeList();
     hepeList = hepe;
     if (hepeList.isEmpty) {
+      // context.read().changeCap('Creating Hepe List...');
+      Provider.of<Caption>(context, listen: false)
+          .changeCap('Creating Hepe List...');
       var rsp = await db.getHepeList();
       hepeList = rsp;
       int x = 1;
@@ -610,6 +671,9 @@ class _MyOptionPageState extends State<MyOptionPage> {
     } else {
       // String updateType = 'Jefe';
       if (NetworkData.connected) {
+        // context.read().changeCap('Updating Hepe List...');
+        Provider.of<Caption>(context, listen: false)
+            .changeCap('Updating Hepe List...');
         var rsp = await db.getHepeList();
         hepeList = rsp;
         int x = 1;
@@ -878,7 +942,8 @@ class _LoadingSpinkitState extends State<LoadingSpinkit> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  GlobalVariables.statusCaption,
+                  // Provider.of<Caption>(context).cap,
+                  context.watch<Caption>().cap,
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,

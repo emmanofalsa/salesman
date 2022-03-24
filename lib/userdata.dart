@@ -99,7 +99,7 @@ class CartData {
   static String? itmUom;
   static String? itmAmt;
   static String itmQty = '';
-  static String? itmTotal;
+  static String itmTotal = "";
   static String? cartTotal;
   static String? imgpath;
   static bool allProd = false;

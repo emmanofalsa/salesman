@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:salesman/customer/customer_cart.dart';
 import 'package:salesman/customer/customer_inbox.dart';
 import 'package:salesman/db/db_helper.dart';
@@ -152,47 +154,78 @@ class _CustomerProfileState extends State<CustomerProfile> {
         handleUserInteraction();
       },
       child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              // color: Colors.grey,
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, top: 300, bottom: 0),
-                child: Column(
-                  children: [
-                    // SizedBox(
-                    //   height: 25,
-                    // ),
-                    // buildHeaderCont(),
-                    buildTransHistory(),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: 330,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.white,
-              child: SingleChildScrollView(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 0),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 0,
-                    ),
-                    buildHeaderCont(),
-                    buildCustomerInfo(),
-                  ],
-                ),
-              ),
-            ),
-            // buildSummaryCont(context),
-          ],
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.deepOrange),
+          elevation: 0,
+          title: Text(
+            'Customer Informations',
+            style: TextStyle(fontSize: 14, color: Colors.deepOrange),
+          ),
+          leading: GestureDetector(
+            child: Icon(CupertinoIcons.arrow_left),
+            onTap: () {
+              GlobalVariables.menuKey = 0;
+              GlobalVariables.viewPolicy = false;
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.leftToRight,
+                      child: SalesmanMenu()));
+            },
+          ),
         ),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 15),
+          child: Column(
+            children: [
+              buildCustomerInfo(),
+              Expanded(child: buildTransHistory()),
+            ],
+          ),
+        ),
+        // body: Stack(
+        //   children: [
+        //     Container(
+        //       // color: Colors.grey,
+        //       height: MediaQuery.of(context).size.height,
+        //       width: MediaQuery.of(context).size.width,
+        //       child: SingleChildScrollView(
+        //         padding:
+        //             EdgeInsets.only(left: 16, right: 16, top: 300, bottom: 0),
+        //         child: Column(
+        //           children: [
+        //             // SizedBox(
+        //             //   height: 25,
+        //             // ),
+        //             // buildHeaderCont(),
+        //             buildTransHistory(),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //     Container(
+        //       height: 330,
+        //       width: MediaQuery.of(context).size.width,
+        //       color: Colors.white,
+        //       child: SingleChildScrollView(
+        //         padding:
+        //             EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 0),
+        //         child: Column(
+        //           children: <Widget>[
+        //             SizedBox(
+        //               height: 0,
+        //             ),
+        //             buildHeaderCont(),
+        //             buildCustomerInfo(),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //     // buildSummaryCont(context),
+        //   ],
+        // ),
       ),
     );
   }
@@ -230,7 +263,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(top: 25),
+      margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.only(
         left: 0,
       ),
@@ -431,60 +464,60 @@ class _CustomerProfileState extends State<CustomerProfile> {
     );
   }
 
-  Container buildHeaderCont() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 80,
-      // color: Colors.grey,
-      alignment: Alignment.centerLeft,
-      child: Column(
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  GlobalVariables.menuKey = 0;
-                  GlobalVariables.viewPolicy = false;
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return SalesmanMenu();
-                  }));
-                },
-                child: Container(
-                  width: 50,
-                  height: 80,
-                  child: Image(
-                    image: AssetsValues.backImg,
-                  ),
-                ),
-              ),
-              SizedBox(height: 50),
-              Container(
-                // padding: EdgeInsets.only(top: 50),
-                width: MediaQuery.of(context).size.width - 100,
-                height: 60,
-                // color: Colors.grey[350],
-                alignment: Alignment.center,
-                // color: Colors.lightGreen,
-                child: Text(
-                  '',
-                  style: TextStyle(
-                    // color: Colors.grey,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  // Container buildHeaderCont() {
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width,
+  //     height: 80,
+  //     // color: Colors.grey,
+  //     alignment: Alignment.centerLeft,
+  //     child: Column(
+  //       children: <Widget>[
+  //         Row(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: <Widget>[
+  //             GestureDetector(
+  //               onTap: () {
+  //                 GlobalVariables.menuKey = 0;
+  //                 GlobalVariables.viewPolicy = false;
+  //                 Navigator.push(context, MaterialPageRoute(builder: (context) {
+  //                   return SalesmanMenu();
+  //                 }));
+  //               },
+  //               child: Container(
+  //                 width: 50,
+  //                 height: 80,
+  //                 child: Image(
+  //                   image: AssetsValues.backImg,
+  //                 ),
+  //               ),
+  //             ),
+  //             SizedBox(height: 50),
+  //             Container(
+  //               // padding: EdgeInsets.only(top: 50),
+  //               width: MediaQuery.of(context).size.width - 100,
+  //               height: 60,
+  //               // color: Colors.grey[350],
+  //               alignment: Alignment.center,
+  //               // color: Colors.lightGreen,
+  //               child: Text(
+  //                 '',
+  //                 style: TextStyle(
+  //                   // color: Colors.grey,
+  //                   fontSize: 26,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Container buildCustomerInfo() {
     return Container(
-      height: 215,
+      // height: 215,
       // color: Colors.grey[300],
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(top: 0, bottom: 0),
@@ -502,7 +535,9 @@ class _CustomerProfileState extends State<CustomerProfile> {
                 children: <Widget>[
                   Container(
                     width: 200,
-                    height: 150,
+                    // height: 150,
+                    height: ScreenData.scrHeight * .20,
+                    // color: Colors.grey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -617,8 +652,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
               ),
               Container(
                 padding: EdgeInsets.only(top: 0),
-                width: 100,
-                height: 150,
+                // width: 100,
+                // height: 150,
+                // color: Colors.grey,
+                width: ScreenData.scrWidth * .25,
+                height: ScreenData.scrHeight * .20,
                 child: Image(
                   image: AssetsValues.personImg,
                 ),
@@ -752,38 +790,43 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         ),
                         Container(
                           height: 20,
-                          width: 150,
+                          width: MediaQuery.of(context).size.width / 5 + 30,
                           margin: EdgeInsets.only(top: 0),
                           child: ElevatedButton(
                             style: raisedButtonStyleWhite,
                             onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return CustomerCart();
-                              }));
+                              // Navigator.push(context,
+                              //     MaterialPageRoute(builder: (context) {
+                              //   return CustomerCart();
+                              // }));
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: CustomerCart()));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  'Place an Order',
+                                  'Add Order',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: ColorsTheme.mainColor,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 5,
-                                ),
+                                // SizedBox(
+                                //   width: 5,
+                                // ),
                                 Container(
-                                  width: 20,
-                                  height: 20,
+                                  width: 15,
+                                  height: 15,
                                   child: Icon(
                                     Icons.add_circle_outline,
                                     color: ColorsTheme.mainColor,
-                                    size: 20,
+                                    size: 15,
                                   ),
                                 ),
                               ],

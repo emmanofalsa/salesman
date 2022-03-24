@@ -58,6 +58,8 @@ dependencies:
   avatar_view: ^1.0.1
   switcher: ^1.0.0
   dio: ^4.0.0
+  page_transition: ^2.0.5
+  provider: ^6.0.2
   # image_picker: ^0.6.3+1
   # path_provider:
   # share: ^0.6.3+6
