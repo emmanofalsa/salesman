@@ -7,6 +7,10 @@ import 'package:provider/provider.dart';
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:root_check/root_check.dart';
 import 'package:salesman/customer/customer.dart';
+import 'package:salesman/customer/customer_cart.dart';
+import 'package:salesman/customer/customer_profile.dart';
+import 'package:salesman/customer/product_page.dart';
+import 'package:salesman/customer/product_per_categ.dart';
 // import 'package:salesman/homescreen.dart';
 import 'package:salesman/menu.dart';
 import 'package:salesman/option.dart';
@@ -58,6 +62,10 @@ class MyApp extends StatelessWidget {
             "/option": (context) => MyOptionPage(),
             "/smmenu": (context) => SalesmanMenu(),
             "/smcustomer": (context) => Customer(),
+            "/custprofile": (context) => CustomerProfile(),
+            "/cart": (context) => CustomerCart(),
+            "/prodpage": (context) => ProductPage(),
+            "/categpage": (context) => ProductperCategory(),
             "/hepemenu": (context) => Menu(),
           },
           // home: Splash(),

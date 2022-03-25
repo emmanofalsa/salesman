@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:page_transition/page_transition.dart';
+// import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:salesman/customer/checkout.dart';
 import 'package:salesman/customer/customer_profile.dart';
-import 'package:salesman/customer/product_page.dart';
+// import 'package:salesman/customer/product_page.dart';
 import 'package:salesman/db/db_helper.dart';
+import 'package:salesman/providers/cart_items.dart';
+import 'package:salesman/providers/cart_total.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/assets.dart';
@@ -70,6 +73,7 @@ class _CustomerCartState extends State<CustomerCart> {
     templist = json.decode(json.encode(rsp));
     // templist = rsp;
     // print(templist);
+
     setState(() {
       if (templist.isNotEmpty) {
         emptyCart = false;
@@ -93,9 +97,9 @@ class _CustomerCartState extends State<CustomerCart> {
       templist.forEach((element) {
         setState(() {
           sum = sum + double.parse(element['item_total']);
-          print(element['item_total']);
+          // print(element['item_total']);
           CartData.totalAmount = sum.toStringAsFixed(2);
-          print(CartData.totalAmount);
+          // print(CartData.totalAmount);
           // CartData.itmNo = templist.length.toString();
           CartData.itmNo =
               (int.parse(CartData.itmNo) + int.parse(element['item_qty']))
@@ -107,12 +111,16 @@ class _CustomerCartState extends State<CustomerCart> {
       // print(CartData.itmNo);
       CartData.itmLineNo = templist.length.toString();
     });
+    Provider.of<CartItemCounter>(context, listen: false)
+        .setTotal(int.parse(CartData.itmNo));
+    Provider.of<CartTotalCounter>(context, listen: false)
+        .setTotal(double.parse(CartData.totalAmount));
   }
 
   loadMinOrder() async {
     var gOrderLimit = await db.getOrderLimit();
     _limit = gOrderLimit;
-
+    if (!mounted) return;
     _limit.forEach((element) {
       setState(() {
         GlobalVariables.minOrder = element['min_order_amt'];
@@ -255,17 +263,19 @@ class _CustomerCartState extends State<CustomerCart> {
               onTap: () {
                 GlobalVariables.menuKey = 0;
                 GlobalVariables.viewPolicy = false;
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.leftToRight,
-                        child: CustomerProfile()));
+                print('POP');
+                Navigator.pop(context);
+                // Navigator.push(
+                //     context,
+                //     PageTransition(
+                //         type: PageTransitionType.leftToRight,
+                //         child: CustomerProfile()));
               },
             ),
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 15),
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 5),
           child: Column(
             children: [
               Expanded(child: buildListViewCont()),
@@ -320,9 +330,11 @@ class _CustomerCartState extends State<CustomerCart> {
             alignment: Alignment.bottomCenter,
             child: FloatingActionButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ProductPage();
-                }));
+                // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                //   return ProductPage();
+                // }));
+                // Navigator.popAndPushNamed(context, '/cart'),
+                Navigator.popAndPushNamed(context, '/prodpage');
               },
               child: Icon(Icons.add),
               backgroundColor: ColorsTheme.mainColor,
@@ -550,11 +562,13 @@ class _CustomerCartState extends State<CustomerCart> {
                                             'No',
                                             'Yes');
                                         if (action == DialogAction.yes) {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return ProductPage();
-                                          }));
+                                          // Navigator.push(context,
+                                          //     MaterialPageRoute(
+                                          //         builder: (context) {
+                                          //   return ProductPage();
+                                          // }));
+                                          Navigator.popAndPushNamed(
+                                              context, '/prodpage');
                                         } else {}
                                       } else {
                                         // Navigator.push(context,
@@ -654,34 +668,34 @@ class _CustomerCartState extends State<CustomerCart> {
         // height: MediaQuery.of(context).size.height - 100,
         width: MediaQuery.of(context).size.width,
         color: Colors.white10,
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 150,
-                color: Colors.white,
-                height: 150,
-                child: Image(
-                  color: ColorsTheme.mainColor,
-                  image: AssetsValues.cartImage,
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 150,
+              color: Colors.white,
+              height: 150,
+              child: Image(
+                color: ColorsTheme.mainColor,
+                image: AssetsValues.cartImage,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }
     if (emptyCart == true) {
       return Container(
-        padding: EdgeInsets.all(50),
+        // padding: EdgeInsets.all(50),
         // margin: EdgeInsets.only(top: 200),
         // height: MediaQuery.of(context).size.width,
         width: MediaQuery.of(context).size.width,
         // color: Colors.deepOrange,
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Icon(
               Icons.remove_shopping_cart,

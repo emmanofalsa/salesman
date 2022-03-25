@@ -59,6 +59,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
     // _getColor();
     if (NetworkData.connected) {
       var getM = await db.checkCustomerMessages(CustomerData.accountCode);
+      if (!mounted) return;
       setState(() {
         msgList = getM;
         print(msgList.length);
@@ -160,7 +161,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
           iconTheme: IconThemeData(color: Colors.deepOrange),
           elevation: 0,
           title: Text(
-            'Customer Informations',
+            'Customer Profile',
             style: TextStyle(fontSize: 14, color: Colors.deepOrange),
           ),
           leading: GestureDetector(
@@ -168,11 +169,12 @@ class _CustomerProfileState extends State<CustomerProfile> {
             onTap: () {
               GlobalVariables.menuKey = 0;
               GlobalVariables.viewPolicy = false;
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.leftToRight,
-                      child: SalesmanMenu()));
+              Navigator.pop(context);
+              // Navigator.push(
+              //     context,
+              //     PageTransition(
+              //         type: PageTransitionType.leftToRight,
+              //         child: SalesmanMenu()));
             },
           ),
         ),
@@ -185,47 +187,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
             ],
           ),
         ),
-        // body: Stack(
-        //   children: [
-        //     Container(
-        //       // color: Colors.grey,
-        //       height: MediaQuery.of(context).size.height,
-        //       width: MediaQuery.of(context).size.width,
-        //       child: SingleChildScrollView(
-        //         padding:
-        //             EdgeInsets.only(left: 16, right: 16, top: 300, bottom: 0),
-        //         child: Column(
-        //           children: [
-        //             // SizedBox(
-        //             //   height: 25,
-        //             // ),
-        //             // buildHeaderCont(),
-        //             buildTransHistory(),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //     Container(
-        //       height: 330,
-        //       width: MediaQuery.of(context).size.width,
-        //       color: Colors.white,
-        //       child: SingleChildScrollView(
-        //         padding:
-        //             EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 0),
-        //         child: Column(
-        //           children: <Widget>[
-        //             SizedBox(
-        //               height: 0,
-        //             ),
-        //             buildHeaderCont(),
-        //             buildCustomerInfo(),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //     // buildSummaryCont(context),
-        //   ],
-        // ),
       ),
     );
   }

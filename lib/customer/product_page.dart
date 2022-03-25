@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:salesman/customer/customer_cart.dart';
+// import 'package:salesman/customer/customer_cart.dart';
 import 'package:salesman/customer/favorites.dart';
 import 'package:salesman/customer/product_per_categ.dart';
 import 'package:salesman/db/db_helper.dart';
@@ -32,8 +32,6 @@ class _ProductPageState extends State<ProductPage> {
   void initState() {
     super.initState();
     loadCateg();
-    Provider.of<CartItemCounter>(context, listen: false)
-        .setTotal(int.parse(CartData.itmNo));
   }
 
   loadCateg() async {
@@ -42,6 +40,7 @@ class _ProductPageState extends State<ProductPage> {
     // var filePathAndName = documentDirectory.path + '/images/pic.jpg';
     categPath = firstPath;
     var ctg = await db.ofFetchCategList();
+    if (!mounted) return;
     setState(() {
       _categlist = ctg;
       // print()
@@ -52,6 +51,7 @@ class _ProductPageState extends State<ProductPage> {
 
   searchCateg() async {
     var getC = await db.categSearch(_searchController);
+    if (!mounted) return;
     setState(() {
       _categlist = getC;
     });
@@ -127,29 +127,6 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ],
         ),
-        // floatingActionButton: Align(
-        //   alignment: Alignment.topRight,
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.end,
-        //     children: <Widget>[
-        //       Container(
-        //         padding: EdgeInsets.only(right: 30, top: 60),
-        //         child: FloatingActionButton(
-        //           onPressed: () {
-        //             Navigator.push(context, MaterialPageRoute(builder: (context) {
-        //               return CustomerCart();
-        //             }));
-        //           },
-        //           child: Icon(
-        //             Icons.shopping_cart,
-        //             size: 26,
-        //           ),
-        //           // backgroundColor: ColorsTheme.mainColor,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ),
     );
   }
@@ -251,9 +228,10 @@ class _ProductPageState extends State<ProductPage> {
               return GestureDetector(
                 onTap: () => {
                   CartData.setCateg = _categlist[index]['category_name'],
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ProductperCategory();
-                  })),
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   return ProductperCategory();
+                  // })),
+                  Navigator.popAndPushNamed(context, '/categpage'),
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width - 20 / 2,
@@ -403,9 +381,10 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                 ),
                 onTap: () => {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return CustomerCart();
-                  })),
+                  Navigator.popAndPushNamed(context, '/cart'),
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   return CustomerCart();
+                  // })),
                 },
               ),
             ],

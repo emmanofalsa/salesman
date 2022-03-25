@@ -796,18 +796,6 @@ class _ProcessedListViewState extends State<ProcessedListView> {
                   var itmqty = _list[index]['del_qty'].toString();
                   var itmtot = _list[index]['tot_amt'].toString();
                   var itmcat = _list[index]['itm_cat'].toString();
-                  showSnackBar(
-                    context,
-                    tran,
-                    itmcode,
-                    itmdesc,
-                    itmuom,
-                    itmamt,
-                    itmqty,
-                    itmtot,
-                    itmcat,
-                  );
-
                   setState(() {
                     db.addtoUnserved(
                         OrderData.trans,
@@ -827,6 +815,18 @@ class _ProcessedListViewState extends State<ProcessedListView> {
 
                     computeTotal();
                   });
+
+                  showSnackBar(
+                    context,
+                    tran,
+                    itmcode,
+                    itmdesc,
+                    itmuom,
+                    itmamt,
+                    itmqty,
+                    itmtot,
+                    itmcat,
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(0.0),
@@ -1406,9 +1406,9 @@ class _ProcessedListViewState extends State<ProcessedListView> {
                             element['itm_cat']);
                         if (i == _testList.length) {
                           print('Changes Discarded');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              getSnackBar("Changes Discarded", Colors.black54,
-                                  Colors.white));
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //     getSnackBar("Changes Discarded", Colors.black54,
+                          //         Colors.white));
                           Navigator.pop(context);
                         }
                       });

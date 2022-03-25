@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
@@ -361,7 +360,7 @@ class _HistoryState extends State<History> {
           Expanded(
             child: Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.only(left: 15, right: 15),
+              padding: EdgeInsets.only(left: 15, right: 15, top: 5),
               // color: Colors.white,
               child: ListView.builder(
                 padding: const EdgeInsets.all(0),
@@ -709,7 +708,7 @@ class _HistoryState extends State<History> {
           Expanded(
             child: Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.only(left: 15, right: 15),
+              padding: EdgeInsets.only(left: 15, right: 15, top: 5),
               // color: Colors.white,
               child: ListView.builder(
                 padding: const EdgeInsets.all(0),
@@ -1065,7 +1064,7 @@ class _HistoryState extends State<History> {
           Expanded(
             child: Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.only(left: 15, right: 15),
+              padding: EdgeInsets.only(left: 15, right: 15, top: 5),
               // color: Colors.white,
               child: ListView.builder(
                 padding: const EdgeInsets.all(0),
@@ -1346,69 +1345,4 @@ class _HistoryState extends State<History> {
       ),
     );
   }
-
-  // Container buildSearchField() {
-  //   return Container(
-  //     height: 50,
-  //     // color: Colors.grey,
-  //     width: MediaQuery.of(context).size.width,
-  //     margin: EdgeInsets.only(top: 0, bottom: 0),
-  //     child: Form(
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         crossAxisAlignment: CrossAxisAlignment.center,
-  //         children: <Widget>[
-  //           Row(
-  //             children: <Widget>[
-  //               Container(
-  //                 width: MediaQuery.of(context).size.width - 50,
-  //                 height: 40,
-  //                 child: TextFormField(
-  //                   onChanged: (String str) {
-  //                     setState(() {
-  //                       _searchController = str;
-  //                       searchHistory();
-  //                     });
-  //                   },
-  //                   decoration: InputDecoration(
-  //                       contentPadding:
-  //                           EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-  //                       enabledBorder: OutlineInputBorder(
-  //                         borderSide: BorderSide(color: Colors.grey),
-  //                         borderRadius: BorderRadius.all(Radius.circular(16)),
-  //                       ),
-  //                       focusedBorder: OutlineInputBorder(
-  //                         borderSide: BorderSide(color: Colors.black87),
-  //                         borderRadius: BorderRadius.all(Radius.circular(16)),
-  //                       ),
-  //                       hintText: 'Search Account/Store Name'),
-  //                 ),
-  //               ),
-  //               SizedBox(
-  //                 width: 10,
-  //               ),
-  //               // Container(
-  //               //   width: 80,
-  //               //   height: 35,
-  //               //   // color: ColorsTheme.mainColor,
-  //               //   child: RaisedButton(
-  //               //     shape: RoundedRectangleBorder(
-  //               //         borderRadius: BorderRadius.circular(5)),
-  //               //     color: ColorsTheme.mainColor,
-  //               //     // padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-  //               //     onPressed: () {},
-  //               //     child: Text(
-  //               //       'Search',
-  //               //       style: TextStyle(color: Colors.white, fontSize: 12),
-  //               //     ),
-  //               //   ),
-  //               // ),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
 }

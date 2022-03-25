@@ -345,8 +345,6 @@ class _HomeState extends State<Home> {
             }
             return SingleChildScrollView(
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.end,
-                // crossAxisAlignment: CrossAxisAlignment.end,
                 // mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   GestureDetector(

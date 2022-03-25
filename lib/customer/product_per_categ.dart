@@ -48,9 +48,10 @@ class _ProductperCategoryState extends State<ProductperCategory> {
 
   void initState() {
     super.initState();
-    refreshList();
+    // refreshList();
     loadProducts();
-
+    // Provider.of<CartTotalCounter>(context, listen: false)
+    //     .setTotal(double.parse(CartData.totalAmount));
     // addImage();
   }
 
@@ -64,8 +65,6 @@ class _ProductperCategoryState extends State<ProductperCategory> {
   // }
 
   loadProducts() async {
-    Provider.of<CartTotalCounter>(context, listen: false)
-        .setTotal(double.parse(CartData.totalAmount));
     // int x = 1;
     var documentDirectory = await getApplicationDocumentsDirectory();
     var firstPath = documentDirectory.path + '/';
@@ -79,7 +78,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
         if (!mounted) return;
         setState(() {
           _itemlist = json.decode(json.encode(getO));
-          print(_itemlist);
+          // print(_itemlist);
           // print(_itemlist);
           // _itemlist.forEach((element) async {
           //   var getImg =
@@ -97,7 +96,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
     } else {
       CartData.allProd = false;
       var getO = await db.getProducts(CartData.setCateg);
-      print(getO);
+      // print(getO);
       if (!mounted) return;
       setState(() {
         _itemlist = json.decode(json.encode(getO));
@@ -133,7 +132,7 @@ class _ProductperCategoryState extends State<ProductperCategory> {
   loadFavorites() async {
     var getF = await db.getFav(CustomerData.accountCode);
     GlobalVariables.favlist = getF;
-    print('FAVORITES:' + GlobalVariables.favlist.toString());
+    // print('FAVORITES:' + GlobalVariables.favlist.toString());
     // });
   }
 
@@ -241,15 +240,15 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                                     color: Colors.black),
                                 children: [
                                   TextSpan(
-                                      // text: formatCurrencyAmt.format(
-                                      //     double.parse(
-                                      //         GlobalVariables.minOrder)),
                                       text: formatCurrencyAmt.format(
                                           double.parse(
-                                              Provider.of<CartTotalCounter>(
-                                                      context)
-                                                  .totalAmt
-                                                  .toString())),
+                                              GlobalVariables.minOrder)),
+                                      // text: formatCurrencyAmt.format(
+                                      //     double.parse(
+                                      //         Provider.of<CartTotalCounter>(
+                                      //                 context)
+                                      //             .totalAmt
+                                      //             .toString())),
                                       style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500,
@@ -268,7 +267,13 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                                           color: Colors.black)),
                                   TextSpan(
                                       text: formatCurrencyAmt.format(
-                                          double.parse(CartData.totalAmount)),
+                                          double.parse(
+                                              Provider.of<CartTotalCounter>(
+                                                      context)
+                                                  .totalAmt
+                                                  .toString())),
+                                      // text: formatCurrencyAmt.format(
+                                      //     double.parse(CartData.totalAmount)),
                                       style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500,
@@ -291,10 +296,15 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                         child: ElevatedButton(
                           style: raisedButtonStyleGreen,
                           onPressed: () => {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return CustomerCart();
-                            })),
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) {
+                            //   return CustomerCart();
+                            // })),
+                            // Navigator.of(context).pushAndRemoveUntil(
+                            //     MaterialPageRoute(
+                            //         builder: (c) => CustomerCart()),
+                            //     ModalRoute.withName('/custprofile')),
+                            Navigator.popAndPushNamed(context, '/cart'),
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -594,11 +604,13 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                                                     false,
                                                     'OK');
                                             if (action == DialogAction.yes) {
-                                              Navigator.pushReplacement(context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
-                                                return ProductperCategory();
-                                              }));
+                                              Navigator.popAndPushNamed(
+                                                  context, '/categpage');
+                                              // Navigator.pushReplacement(context,
+                                              //     MaterialPageRoute(
+                                              //         builder: (context) {
+                                              //   return ProductperCategory();
+                                              // }));
                                             } else {}
                                           } else {
                                             _flist.forEach((element) {
@@ -793,7 +805,8 @@ class _ProductperCategoryState extends State<ProductperCategory> {
               //     MaterialPageRoute(builder: (context) {
               //   return ProductPage();
               // }));
-              Navigator.pop(context);
+              // Navigator.pop(context);
+              Navigator.popAndPushNamed(context, '/prodpage');
             },
             child: Container(
               width: 50,
