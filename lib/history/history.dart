@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/userdata.dart';
@@ -432,10 +433,15 @@ class _HistoryState extends State<History> {
                                 _toList[index]['account_code'];
                             clearChequeData();
                             checkifDiscounted();
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return OrdersAndTracking();
-                            }));
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) {
+                            //   return OrdersAndTracking();
+                            // }));
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.rightToLeft,
+                                    child: OrdersAndTracking()));
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 8),
@@ -787,10 +793,15 @@ class _HistoryState extends State<History> {
                                 _completedList[index]['account_code'];
                             clearChequeData();
                             checkifDiscounted();
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return OrdersAndTracking();
-                            }));
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) {
+                            //   return OrdersAndTracking();
+                            // }));
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.rightToLeft,
+                                    child: OrdersAndTracking()));
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 8),
@@ -1136,10 +1147,15 @@ class _HistoryState extends State<History> {
                                 _cancelList[index]['account_code'];
                             clearChequeData();
                             checkifDiscounted();
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return OrdersAndTracking();
-                            }));
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) {
+                            //   return OrdersAndTracking();
+                            // }));
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.rightToLeft,
+                                    child: OrdersAndTracking()));
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 8),

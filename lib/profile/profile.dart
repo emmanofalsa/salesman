@@ -5,6 +5,7 @@ import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:page_transition/page_transition.dart';
 // import 'package:path_provider/path_provider.dart';
 // import 'package:path_provider/path_provider.dart';
 // import 'package:path_provider/path_provider.dart';
@@ -322,10 +323,14 @@ class _ProfileState extends State<Profile> {
       color: Colors.white,
       child: InkWell(
         onTap: () async {
-          showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) => ViewSettings());
+          Navigator.push(
+              context,
+              PageTransition(
+                  type: PageTransitionType.rightToLeft, child: ViewSettings()));
+          // showDialog(
+          //     barrierDismissible: false,
+          //     context: context,
+          //     builder: (context) => ViewSettings());
           // if (NetworkData.connected == true) {
           //   showDialog(
           //       barrierDismissible: false,
@@ -563,9 +568,13 @@ class _ProfileState extends State<Profile> {
       color: Colors.white,
       child: InkWell(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return ViewNotice();
-          }));
+          // Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //   return ViewNotice();
+          // }));
+          Navigator.push(
+              context,
+              PageTransition(
+                  type: PageTransitionType.rightToLeft, child: ViewNotice()));
         },
         child: Row(
           children: [

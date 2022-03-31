@@ -257,10 +257,15 @@ class _CustomerProfileState extends State<CustomerProfile> {
                     OrderData.dateApp = _hList[index]['date_app'];
                     OrderData.dateDel = _hList[index]['date_del'];
                     checkifDiscounted();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return OrdersAndTracking();
-                    }));
+                    //   Navigator.push(context,
+                    //       MaterialPageRoute(builder: (context) {
+                    //     return OrdersAndTracking();
+                    //   }));
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: OrdersAndTracking()));
                   },
                   child: Container(
                     margin: EdgeInsets.only(bottom: 8),

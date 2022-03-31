@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/home/consolidated_listview.dart';
 import 'package:salesman/variables/colors.dart';
@@ -375,10 +376,15 @@ class _HomeState extends State<Home> {
                       checkifDiscounted();
 
                       if (processedPressed == true) {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ProcessedListView();
-                        }));
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return ProcessedListView();
+                        // }));
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: ProcessedListView()));
                       } else {
                         reqDate = _toList[index]['date_req'];
                         DateTime e = DateTime.parse(_toList[index]['date_req']);

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 // import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -334,6 +335,11 @@ class _CustomerCartState extends State<CustomerCart> {
                 //   return ProductPage();
                 // }));
                 // Navigator.popAndPushNamed(context, '/cart'),
+                // Navigator.push(
+                //     context,
+                //     PageTransition(
+                //         type: PageTransitionType.rightToLeft,
+                //         child: CheckOut()));
                 Navigator.popAndPushNamed(context, '/prodpage');
               },
               child: Icon(Icons.add),
@@ -574,13 +580,14 @@ class _CustomerCartState extends State<CustomerCart> {
                                         // Navigator.push(context,
                                         //     MaterialPageRoute(
                                         //         builder: (context) {
-                                        //   return CheckOutOrderAs();
+                                        //   return CheckOut();
                                         // }));
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return CheckOut();
-                                        }));
+                                        Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                type: PageTransitionType
+                                                    .rightToLeft,
+                                                child: CheckOut()));
                                       }
                                     }
                                   },
