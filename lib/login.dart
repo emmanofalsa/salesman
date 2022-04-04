@@ -397,11 +397,13 @@ class _MyLoginPageState extends State<MyLoginPage> {
                             return ChangePass();
                           }));
                         } else {
-                          GlobalVariables.passExp = false;
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return Menu();
-                          }));
+                          // GlobalVariables.passExp = false;
+                          // Navigator.push(context,
+                          //     MaterialPageRoute(builder: (context) {
+                          //   return Menu();
+                          // }));
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/hepemenu', (Route<dynamic> route) => false);
                         }
                       }
                     }

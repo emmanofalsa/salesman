@@ -422,10 +422,12 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
                         }));
                       } else {
                         GlobalVariables.passExp = false;
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return SalesmanMenu();
-                        }));
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return SalesmanMenu();
+                        // }));
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/smmenu', (Route<dynamic> route) => false);
                         print("Login Successful!");
                       }
                     }

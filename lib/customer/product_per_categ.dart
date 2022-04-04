@@ -641,11 +641,17 @@ class _ProductperCategoryState extends State<ProductperCategory> {
                                                       false,
                                                       'OK');
                                               if (action == DialogAction.yes) {
-                                                Navigator.pushReplacement(
-                                                    context, MaterialPageRoute(
-                                                        builder: (context) {
-                                                  return ProductperCategory();
-                                                }));
+                                                // Navigator.pushReplacement(
+                                                //     context, MaterialPageRoute(
+                                                //         builder: (context) {
+                                                //   return ProductperCategory();
+                                                // }));
+                                                Navigator.of(context)
+                                                    .pushNamedAndRemoveUntil(
+                                                        '/categpage',
+                                                        (Route<dynamic>
+                                                                route) =>
+                                                            false);
                                               } else {}
                                             } else {
                                               showGlobalSnackbar(

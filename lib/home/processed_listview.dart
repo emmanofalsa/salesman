@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/home/recieve_dialog.dart';
 import 'package:salesman/home/return_dialog.dart';
-import 'package:salesman/menu.dart';
+// import 'package:salesman/menu.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/userdata.dart';
 import 'package:intl/intl.dart';
@@ -77,6 +77,8 @@ class _ProcessedListViewState extends State<ProcessedListView> {
   }
 
   loadOrders() async {
+    // print(_testList);
+    _testList.clear();
     int x = 1;
     itmNo = '0';
     var documentDirectory = await getApplicationDocumentsDirectory();
@@ -269,419 +271,423 @@ class _ProcessedListViewState extends State<ProcessedListView> {
       onPanDown: (details) {
         handleUserInteraction();
       },
-      child: Scaffold(
-        // key: _scaffoldKey,
-        body: Builder(
-          builder: (context) => Stack(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                  // physics: NeverScrollableScrollPhysics(),
-                  padding:
-                      EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 5),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15,
-                      ),
-                      // buildHeaderCont(),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      buildListViewCont(),
-                    ],
+      child: WillPopScope(
+        onWillPop: () => Future.value(false),
+        child: Scaffold(
+          // key: _scaffoldKey,
+          body: Builder(
+            builder: (context) => Stack(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: SingleChildScrollView(
+                    // physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.only(
+                        left: 16, right: 16, top: 30, bottom: 5),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 15,
+                        ),
+                        // buildHeaderCont(),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        buildListViewCont(),
+                      ],
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                height: 160,
-                width: MediaQuery.of(context).size.width,
-                color: Colors.white,
-                child: SingleChildScrollView(
-                  padding:
-                      EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 5),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 15,
-                      ),
-                      buildHeaderCont(),
-                    ],
-                  ),
-                ),
-              ),
-              // buildSummaryCont(context),
-            ],
-          ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: sumHeight,
-            // color: Colors.grey,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width: 5,
                 ),
                 Container(
-                  // width: 130,
-                  width: MediaQuery.of(context).size.width / 3 + 10,
-                  height: sumHeight,
-                  // color: Colors.grey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Order Summary',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Order No.',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.normal),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Payment Method',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.normal),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Item(s)',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.normal),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Gross Amount',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.normal),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Visibility(
-                        visible: qtyVisible,
-                        child: Text(
-                          'Return Amount',
+                  height: 160,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.white,
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                        left: 16, right: 16, top: 30, bottom: 5),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 15,
+                        ),
+                        buildHeaderCont(),
+                      ],
+                    ),
+                  ),
+                ),
+                // buildSummaryCont(context),
+              ],
+            ),
+          ),
+          bottomNavigationBar: BottomAppBar(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: sumHeight,
+              // color: Colors.grey,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Container(
+                    // width: 130,
+                    width: MediaQuery.of(context).size.width / 3 + 10,
+                    height: sumHeight,
+                    // color: Colors.grey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          'Order Summary',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          'Order No.',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.normal),
                         ),
-                      ),
-                      Visibility(
-                        visible: qtyVisible,
-                        child: SizedBox(
+                        SizedBox(
                           height: 5,
                         ),
-                      ),
-                      Visibility(
-                        visible: CustomerData.discounted,
-                        child: Text(
-                          'Discount',
+                        Text(
+                          'Payment Method',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.normal),
                         ),
-                      ),
-                      Visibility(
-                        visible: CustomerData.discounted,
-                        child: SizedBox(
+                        SizedBox(
                           height: 5,
                         ),
-                      ),
-                      Text(
-                        'Net Amount',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      Visibility(
-                        visible: OrderData.visible,
-                        child: Container(
-                          height: 30,
-                          child: ElevatedButton(
-                            style: raisedButtonStyleBlack,
-                            onPressed: () async {
-                              print(_list.length);
-                              if (_list.isEmpty) {
-                                showGlobalSnackbar(
-                                    'Information',
-                                    'Unable to return empty order.',
-                                    Colors.blue,
-                                    Colors.white);
-                              } else {
-                                ChequeData.payeeName = "";
-                                ChequeData.payorName = "";
-                                ChequeData.bankName = "";
-                                ChequeData.chequeNum = "";
-                                ChequeData.branchCode = "";
-                                ChequeData.bankAccNo = "";
-                                ChequeData.imgName = "";
-                                ChequeData.changeImg = false;
-                                OrderData.pmtype = "";
-                                OrderData.signature = "";
-                                OrderData.setPmType = false;
-                                OrderData.setChequeImg = false;
-                                OrderData.returnOrder = true;
-                                OrderData.returnReason = "";
-                                OrderData.setSign = false;
-                                showDialog(
-                                    barrierDismissible: true,
-                                    context: context,
-                                    builder: (context) => ReturnDialog());
-                              }
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "Return Order",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.white),
-                                ),
-                              ],
+                        Text(
+                          'Item(s)',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.normal),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          'Gross Amount',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.normal),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Visibility(
+                          visible: qtyVisible,
+                          child: Text(
+                            'Return Amount',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.normal),
+                          ),
+                        ),
+                        Visibility(
+                          visible: qtyVisible,
+                          child: SizedBox(
+                            height: 5,
+                          ),
+                        ),
+                        Visibility(
+                          visible: CustomerData.discounted,
+                          child: Text(
+                            'Discount',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.normal),
+                          ),
+                        ),
+                        Visibility(
+                          visible: CustomerData.discounted,
+                          child: SizedBox(
+                            height: 5,
+                          ),
+                        ),
+                        Text(
+                          'Net Amount',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Visibility(
+                          visible: OrderData.visible,
+                          child: Container(
+                            height: 30,
+                            child: ElevatedButton(
+                              style: raisedButtonStyleBlack,
+                              onPressed: () async {
+                                print(_list.length);
+                                if (_list.isEmpty) {
+                                  showGlobalSnackbar(
+                                      'Information',
+                                      'Unable to return empty order.',
+                                      Colors.blue,
+                                      Colors.white);
+                                } else {
+                                  ChequeData.payeeName = "";
+                                  ChequeData.payorName = "";
+                                  ChequeData.bankName = "";
+                                  ChequeData.chequeNum = "";
+                                  ChequeData.branchCode = "";
+                                  ChequeData.bankAccNo = "";
+                                  ChequeData.imgName = "";
+                                  ChequeData.changeImg = false;
+                                  OrderData.pmtype = "";
+                                  OrderData.signature = "";
+                                  OrderData.setPmType = false;
+                                  OrderData.setChequeImg = false;
+                                  OrderData.returnOrder = true;
+                                  OrderData.returnReason = "";
+                                  OrderData.setSign = false;
+                                  showDialog(
+                                      barrierDismissible: true,
+                                      context: context,
+                                      builder: (context) => ReturnDialog());
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Return Order",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 5),
-                  width: MediaQuery.of(context).size.width / 2 + 40,
-                  height: sumHeight,
-                  // color: Colors.grey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 32,
-                      ),
-                      Text(
-                        OrderData.trans!,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        OrderData.pmeth!,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.green,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FontStyle.italic),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        itmNo,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                  Container(
+                    margin: EdgeInsets.only(right: 5),
+                    width: MediaQuery.of(context).size.width / 2 + 40,
+                    height: sumHeight,
+                    // color: Colors.grey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 32,
                         ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        formatCurrencyAmt
-                            .format(double.parse(OrderData.totamt)),
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
+                        Text(
+                          OrderData.trans!,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          OrderData.pmeth!,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.green,
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.italic),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          itmNo,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            // decoration: TextDecoration.underline,
-                            color: Colors.grey),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Visibility(
-                        visible: qtyVisible,
-                        child: Text(
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
                           formatCurrencyAmt
-                              .format(double.parse(OrderData.retAmt)),
+                              .format(double.parse(OrderData.totamt)),
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                               // decoration: TextDecoration.underline,
-                              color: Colors.red),
+                              color: Colors.grey),
                         ),
-                      ),
-                      Visibility(
-                        visible: qtyVisible,
-                        child: SizedBox(
+                        SizedBox(
                           height: 5,
                         ),
-                      ),
-                      Visibility(
-                        visible: CustomerData.discounted,
-                        child: Text(
-                          '- ' +
-                              formatCurrencyAmt
-                                  .format(double.parse(OrderData.totalDisc)),
+                        Visibility(
+                          visible: qtyVisible,
+                          child: Text(
+                            formatCurrencyAmt
+                                .format(double.parse(OrderData.retAmt)),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                // decoration: TextDecoration.underline,
+                                color: Colors.red),
+                          ),
+                        ),
+                        Visibility(
+                          visible: qtyVisible,
+                          child: SizedBox(
+                            height: 5,
+                          ),
+                        ),
+                        Visibility(
+                          visible: CustomerData.discounted,
+                          child: Text(
+                            '- ' +
+                                formatCurrencyAmt
+                                    .format(double.parse(OrderData.totalDisc)),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                // decoration: TextDecoration.underline,
+                                color: Colors.red),
+                          ),
+                        ),
+                        Visibility(
+                          visible: CustomerData.discounted,
+                          child: SizedBox(
+                            height: 5,
+                          ),
+                        ),
+                        Text(
+                          formatCurrencyTot
+                              .format(double.parse(OrderData.grandTotal)),
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              // decoration: TextDecoration.underline,
-                              color: Colors.red),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
-                      ),
-                      Visibility(
-                        visible: CustomerData.discounted,
-                        child: SizedBox(
-                          height: 5,
-                        ),
-                      ),
-                      Text(
-                        formatCurrencyTot
-                            .format(double.parse(OrderData.grandTotal)),
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      Visibility(
-                        visible: OrderData.visible,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Container(
-                              height: 30,
-                              // color: Colors.grey,
-                              child: ElevatedButton(
-                                style: raisedButtonStyleWhite,
-                                onPressed: () async {
-                                  if (unabletoEdit) {
-                                    final action = await Dialogs.openDialog(
-                                        context,
-                                        'Confirmation',
-                                        'Are you sure you want to edit this transaction?',
-                                        true,
-                                        'No',
-                                        'Yes');
-                                    if (action == DialogAction.yes) {
-                                      setState(() {
-                                        sumHeight = sumHeight + 20;
-                                        qtyVisible = true;
-                                        unabletoEdit = false;
-                                        itmCat = "";
-                                        categ = false;
+                        Visibility(
+                          visible: OrderData.visible,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                height: 30,
+                                // color: Colors.grey,
+                                child: ElevatedButton(
+                                  style: raisedButtonStyleWhite,
+                                  onPressed: () async {
+                                    if (unabletoEdit) {
+                                      final action = await Dialogs.openDialog(
+                                          context,
+                                          'Confirmation',
+                                          'Are you sure you want to edit this transaction?',
+                                          true,
+                                          'No',
+                                          'Yes');
+                                      if (action == DialogAction.yes) {
+                                        setState(() {
+                                          sumHeight = sumHeight + 20;
+                                          qtyVisible = true;
+                                          unabletoEdit = false;
+                                          itmCat = "";
+                                          categ = false;
+                                          // Navigator.pop(context);
+                                        });
+                                      } else {
                                         // Navigator.pop(context);
-                                      });
-                                    } else {
-                                      // Navigator.pop(context);
+                                      }
                                     }
-                                  }
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "Edit Order",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: ColorsTheme.mainColor,
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "Edit Order",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: ColorsTheme.mainColor,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                              height: 30,
-                              child: ElevatedButton(
-                                style: raisedButtonStyleGreen,
-                                onPressed: () async {
-                                  if (_list.isEmpty) {
-                                    showGlobalSnackbar(
-                                        'Information',
-                                        'Unable to receive empty order.',
-                                        Colors.blue,
-                                        Colors.white);
-                                  } else {
-                                    ChequeData.payeeName = "";
-                                    ChequeData.payorName = "";
-                                    ChequeData.bankName = "";
-                                    ChequeData.chequeNum = "";
-                                    ChequeData.branchCode = "";
-                                    ChequeData.bankAccNo = "";
-                                    ChequeData.imgName = "";
-                                    ChequeData.changeImg = false;
-                                    OrderData.pmtype = "";
-                                    OrderData.signature = "";
-                                    OrderData.setPmType = false;
-                                    OrderData.setChequeImg = false;
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => ReceivedDialog());
-                                  }
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "Receive Order",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Container(
+                                height: 30,
+                                child: ElevatedButton(
+                                  style: raisedButtonStyleGreen,
+                                  onPressed: () async {
+                                    if (_list.isEmpty) {
+                                      showGlobalSnackbar(
+                                          'Information',
+                                          'Unable to receive empty order.',
+                                          Colors.blue,
+                                          Colors.white);
+                                    } else {
+                                      ChequeData.payeeName = "";
+                                      ChequeData.payorName = "";
+                                      ChequeData.bankName = "";
+                                      ChequeData.chequeNum = "";
+                                      ChequeData.branchCode = "";
+                                      ChequeData.bankAccNo = "";
+                                      ChequeData.imgName = "";
+                                      ChequeData.changeImg = false;
+                                      OrderData.pmtype = "";
+                                      OrderData.signature = "";
+                                      OrderData.setPmType = false;
+                                      OrderData.setChequeImg = false;
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              ReceivedDialog());
+                                    }
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "Receive Order",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -1421,13 +1427,14 @@ class _ProcessedListViewState extends State<ProcessedListView> {
                 GlobalVariables.viewPolicy = false;
                 // print('CliCKED!');
                 // });
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) {
-                  return Menu();
-                }));
+                // Navigator.pushReplacement(context,
+                //     MaterialPageRoute(builder: (context) {
+                //   return Menu();
+                // }));
+                // Navigator.popAndPushNamed(context, '/hepemenu');
                 // Navigator.of(context).pushNamedAndRemoveUntil(
                 //     '/hepemenu', (Route<dynamic> route) => false);
-                // Navigator.pop(context);
+                Navigator.pop(context);
               }
             },
             child: Container(

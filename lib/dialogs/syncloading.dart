@@ -63,6 +63,13 @@ class _LoadingSpinkitState extends State<LoadingSpinkit>
                 //   controller: AnimationController(
                 //       vsync: this, duration: const Duration(seconds: 1)),
                 // ),
+                // Text(
+                //   'Updating ' + GlobalVariables.updateType + ' . . .',
+                //   style: TextStyle(
+                //       fontSize: 14,
+                //       fontWeight: FontWeight.w500,
+                //       color: Colors.white),
+                // ),
                 SpinKitCircle(
                   controller: animationController,
                   color: Colors.yellowAccent,

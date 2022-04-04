@@ -275,10 +275,12 @@ class ReceivedConsolidatedDialog extends StatelessWidget {
                 if (action == DialogAction.yes) {
                   GlobalVariables.processedPressed = true;
                   GlobalVariables.menuKey = 0;
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return Menu();
-                  }));
+                  // Navigator.pushReplacement(context,
+                  //     MaterialPageRoute(builder: (context) {
+                  //   return Menu();
+                  // }));
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/hepemenu', (Route<dynamic> route) => false);
                 }
               } else {
                 // Navigator.pop(context);

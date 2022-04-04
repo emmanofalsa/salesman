@@ -99,48 +99,52 @@ class _ConsolidatedListViewState extends State<ConsolidatedListView> {
       OrderData.totamt = '0';
       OrderData.retAmt = '0';
       _remlist = json.decode(json.encode(getO));
-      print(_remlist);
+      // print(_remlist);
+      _list.clear();
       setState(() {
-        _list.clear();
         _remlist.forEach((element) async {
           var getImg = await db.getItemImg(element['itm_code'], element['uom']);
           _imgpath = json.decode(json.encode(getImg));
           // print(element['itm_code']);
           element['image'] = _imgpath[0]['image'];
-          // setState(() {
-          itmCat = "";
-          categ = false;
-          lineAmt = '0';
-          discAmt = 0.00;
-          if (double.parse(element['total_qty'].toString()) != 0) {
-            _list.add(json.decode(json.encode(element)));
-            // print(_list);
-          }
-          if (element['flag'] == "1") {
+          setState(() {
+            // print(_imgpath[0]['image']);
+            itmCat = "";
+            categ = false;
             lineAmt = '0';
             discAmt = 0.00;
-            double a = double.parse(element['discount']);
-            lineAmt = (double.parse(element['amt']) *
-                    double.parse(element['total_qty'].toString()))
+            if (double.parse(element['total_qty'].toString()) != 0) {
+              _list.add(json.decode(json.encode(element)));
+              // print(element);
+            }
+            if (element['flag'] == "1") {
+              lineAmt = '0';
+              discAmt = 0.00;
+              double a = double.parse(element['discount']);
+              lineAmt = (double.parse(element['amt']) *
+                      double.parse(element['total_qty'].toString()))
+                  .toString();
+              discAmt = double.parse(lineAmt) * (a / 100);
+            }
+
+            lineTot = double.parse(element['amt']) *
+                double.parse(element['total_qty'].toString());
+            orderTotal = (double.parse(orderTotal) + lineTot).toString();
+            itmNo = _list.length.toString();
+            // print(orderTotal);
+            // print(orderTotal);
+            // print(lineTot);
+
+            // itmNo =
+            //     (int.parse(itmNo) + int.parse(element['total_qty'])).toString();
+            OrderData.itmno = itmNo;
+            OrderData.totalDisc =
+                (double.parse(OrderData.totalDisc) + discAmt).toString();
+            OrderData.totamt = orderTotal;
+            OrderData.grandTotal = (double.parse(OrderData.totamt) -
+                    double.parse(OrderData.totalDisc))
                 .toString();
-            discAmt = double.parse(lineAmt) * (a / 100);
-          }
-
-          lineTot = double.parse(element['amt']) *
-              double.parse(element['total_qty'].toString());
-          orderTotal = (double.parse(orderTotal) + lineTot).toString();
-          itmNo = _list.length.toString();
-
-          // itmNo =
-          //     (int.parse(itmNo) + int.parse(element['total_qty'])).toString();
-          OrderData.itmno = itmNo;
-          OrderData.totalDisc =
-              (double.parse(OrderData.totalDisc) + discAmt).toString();
-          OrderData.totamt = orderTotal;
-          OrderData.grandTotal = (double.parse(OrderData.totamt) -
-                  double.parse(OrderData.totalDisc))
-              .toString();
-          // });
+          });
         });
       });
 
@@ -864,6 +868,7 @@ class _ConsolidatedListViewState extends State<ConsolidatedListView> {
           if (OrderData.status == 'Approved') {
             itmQty = _list[index]['total_qty'].toString();
             appBool = true;
+            // print(itmQty);
           } else {
             itmQty = _list[index]['req_qty'];
             appBool = false;

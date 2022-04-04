@@ -112,10 +112,12 @@ class _ProfileInfoState extends State<ProfileInfo> {
           if (action == DialogAction.yes) {
             GlobalVariables.processedPressed = true;
             GlobalVariables.menuKey = 3;
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) {
-              return SalesmanMenu();
-            }));
+            // Navigator.pushReplacement(context,
+            //     MaterialPageRoute(builder: (context) {
+            //   return SalesmanMenu();
+            // }));
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/smmenu', (Route<dynamic> route) => false);
           }
         }
       } else {
@@ -131,10 +133,12 @@ class _ProfileInfoState extends State<ProfileInfo> {
           if (action == DialogAction.yes) {
             GlobalVariables.processedPressed = true;
             GlobalVariables.menuKey = 4;
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) {
-              return Menu();
-            }));
+            // Navigator.pushReplacement(context,
+            //     MaterialPageRoute(builder: (context) {
+            //   return Menu();
+            // }));
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/hepemenu', (Route<dynamic> route) => false);
           }
         }
       }

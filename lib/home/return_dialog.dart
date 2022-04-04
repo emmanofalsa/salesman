@@ -232,10 +232,12 @@ class ReturnDialog extends StatelessWidget {
                   final action = await WarningDialogs.openDialog(context,
                       'Information', 'Returned Successfully!', false, 'OK');
                   if (action == DialogAction.yes) {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) {
-                      return Menu();
-                    }));
+                    // Navigator.pushReplacement(context,
+                    //     MaterialPageRoute(builder: (context) {
+                    //   return Menu();
+                    // }));
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/hepemenu', (Route<dynamic> route) => false);
                   }
                 } else {
                   // Navigator.pop(context);

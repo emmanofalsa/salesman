@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:number_to_words/number_to_words.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/history/chequedata.dart';
+import 'package:salesman/history/signature.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/assets.dart';
@@ -726,24 +728,30 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                                           onPressed: () => {
                                             if (OrderData.signature!.isNotEmpty)
                                               {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return Scaffold(
-                                                        appBar: AppBar(),
-                                                        body: Center(
-                                                            child: Container(
-                                                                color: Colors
-                                                                    .grey[300],
-                                                                child: Image.memory(
-                                                                    base64Decode(
-                                                                        OrderData
-                                                                            .signature!)))),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
+                                                Navigator.push(
+                                                    context,
+                                                    PageTransition(
+                                                        type: PageTransitionType
+                                                            .rightToLeft,
+                                                        child: Signature())),
+                                                // Navigator.of(context).push(
+                                                //   MaterialPageRoute(
+                                                //     builder:
+                                                //         (BuildContext context) {
+                                                //       return Scaffold(
+                                                //         appBar: AppBar(),
+                                                //         body: Center(
+                                                //             child: Container(
+                                                //                 color: Colors
+                                                //                     .grey[300],
+                                                //                 child: Image.memory(
+                                                //                     base64Decode(
+                                                //                         OrderData
+                                                //                             .signature!)))),
+                                                //       );
+                                                //     },
+                                                //   ),
+                                                // ),
                                               }
                                           },
                                           child: Row(
