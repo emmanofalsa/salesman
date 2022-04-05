@@ -1,23 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
-
-// import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:salesman/db/db_helper.dart';
-import 'package:salesman/menu.dart';
 import 'package:salesman/profile/img_option.dart';
-import 'package:salesman/salesman_home/menu.dart';
-// import 'package:salesman/home/capture_cheque.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/url/url.dart';
 import 'package:http/http.dart' as http;
-// import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/colors.dart';
 import 'package:salesman/widgets/dialogs.dart';
-// import 'package:salesman/widgets/dialogs.dart';
 import 'package:salesman/widgets/snackbar.dart';
 import 'package:salesman/widgets/spinkit.dart';
 // import 'package:salesman/widgets/snackbar.dart';
@@ -28,7 +21,7 @@ class ProfileInfo extends StatefulWidget {
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
-  static final String uploadEndpoint = UrlAddress.url + 'uploaduserimg';
+  static final String uploadEndpoint = UrlAddress.url + '/uploaduserimg';
   Future<File>? file;
   String status = "";
   String? base64Image;
@@ -75,6 +68,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
       _image = File(pickedFile!.path);
       showImage();
       fileName = _image!.path.split('/').last;
+      print(pickedFile.path);
       print(fileName);
     });
   }
@@ -87,9 +81,14 @@ class _ProfileInfoState extends State<ProfileInfo> {
     request.files.add(pic);
     var response = await request.send();
     print(request.fields['name']);
-    print(_image!.path);
+    print('PATH: ' + _image!.path);
     print(_image);
+
+    var responseData = await response.stream.toBytes();
+    var responseString = String.fromCharCodes(responseData);
+    print(responseString);
     if (response.statusCode == 200) {
+      print(response.statusCode);
       print('Image Upload');
       // ChequeData.imgName = fileName.toString();
       // OrderData.setChequeImg = true;

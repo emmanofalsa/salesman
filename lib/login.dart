@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:salesman/db/db_helper.dart';
 // import 'package:salesman/dialogs/account_lock.dart';
 import 'package:salesman/forget_pass/forget_password.dart';
-import 'package:salesman/menu.dart';
+// import 'package:salesman/menu.dart';
 import 'package:salesman/variables/assets.dart';
 import 'package:salesman/variables/colors.dart';
 import 'package:salesman/widgets/elevated_button.dart';

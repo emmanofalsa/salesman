@@ -1889,7 +1889,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
     //   }
     // });
     //RETURNED TRAN LIST
-    var retlist = await db.getReturnedTranList();
+    var retlist = await db.getReturnedTranList(context);
     returnList = retlist;
     int v = 1;
     returnList.forEach((element) async {
@@ -1905,7 +1905,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
     });
 
     //RETURNED/UNSERVED LIST
-    var uslist = await db.getUnservedList();
+    var uslist = await db.getUnservedList(context);
     unsrvlist = uslist;
     int w = 1;
     unsrvlist.forEach((element) async {
@@ -1921,23 +1921,23 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
     });
 
     //CHEQUE DATA UPDATE
-    var chqdata = await db.getChequeList();
-    chequeList = chqdata;
-    int x = 1;
-    chequeList.forEach((element) async {
-      if (x < chequeList.length) {
-        x++;
-        if (x == chequeList.length) {
-          await db.deleteTable('tb_cheque_data');
-          await db.insertTable(chequeList, 'tb_cheque_data');
-          await db.updateTable('tb_cheque_data', date.toString());
-          print('Cheque Data List Updated');
-        }
-      }
-    });
+    // var chqdata = await db.getChequeList();
+    // chequeList = chqdata;
+    // int x = 1;
+    // chequeList.forEach((element) async {
+    //   if (x < chequeList.length) {
+    //     x++;
+    //     if (x == chequeList.length) {
+    //       await db.deleteTable('tb_cheque_data');
+    //       await db.insertTable(chequeList, 'tb_cheque_data');
+    //       await db.updateTable('tb_cheque_data', date.toString());
+    //       print('Cheque Data List Updated');
+    //     }
+    //   }
+    // });
 
     //LINE UPDATE
-    var linersp = await db.getTranLine();
+    var linersp = await db.getTranLine(context);
     linelist = linersp;
     int y = 1;
     linelist.forEach((element) async {
@@ -1952,7 +1952,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       }
     });
     //TRAN UPDATE
-    var thead = await db.getTranHead();
+    var thead = await db.getTranHead(context);
     tranHeadList = thead;
     int z = 0;
     tranHeadList.forEach((element) async {
@@ -2102,7 +2102,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
         context: context,
         builder: (context) => LoadingSpinkit());
 
-    var rsp = await db.getHepeList();
+    var rsp = await db.getHepeList(context);
     hepeList = rsp;
     int x = 1;
     hepeList.forEach((element) async {
@@ -2117,7 +2117,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       }
     });
 
-    var resp = await db.getSalesmanList();
+    var resp = await db.getSalesmanList(context);
     salesmanList = resp;
     int y = 1;
     salesmanList.forEach((element) async {

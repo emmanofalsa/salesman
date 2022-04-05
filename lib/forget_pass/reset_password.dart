@@ -53,7 +53,7 @@ class _ResetPassState extends State<ResetPass> {
   final confPassController = TextEditingController();
 
   bool isPasswordCompliant(String password, [int minLength = 7]) {
-    if (password == null || password.isEmpty) {
+    if (password.isEmpty) {
       return false;
     }
 

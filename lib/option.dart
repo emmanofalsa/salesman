@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:archive/archive.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
@@ -20,6 +22,7 @@ import 'package:http/http.dart' as http;
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/assets.dart';
 import 'package:salesman/variables/colors.dart';
+import 'package:salesman/widgets/custom_modals.dart';
 import 'package:salesman/widgets/dialogs.dart';
 import 'package:salesman/widgets/size_config.dart';
 
@@ -235,73 +238,249 @@ class _MyOptionPageState extends State<MyOptionPage> {
   }
 
   downloadSalesmanImage() {
-    // context.read().changeCap('Downloading Salesman Images...');
     Provider.of<Caption>(context, listen: false)
         .changeCap('Downloading Salesman Images...');
     int x = 1;
-    // imgLoad = true;
-    // print(
-    //     'ITEM IMAGE LENGTH ------------->' + (salesmanList.length).toString());
     salesmanList.forEach((element) async {
-      var url = Uri.parse(UrlAddress.userImg + element['img']); // <-- 1
-      var response = await get(url); // <--2
-      var documentDirectory = await getApplicationDocumentsDirectory();
-      var firstPath = documentDirectory.path + '/images/user/';
-      var filePathAndName =
-          documentDirectory.path + '/images/user/' + element['img'];
-      // print(filePathAndName);
-      //comment out the next three lines to prevent the image from being saved
-      //to the device to show that it's coming from the internet
-      await Directory(firstPath).create(recursive: true); // <-- 1
-      File file2 = new File(filePathAndName); // <-- 2
-      file2.writeAsBytesSync(response.bodyBytes);
-      // setState(() {
-      //   imageData = filePathAndName;
-      //   dataLoaded = true;
-      // });
-      if (x == salesmanList.length) {
-        processing = false;
-        print('Salesman Images Saved to File...');
-        loadHepe();
-      } else {
-        // print(x);
-        x++;
+      try {
+        var url = Uri.parse(UrlAddress.userImg + element['img']); // <-- 1
+        var response = await get(url); // <--2
+        if (response.statusCode == 200) {
+          var documentDirectory = await getApplicationDocumentsDirectory();
+          var firstPath = documentDirectory.path + '/images/user/';
+          var filePathAndName =
+              documentDirectory.path + '/images/user/' + element['img'];
+          // print(filePathAndName);
+          //comment out the next three lines to prevent the image from being saved
+          //to the device to show that it's coming from the internet
+          await Directory(firstPath).create(recursive: true); // <-- 1
+          File file2 = new File(filePathAndName); // <-- 2
+          file2.writeAsBytesSync(response.bodyBytes);
+          if (x == salesmanList.length) {
+            processing = false;
+            print('Salesman Images Saved to File...');
+            loadHepe();
+          } else {
+            x++;
+          }
+        } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+          customModal(
+              context,
+              Icon(CupertinoIcons.exclamationmark_circle,
+                  size: 50, color: Colors.red),
+              Text(
+                  "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                  textAlign: TextAlign.center),
+              true,
+              Icon(
+                CupertinoIcons.checkmark_alt,
+                size: 25,
+                color: Colors.greenAccent,
+              ),
+              '',
+              () {});
+        } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+          customModal(
+              context,
+              Icon(CupertinoIcons.exclamationmark_circle,
+                  size: 50, color: Colors.red),
+              Text("Error: ${response.statusCode}. Internal server error.",
+                  textAlign: TextAlign.center),
+              true,
+              Icon(
+                CupertinoIcons.checkmark_alt,
+                size: 25,
+                color: Colors.greenAccent,
+              ),
+              '',
+              () {});
+        }
+      } on TimeoutException {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Connection timed out. Please check internet connection or proxy server configurations.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            'Okay',
+            () {});
+      } on SocketException {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Connection timed out. Please check internet connection or proxy server configurations.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            'Okay',
+            () {});
+      } on HttpException {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("An HTTP error eccured. Please try again later.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            'Okay',
+            () {});
+      } on FormatException {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Format exception error occured. Please try again later.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            'Okay',
+            () {});
       }
     });
   }
 
   downloadHepeImage() {
-    // context.read().changeCap('Downloading Hepe Images...');
     Provider.of<Caption>(context, listen: false)
         .changeCap('Downloading Hepe Images...');
     int x = 1;
-    // imgLoad = true;
-    // print(
-    //     'ITEM IMAGE LENGTH ------------->' + (salesmanList.length).toString());
     hepeList.forEach((element) async {
-      var url = Uri.parse(UrlAddress.userImg + element['img']); // <-- 1
-      var response = await get(url); // <--2
-      var documentDirectory = await getApplicationDocumentsDirectory();
-      var firstPath = documentDirectory.path + '/images/user/';
-      var filePathAndName =
-          documentDirectory.path + '/images/user/' + element['img'];
-      // print(filePathAndName);
-      //comment out the next three lines to prevent the image from being saved
-      //to the device to show that it's coming from the internet
-      await Directory(firstPath).create(recursive: true); // <-- 1
-      File file2 = new File(filePathAndName); // <-- 2
-      file2.writeAsBytesSync(response.bodyBytes);
-      // setState(() {
-      //   imageData = filePathAndName;
-      //   dataLoaded = true;
-      // });
-      if (x == hepeList.length) {
-        processing = false;
-        print('Hepe Images Saved to File...');
-        loadCustomer();
-      } else {
-        // print(x);
-        x++;
+      try {
+        var url = Uri.parse(UrlAddress.userImg + element['img']); // <-- 1
+        var response = await get(url); // <--2
+        if (response.statusCode == 200) {
+          var documentDirectory = await getApplicationDocumentsDirectory();
+          var firstPath = documentDirectory.path + '/images/user/';
+          var filePathAndName =
+              documentDirectory.path + '/images/user/' + element['img'];
+          // print(filePathAndName);
+          //comment out the next three lines to prevent the image from being saved
+          //to the device to show that it's coming from the internet
+          await Directory(firstPath).create(recursive: true); // <-- 1
+          File file2 = new File(filePathAndName); // <-- 2
+          file2.writeAsBytesSync(response.bodyBytes);
+          if (x == hepeList.length) {
+            processing = false;
+            print('Hepe Images Saved to File...');
+            loadCustomer();
+          } else {
+            x++;
+          }
+        } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+          customModal(
+              context,
+              Icon(CupertinoIcons.exclamationmark_circle,
+                  size: 50, color: Colors.red),
+              Text(
+                  "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                  textAlign: TextAlign.center),
+              true,
+              Icon(
+                CupertinoIcons.checkmark_alt,
+                size: 25,
+                color: Colors.greenAccent,
+              ),
+              '',
+              () {});
+        } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+          customModal(
+              context,
+              Icon(CupertinoIcons.exclamationmark_circle,
+                  size: 50, color: Colors.red),
+              Text("Error: ${response.statusCode}. Internal server error.",
+                  textAlign: TextAlign.center),
+              true,
+              Icon(
+                CupertinoIcons.checkmark_alt,
+                size: 25,
+                color: Colors.greenAccent,
+              ),
+              '',
+              () {});
+        }
+      } on TimeoutException {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Connection timed out. Please check internet connection or proxy server configurations.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            'Okay',
+            () {});
+      } on SocketException {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Connection timed out. Please check internet connection or proxy server configurations.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            'Okay',
+            () {});
+      } on HttpException {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("An HTTP error eccured. Please try again later.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            'Okay',
+            () {});
+      } on FormatException {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Format exception error occured. Please try again later.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            'Okay',
+            () {});
       }
     });
   }
@@ -314,7 +493,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
       // context.read().changeCap('Creating Salesman List...');
       Provider.of<Caption>(context, listen: false)
           .changeCap('Creating Salesman List...');
-      var rsp = await db.getSalesmanList();
+      var rsp = await db.getSalesmanList(context);
       salesmanList = rsp;
       // print(salesmanList);
       await db.insertSalesmanList(salesmanList);
@@ -341,7 +520,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
         String updateType = 'Salesman';
         if (NetworkData.connected == true) {
           // print('NISUD SA CONNECTED!!');
-          var resp = await db.getSalesmanList();
+          var resp = await db.getSalesmanList(context);
           if (!mounted) return;
           setState(() {
             salesmanList = resp;
@@ -648,7 +827,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
       // context.read().changeCap('Creating Hepe List...');
       Provider.of<Caption>(context, listen: false)
           .changeCap('Creating Hepe List...');
-      var rsp = await db.getHepeList();
+      var rsp = await db.getHepeList(context);
       hepeList = rsp;
       int x = 1;
       hepeList.forEach((element) async {
@@ -674,7 +853,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
         // context.read().changeCap('Updating Hepe List...');
         Provider.of<Caption>(context, listen: false)
             .changeCap('Updating Hepe List...');
-        var rsp = await db.getHepeList();
+        var rsp = await db.getHepeList(context);
         hepeList = rsp;
         int x = 1;
         hepeList.forEach((element) async {

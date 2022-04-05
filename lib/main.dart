@@ -17,6 +17,7 @@ import 'package:salesman/option.dart';
 import 'package:salesman/providers/caption_provider.dart';
 import 'package:salesman/providers/cart_items.dart';
 import 'package:salesman/providers/cart_total.dart';
+import 'package:salesman/providers/sync_cap.dart';
 // import 'package:salesman/rooted/rooted.dart';
 // import 'package:salesman/router/router.dart';
 import 'package:salesman/salesman_home/menu.dart';
@@ -27,6 +28,7 @@ import 'package:salesman/widgets/size_config.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => Caption()),
+    ChangeNotifierProvider(create: (_) => SyncCaption()),
     ChangeNotifierProvider(create: (_) => CartItemCounter()),
     ChangeNotifierProvider(create: (_) => CartTotalCounter()),
   ], child: MyApp()));

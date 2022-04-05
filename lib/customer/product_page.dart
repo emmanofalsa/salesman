@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 // import 'package:salesman/customer/customer_cart.dart';
 import 'package:salesman/customer/favorites.dart';
-import 'package:salesman/customer/product_per_categ.dart';
+// import 'package:salesman/customer/product_per_categ.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/providers/cart_items.dart';
 import 'package:salesman/session/session_timer.dart';

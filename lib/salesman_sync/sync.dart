@@ -1693,7 +1693,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
         builder: (context) => LoadingSpinkit());
 
     //RETURNED TRAN LIST
-    var retlist = await db.getReturnedTranList();
+    var retlist = await db.getReturnedTranList(context);
     returnList = retlist;
     if (returnList.isNotEmpty) {
       int v = 1;
@@ -1714,7 +1714,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
     }
 
     //RETURNED/UNSERVED LIST
-    var uslist = await db.getUnservedList();
+    var uslist = await db.getUnservedList(context);
     unsrvlist = uslist;
     if (unsrvlist.isNotEmpty) {
       int w = 1;
@@ -1735,27 +1735,27 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
     }
 
     //CHEQUE DATA UPDATE
-    var chqdata = await db.getChequeList();
-    chequeList = chqdata;
-    if (chequeList.isNotEmpty) {
-      int x = 1;
-      chequeList.forEach((element) async {
-        if (x < chequeList.length) {
-          x++;
-          if (x == chequeList.length) {
-            await db.deleteTable('tb_cheque_data');
-            await db.insertTable(chequeList, 'tb_cheque_data');
-            await db.updateTable('tb_cheque_data', date.toString());
-            print('Cheque Data List Created');
-          }
-        }
-      });
-    } else {
-      print('EMPTY CHEQUE LIST');
-      await db.deleteTable('tb_cheque_data');
-    }
+    // var chqdata = await db.getChequeList();
+    // chequeList = chqdata;
+    // if (chequeList.isNotEmpty) {
+    //   int x = 1;
+    //   chequeList.forEach((element) async {
+    //     if (x < chequeList.length) {
+    //       x++;
+    //       if (x == chequeList.length) {
+    //         await db.deleteTable('tb_cheque_data');
+    //         await db.insertTable(chequeList, 'tb_cheque_data');
+    //         await db.updateTable('tb_cheque_data', date.toString());
+    //         print('Cheque Data List Created');
+    //       }
+    //     }
+    //   });
+    // } else {
+    //   print('EMPTY CHEQUE LIST');
+    //   await db.deleteTable('tb_cheque_data');
+    // }
     //LINE UPDATE
-    var linersp = await db.getTranLine();
+    var linersp = await db.getTranLine(context);
     linelist = linersp;
     if (linelist.isNotEmpty) {
       int y = 1;
@@ -1775,7 +1775,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       await db.deleteTable('tb_tran_line');
     }
     //TRAN UPDATE
-    var thead = await db.getTranHead();
+    var thead = await db.getTranHead(context);
     tranHeadList = thead;
     if (tranHeadList.isNotEmpty) {
       int z = 0;
@@ -1931,7 +1931,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
         context: context,
         builder: (context) => LoadingSpinkit());
 
-    var rsp = await db.getHepeList();
+    var rsp = await db.getHepeList(context);
     hepeList = rsp;
     int x = 1;
     hepeList.forEach((element) async {
@@ -1946,7 +1946,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       }
     });
 
-    var resp = await db.getSalesmanList();
+    var resp = await db.getSalesmanList(context);
     salesmanList = resp;
     int y = 1;
     salesmanList.forEach((element) async {

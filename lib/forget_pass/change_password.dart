@@ -55,7 +55,7 @@ class _ChangePassState extends State<ChangePass> {
   final confPassController = TextEditingController();
 
   bool isPasswordCompliant(String password, [int minLength = 7]) {
-    if (password == null || password.isEmpty) {
+    if (password.isEmpty) {
       return false;
     }
 
