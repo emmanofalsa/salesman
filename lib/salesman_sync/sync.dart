@@ -161,6 +161,7 @@ class _SyncSalesmanState extends State<SyncSalesman> {
         print('SEND');
         print(_tempList);
         var rsp = await db.saveTransactions(
+            context,
             element['sm_code'],
             element['date_req'],
             element['account_code'],
@@ -1807,7 +1808,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
         context: context,
         builder: (context) => LoadingSpinkit());
 
-    var rsp = await db.getItemImgList();
+    var rsp = await db.getItemImgList(context);
     itemImgList = rsp;
     int x = 0;
     itemImgList.forEach((element) async {
@@ -1823,7 +1824,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
 
     // //CATEGORY
 
-    var rsp1 = await db.getCategList();
+    var rsp1 = await db.getCategList(context);
     categList = rsp1;
     int y = 0;
     categList.forEach((element) async {
@@ -1843,7 +1844,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       }
     });
 
-    var resp = await db.getItemList();
+    var resp = await db.getItemList(context);
     itemList = resp;
     int z = 0;
     itemList.forEach((element) async {
@@ -1876,7 +1877,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
         context: context,
         builder: (context) => LoadingSpinkit());
 
-    var rsp = await db.getDiscountList();
+    var rsp = await db.getDiscountList(context);
     discountList = rsp;
     int x = 1;
     discountList.forEach((element) async {
@@ -1891,7 +1892,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       }
     });
 
-    var rsp1 = await db.getBankListonLine();
+    var rsp1 = await db.getBankListonLine(context);
     bankList = rsp1;
     int y = 1;
     bankList.forEach((element) async {
@@ -1906,7 +1907,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       }
     });
 
-    var resp = await db.getCustomersList();
+    var resp = await db.getCustomersList(context);
     customerList = resp;
     int z = 1;
     customerList.forEach((element) async {

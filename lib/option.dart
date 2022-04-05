@@ -179,7 +179,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var itmImg = await db.ofFetchItemImgList();
     itemImgList = itmImg;
     if (itemImgList.isEmpty) {
-      var rsp = await db.getItemImgList();
+      var rsp = await db.getItemImgList(context);
       itemImgList = rsp;
       _downloadZip();
     } else {
@@ -607,7 +607,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
       // context.read().changeCap('Creating Category...');
       Provider.of<Caption>(context, listen: false)
           .changeCap('Creating Categories...');
-      var rsp = await db.getCategList();
+      var rsp = await db.getCategList(context);
       categList = rsp;
       int x = 1;
       categList.forEach((element) async {
@@ -653,7 +653,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var itmImg = await db.ofFetchItemImgList();
     itemAllImgList = itmImg;
     if (itemAllImgList.isEmpty) {
-      var rsp = await db.getAllItemImgList();
+      var rsp = await db.getAllItemImgList(context);
       itemAllImgList = rsp;
       await db.insertItemImgList(itemAllImgList);
       await db.addUpdateTable('tbl_item_image   ', 'ITEM', date.toString());
@@ -676,7 +676,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var itm = await db.ofFetchItemList();
     itemList = itm;
     if (itemList.isEmpty) {
-      var rsp = await db.getItemList();
+      var rsp = await db.getItemList(context);
       itemList = rsp;
       await db.insertItemList(itemList);
       await db.addUpdateTable('item_masterfiles ', 'ITEM', date.toString());
@@ -700,7 +700,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
     bankList = blist;
     // print(bankList);
     if (bankList.isEmpty) {
-      var resp = await db.getBankListonLine();
+      var resp = await db.getBankListonLine(context);
       bankList = resp;
       int x = 1;
       bankList.forEach((element) async {
@@ -732,7 +732,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var stlist = await db.ofSalesTypeList();
     salestypeList = stlist;
     if (salestypeList.isEmpty) {
-      var resp = await db.getSalesTypeListonLine();
+      var resp = await db.getSalesTypeListonLine(context);
       salestypeList = resp;
       int x = 1;
       salestypeList.forEach((element) async {
@@ -764,7 +764,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var disc = await db.ofFetchDiscountList();
     discountList = disc;
     if (discountList.isEmpty) {
-      var resp = await db.getDiscountList();
+      var resp = await db.getDiscountList(context);
       discountList = resp;
       int x = 1;
       discountList.forEach((element) async {
@@ -796,7 +796,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var cust = await db.ofFetchCustomerList();
     customerList = cust;
     if (customerList.isEmpty) {
-      var resp = await db.getCustomersList();
+      var resp = await db.getCustomersList(context);
       customerList = resp;
       int x = 1;
       customerList.forEach((element) async {

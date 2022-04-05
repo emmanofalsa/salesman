@@ -146,38 +146,39 @@ class _SyncHepeState extends State<SyncHepe> {
         //pagkuha sa list sa unserved sa sqflite
         var tmpretLine = await db.getReturnedLine(element['tran_no']);
 
-        //KUNG CHEQUE IYANG MODE OF PAYMENT
-        if (element['pmeth_type'] == 'CHEQUE') {
-          var tmpchq = await db.getChequeData(element['tran_no']);
-          _chequeList = tmpchq;
-          if (_chequeList.isNotEmpty) {
-            _chequeList.forEach((element) async {
-              //PA SAVE SA CHEQUE DATA SA SERVER
-              await db.setChequeData(
-                  element['tran_no'],
-                  element['account_code'],
-                  element['sm_code'],
-                  element['hepe_code'],
-                  element['datetime'],
-                  element['payee_name'],
-                  element['payor_name'],
-                  element['bank_name'],
-                  element['cheque_no'],
-                  element['branch_code'],
-                  element['account_no'],
-                  element['cheque_date'],
-                  element['amount'],
-                  element['status'],
-                  element['image']);
-              // print(lrsp);
-            });
-          }
-        }
+        ////////////////////////////////////////////////////////////KUNG CHEQUE IYANG MODE OF PAYMENT
+        // if (element['pmeth_type'] == 'CHEQUE') {
+        //   var tmpchq = await db.getChequeData(element['tran_no']);
+        //   _chequeList = tmpchq;
+        //   if (_chequeList.isNotEmpty) {
+        //     _chequeList.forEach((element) async {
+        //       //PA SAVE SA CHEQUE DATA SA SERVER
+        //       await db.setChequeData(
+        //           element['tran_no'],
+        //           element['account_code'],
+        //           element['sm_code'],
+        //           element['hepe_code'],
+        //           element['datetime'],
+        //           element['payee_name'],
+        //           element['payor_name'],
+        //           element['bank_name'],
+        //           element['cheque_no'],
+        //           element['branch_code'],
+        //           element['account_no'],
+        //           element['cheque_date'],
+        //           element['amount'],
+        //           element['status'],
+        //           element['image']);
+        //       // print(lrsp);
+        //     });
+        //   }
+        // }
 
         if (element['tran_stat'] == 'Delivered' &&
             element['hepe_upload'] != 'TRUE') {
           print('NISUD SA DELIVERED');
           var rsp = await db.updateDeliveredTranStat(
+              context,
               element['tran_no'],
               element['tran_stat'],
               element['itm_del_count'],
@@ -222,6 +223,7 @@ class _SyncHepeState extends State<SyncHepe> {
           var retLine = await db.getReturnedLine(element['tran_no']);
 
           var smp = await db.updateReturnedTranStat(
+              context,
               element['tran_no'],
               element['tran_stat'],
               element['tot_del_amt'],
@@ -1978,7 +1980,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
         context: context,
         builder: (context) => LoadingSpinkit());
 
-    var rsp = await db.getItemImgList();
+    var rsp = await db.getItemImgList(context);
     itemImgList = rsp;
     int x = 0;
     itemImgList.forEach((element) async {
@@ -1994,7 +1996,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
 
     // //CATEGORY
 
-    var rsp1 = await db.getCategList();
+    var rsp1 = await db.getCategList(context);
     categList = rsp1;
     int y = 0;
     categList.forEach((element) async {
@@ -2014,7 +2016,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       }
     });
 
-    var resp = await db.getItemList();
+    var resp = await db.getItemList(context);
     itemList = resp;
     int z = 0;
     itemList.forEach((element) async {
@@ -2047,7 +2049,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
         context: context,
         builder: (context) => LoadingSpinkit());
 
-    var rsp = await db.getDiscountList();
+    var rsp = await db.getDiscountList(context);
     discountList = rsp;
     int x = 1;
     discountList.forEach((element) async {
@@ -2062,7 +2064,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       }
     });
 
-    var rsp1 = await db.getBankListonLine();
+    var rsp1 = await db.getBankListonLine(context);
     bankList = rsp1;
     int y = 1;
     bankList.forEach((element) async {
@@ -2077,7 +2079,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       }
     });
 
-    var resp = await db.getCustomersList();
+    var resp = await db.getCustomersList(context);
     customerList = resp;
     int z = 1;
     customerList.forEach((element) async {

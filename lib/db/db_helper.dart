@@ -1354,86 +1354,854 @@ class DatabaseHelper {
     }
   }
 
-  Future getCustomersList() async {
-    // String url = UrlAddress.url + '/getcustomerslist';
-    var url = Uri.parse(UrlAddress.url + '/getcustomerslist');
-    final response = await retry(() =>
-        http.post(url, headers: {"Accept": "Application/json"}, body: {}));
-    // var convertedDatatoJson = jsonDecode(decrypt(response.body));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
+  Future getCustomersList(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getcustomerslist');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      // var convertedDatatoJson = jsonDecode(decrypt(response.body));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 
-  Future getDiscountList() async {
-    // String url = UrlAddress.url + '/getdiscountlist';
-    var url = Uri.parse(UrlAddress.url + '/getdiscountlist');
-    final response = await retry(() =>
-        http.post(url, headers: {"Accept": "Application/json"}, body: {}));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
+  Future getDiscountList(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getdiscountlist');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 
-  Future getBankListonLine() async {
-    // String url = UrlAddress.url + '/getbanklist';
-    var url = Uri.parse(UrlAddress.url + '/getbanklist');
-    final response = await retry(() =>
-        http.post(url, headers: {"Accept": "Application/json"}, body: {}));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
+  Future getBankListonLine(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getbanklist');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 
-  Future getSalesTypeListonLine() async {
-    // String url = UrlAddress.url + '/getallsalestype';
-    var url = Uri.parse(UrlAddress.url + '/getallsalestype');
-    final response = await retry(() =>
-        http.post(url, headers: {"Accept": "Application/json"}, body: {}));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
+  Future getSalesTypeListonLine(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getallsalestype');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 
-  Future getChequeList() async {
-    // String url = UrlAddress.url + '/getchequedata';
-    var url = Uri.parse(UrlAddress.url + '/getchequedata');
-    final response = await retry(() =>
-        http.post(url, headers: {"Accept": "Application/json"}, body: {}));
-    var convertedDatatoJson = jsonDecode(decrypt(response.body));
-    return convertedDatatoJson;
+  // Future getChequeList() async {
+  //   // String url = UrlAddress.url + '/getchequedata';
+  //   var url = Uri.parse(UrlAddress.url + '/getchequedata');
+  //   final response = await retry(() =>
+  //       http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+  //   var convertedDatatoJson = jsonDecode(decrypt(response.body));
+  //   return convertedDatatoJson;
+  // }
+
+  Future getItemList(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getitemlist');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 
-  Future getItemList() async {
-    // String url = UrlAddress.url + '/getitemlist';
-    var url = Uri.parse(UrlAddress.url + '/getitemlist');
-    final response = await retry(() =>
-        http.post(url, headers: {"Accept": "Application/json"}, body: {}));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
+  Future getItemImgList(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getitemimglist');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 
-  Future getItemImgList() async {
-    // String url = UrlAddress.url + '/getitemimglist';
-    var url = Uri.parse(UrlAddress.url + '/getitemimglist');
-    final response = await retry(() =>
-        http.post(url, headers: {"Accept": "Application/json"}, body: {}));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
+  Future getAllItemImgList(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getallitemimglist');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 
-  Future getAllItemImgList() async {
-    // String url = UrlAddress.url + '/getallitemimglist';
-    var url = Uri.parse(UrlAddress.url + '/getallitemimglist');
-    final response = await retry(() =>
-        http.post(url, headers: {"Accept": "Application/json"}, body: {}));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
-  }
-
-  Future getCategList() async {
-    // String url = UrlAddress.url + '/getcateglist';
-    var url = Uri.parse(UrlAddress.url + '/getcateglist');
-    final response = await retry(() =>
-        http.post(url, headers: {"Accept": "Application/json"}, body: {}));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
+  Future getCategList(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getcateglist');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 
   Future getTranHead(BuildContext context) async {
@@ -1857,6 +2625,7 @@ class DatabaseHelper {
   }
 
   Future saveTransactions(
+      BuildContext context,
       String userId,
       String date,
       String custId,
@@ -1869,91 +2638,187 @@ class DatabaseHelper {
       String smStat,
       String hepeStat,
       List line) async {
-    // String url = UrlAddress.url + '/addtranhead';
-    var url = Uri.parse(UrlAddress.url + '/addtransactions');
-    final response = await retry(() => http.post(url, headers: {
-          "Accept": "Application/json"
-        }, body: {
-          'sm_code': encrypt(userId),
-          'date_req': encrypt(date),
-          'account_code': encrypt(custId),
-          'store_name': encrypt(storeName),
-          'p_meth': encrypt(payment),
-          'itm_count': encrypt(itmcount),
-          'tot_amt': encrypt(totamt),
-          'tran_stat': encrypt(stat),
-          'auth_signature': encrypt(signature),
-          'sm_upload': encrypt(smStat),
-          'hepe_upload': encrypt(hepeStat),
-          'line': jsonEncode(line),
-        }));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
+    try {
+      var url = Uri.parse(UrlAddress.url + '/addtransactions');
+      final response = await retry(() => http.post(url, headers: {
+            "Accept": "Application/json"
+          }, body: {
+            'sm_code': encrypt(userId),
+            'date_req': encrypt(date),
+            'account_code': encrypt(custId),
+            'store_name': encrypt(storeName),
+            'p_meth': encrypt(payment),
+            'itm_count': encrypt(itmcount),
+            'tot_amt': encrypt(totamt),
+            'tran_stat': encrypt(stat),
+            'auth_signature': encrypt(signature),
+            'sm_upload': encrypt(smStat),
+            'hepe_upload': encrypt(hepeStat),
+            'line': jsonEncode(line),
+          }));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 
-  Future saveTransactionHead(
-      String userId,
-      String date,
-      String custId,
-      String storeName,
-      String payment,
-      String itmcount,
-      String totamt,
-      String stat,
-      String signature,
-      String smStat,
-      String hepeStat) async {
-    // String url = UrlAddress.url + '/addtranhead';
-    var url = Uri.parse(UrlAddress.url + '/addtranhead');
-    final response = await retry(() => http.post(url, headers: {
-          "Accept": "Application/json"
-        }, body: {
-          'sm_code': encrypt(userId),
-          'date_req': encrypt(date),
-          'account_code': encrypt(custId),
-          'store_name': encrypt(storeName),
-          'p_meth': encrypt(payment),
-          'itm_count': encrypt(itmcount),
-          'tot_amt': encrypt(totamt),
-          'tran_stat': encrypt(stat),
-          'auth_signature': encrypt(signature),
-          'sm_upload': encrypt(smStat),
-          'hepe_upload': encrypt(hepeStat),
-        }));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
-  }
+  // Future saveTransactionHead(
+  //     String userId,
+  //     String date,
+  //     String custId,
+  //     String storeName,
+  //     String payment,
+  //     String itmcount,
+  //     String totamt,
+  //     String stat,
+  //     String signature,
+  //     String smStat,
+  //     String hepeStat) async {
+  //   // String url = UrlAddress.url + '/addtranhead';
+  //   var url = Uri.parse(UrlAddress.url + '/addtranhead');
+  //   final response = await retry(() => http.post(url, headers: {
+  //         "Accept": "Application/json"
+  //       }, body: {
+  //         'sm_code': encrypt(userId),
+  //         'date_req': encrypt(date),
+  //         'account_code': encrypt(custId),
+  //         'store_name': encrypt(storeName),
+  //         'p_meth': encrypt(payment),
+  //         'itm_count': encrypt(itmcount),
+  //         'tot_amt': encrypt(totamt),
+  //         'tran_stat': encrypt(stat),
+  //         'auth_signature': encrypt(signature),
+  //         'sm_upload': encrypt(smStat),
+  //         'hepe_upload': encrypt(hepeStat),
+  //       }));
+  //   var convertedDatatoJson = jsonDecode(response.body);
+  //   return convertedDatatoJson;
+  // }
 
-  Future saveTransactionLine(
-      String tranNo,
-      String itmcode,
-      String desc,
-      String qty,
-      String uom,
-      String amt,
-      String totamt,
-      String categ,
-      String code,
-      String date) async {
-    // String url = UrlAddress.url + '/addtranline';
-    var url = Uri.parse(UrlAddress.url + '/addtranline');
-    final response = await retry(() => http.post(url, headers: {
-          "Accept": "Application/json"
-        }, body: {
-          'tran_no': encrypt(tranNo),
-          'itm_code': encrypt(itmcode),
-          'item_desc': encrypt(desc),
-          'req_qty': encrypt(qty),
-          'uom': encrypt(uom),
-          'amt': encrypt(amt),
-          'tot_amt': encrypt(totamt),
-          'itm_cat': encrypt(categ),
-          'account_code': encrypt(code),
-          'date_req': encrypt(date),
-        }));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
-  }
+  // Future saveTransactionLine(
+  //     String tranNo,
+  //     String itmcode,
+  //     String desc,
+  //     String qty,
+  //     String uom,
+  //     String amt,
+  //     String totamt,
+  //     String categ,
+  //     String code,
+  //     String date) async {
+  //   // String url = UrlAddress.url + '/addtranline';
+  //   var url = Uri.parse(UrlAddress.url + '/addtranline');
+  //   final response = await retry(() => http.post(url, headers: {
+  //         "Accept": "Application/json"
+  //       }, body: {
+  //         'tran_no': encrypt(tranNo),
+  //         'itm_code': encrypt(itmcode),
+  //         'item_desc': encrypt(desc),
+  //         'req_qty': encrypt(qty),
+  //         'uom': encrypt(uom),
+  //         'amt': encrypt(amt),
+  //         'tot_amt': encrypt(totamt),
+  //         'itm_cat': encrypt(categ),
+  //         'account_code': encrypt(code),
+  //         'date_req': encrypt(date),
+  //       }));
+  //   var convertedDatatoJson = jsonDecode(response.body);
+  //   return convertedDatatoJson;
+  // }
 
   Future checkStat() async {
     try {
@@ -2434,34 +3299,35 @@ class DatabaseHelper {
   //////
   ///HEPE API
   ///
-  Future oldupdateTranStat(
-      String tranNo,
-      String status,
-      String itmdel,
-      String amt,
-      String date,
-      String hepecode,
-      String type,
-      String signature) async {
-    // String url = UrlAddress.url + '/updatetranstat';
-    var url = Uri.parse(UrlAddress.url + '/updatetranstat');
-    final response = await retry(() => http.post(url, headers: {
-          "Accept": "Application/json"
-        }, body: {
-          'tran_no': encrypt(tranNo),
-          'tran_stat': encrypt(status),
-          'itm_del_count': encrypt(itmdel),
-          'tot_del_amt': encrypt(amt),
-          'date_del': encrypt(date),
-          'hepe_code': encrypt(hepecode),
-          'pmeth_type': encrypt(type),
-          'signature': encrypt(signature),
-        }));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
-  }
+  // Future oldupdateTranStat(
+  //     String tranNo,
+  //     String status,
+  //     String itmdel,
+  //     String amt,
+  //     String date,
+  //     String hepecode,
+  //     String type,
+  //     String signature) async {
+  //   // String url = UrlAddress.url + '/updatetranstat';
+  //   var url = Uri.parse(UrlAddress.url + '/updatetranstat');
+  //   final response = await retry(() => http.post(url, headers: {
+  //         "Accept": "Application/json"
+  //       }, body: {
+  //         'tran_no': encrypt(tranNo),
+  //         'tran_stat': encrypt(status),
+  //         'itm_del_count': encrypt(itmdel),
+  //         'tot_del_amt': encrypt(amt),
+  //         'date_del': encrypt(date),
+  //         'hepe_code': encrypt(hepecode),
+  //         'pmeth_type': encrypt(type),
+  //         'signature': encrypt(signature),
+  //       }));
+  //   var convertedDatatoJson = jsonDecode(response.body);
+  //   return convertedDatatoJson;
+  // }
 
   Future updateDeliveredTranStat(
+      BuildContext context,
       String tranNo,
       String status,
       String itmdel,
@@ -2472,27 +3338,124 @@ class DatabaseHelper {
       String signature,
       List tranLine,
       List unsLine) async {
-    // String url = UrlAddress.url + '/updatetranstat';
-    var url = Uri.parse(UrlAddress.url + '/updatedeliveredtranstatwithline');
-    final response = await retry(() => http.post(url, headers: {
-          "Accept": "Application/json"
-        }, body: {
-          'tran_no': encrypt(tranNo),
-          'tran_stat': encrypt(status),
-          'itm_del_count': encrypt(itmdel),
-          'tot_del_amt': encrypt(amt),
-          'date_del': encrypt(date),
-          'hepe_code': encrypt(hepecode),
-          'pmeth_type': encrypt(type),
-          'signature': encrypt(signature),
-          'tranline': jsonEncode(tranLine),
-          'unsline': jsonEncode(unsLine),
-        }));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
+    try {
+      var url = Uri.parse(UrlAddress.url + '/updatedeliveredtranstatwithline');
+      final response = await retry(() => http.post(url, headers: {
+            "Accept": "Application/json"
+          }, body: {
+            'tran_no': encrypt(tranNo),
+            'tran_stat': encrypt(status),
+            'itm_del_count': encrypt(itmdel),
+            'tot_del_amt': encrypt(amt),
+            'date_del': encrypt(date),
+            'hepe_code': encrypt(hepecode),
+            'pmeth_type': encrypt(type),
+            'signature': encrypt(signature),
+            'tranline': jsonEncode(tranLine),
+            'unsline': jsonEncode(unsLine),
+          }));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 
   Future updateReturnedTranStat(
+      BuildContext context,
       String tranNo,
       String status,
       // String itmdel,
@@ -2503,112 +3466,208 @@ class DatabaseHelper {
       String signature,
       List rettran,
       List retline) async {
-    // String url = UrlAddress.url + '/updatetranstat';
-    var url = Uri.parse(UrlAddress.url + '/updatereturnedtranstatwithline');
-    final response = await retry(() => http.post(url, headers: {
-          "Accept": "Application/json"
-        }, body: {
-          'tran_no': encrypt(tranNo),
-          'tran_stat': encrypt(status),
-          // 'itm_del_count': encrypt(itmdel),
-          'tot_del_amt': encrypt(amt),
-          'date_del': encrypt(date),
-          'hepe_code': encrypt(hepecode),
-          // 'pmeth_type': encrypt(type),
-          'signature': encrypt(signature),
-          'rettran': jsonEncode(rettran),
-          'retline': jsonEncode(retline),
-        }));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
-  }
-
-  Future updateLineStat(String tranNo, String status, String qty, String totAmt,
-      String totDiscAmt, String itmcode, String uom, String date) async {
     try {
-      // String url = UrlAddress.url + '/updatelinestat';
-      var url = Uri.parse(UrlAddress.url + '/updatelinestat');
-      final response = await http.post(url, headers: {
-        "Accept": "Application/json"
-      }, body: {
-        'tran_no': encrypt(tranNo),
-        'itm_stat': encrypt(status),
-        'del_qty': encrypt(qty),
-        'tot_amt': encrypt(totAmt),
-        'discounted_amount': encrypt(totDiscAmt),
-        'itm_code': encrypt(itmcode),
-        'uom': encrypt(uom),
-        'date_del': encrypt(date),
-      });
-      var convertedDatatoJson = jsonDecode(response.body);
-      return convertedDatatoJson;
+      var url = Uri.parse(UrlAddress.url + '/updatereturnedtranstatwithline');
+      final response = await retry(() => http.post(url, headers: {
+            "Accept": "Application/json"
+          }, body: {
+            'tran_no': encrypt(tranNo),
+            'tran_stat': encrypt(status),
+            // 'itm_del_count': encrypt(itmdel),
+            'tot_del_amt': encrypt(amt),
+            'date_del': encrypt(date),
+            'hepe_code': encrypt(hepecode),
+            // 'pmeth_type': encrypt(type),
+            'signature': encrypt(signature),
+            'rettran': jsonEncode(rettran),
+            'retline': jsonEncode(retline),
+          }));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
     } on SocketException {
-      return 'ERROR';
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
     } on HttpException {
-      return 'ERROR';
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
     } on FormatException {
-      return 'ERROR';
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
     }
   }
+
+  // Future updateLineStat(String tranNo, String status, String qty, String totAmt,
+  //     String totDiscAmt, String itmcode, String uom, String date) async {
+  //   try {
+  //     // String url = UrlAddress.url + '/updatelinestat';
+  //     var url = Uri.parse(UrlAddress.url + '/updatelinestat');
+  //     final response = await http.post(url, headers: {
+  //       "Accept": "Application/json"
+  //     }, body: {
+  //       'tran_no': encrypt(tranNo),
+  //       'itm_stat': encrypt(status),
+  //       'del_qty': encrypt(qty),
+  //       'tot_amt': encrypt(totAmt),
+  //       'discounted_amount': encrypt(totDiscAmt),
+  //       'itm_code': encrypt(itmcode),
+  //       'uom': encrypt(uom),
+  //       'date_del': encrypt(date),
+  //     });
+  //     var convertedDatatoJson = jsonDecode(response.body);
+  //     return convertedDatatoJson;
+  //   } on SocketException {
+  //     return 'ERROR';
+  //   } on HttpException {
+  //     return 'ERROR';
+  //   } on FormatException {
+  //     return 'ERROR';
+  //   }
+  // }
 
   //FOR ADDING RETURNED TRAN TO SERVER
-  Future setReturnStatus(
-    String userId,
-    String date,
-    String signature,
-    String accountCode,
-    String sName,
-    String itmcount,
-    String retamt,
-    String smcode,
-    String reason,
-  ) async {
-    // String url = UrlAddress.url + '/setreturnstatus';
-    var url = Uri.parse(UrlAddress.url + '/setreturnstatus');
-    final response = await retry(() => http.post(url, headers: {
-          "Accept": "Application/json"
-        }, body: {
-          'tran_no': userId,
-          'date': date,
-          'signature': signature,
-          'account_code': accountCode,
-          'store_name': sName,
-          'itm_count': itmcount,
-          'tot_amt': retamt,
-          'hepe_code': smcode,
-          'reason': reason,
-        }));
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
-  }
+  // Future setReturnStatus(
+  //   String userId,
+  //   String date,
+  //   String signature,
+  //   String accountCode,
+  //   String sName,
+  //   String itmcount,
+  //   String retamt,
+  //   String smcode,
+  //   String reason,
+  // ) async {
+  //   // String url = UrlAddress.url + '/setreturnstatus';
+  //   var url = Uri.parse(UrlAddress.url + '/setreturnstatus');
+  //   final response = await retry(() => http.post(url, headers: {
+  //         "Accept": "Application/json"
+  //       }, body: {
+  //         'tran_no': userId,
+  //         'date': date,
+  //         'signature': signature,
+  //         'account_code': accountCode,
+  //         'store_name': sName,
+  //         'itm_count': itmcount,
+  //         'tot_amt': retamt,
+  //         'hepe_code': smcode,
+  //         'reason': reason,
+  //       }));
+  //   var convertedDatatoJson = jsonDecode(response.body);
+  //   return convertedDatatoJson;
+  // }
 
-  Future setReturnLineStatus(String tran, String itmcode, String desc,
-      String uom, String amt, String qty, String itmtotal, String categ) async {
-    try {
-      // String url = UrlAddress.url + '/addreturnline';
-      var url = Uri.parse(UrlAddress.url + '/addreturnline');
-      final response = await http.post(url, headers: {
-        "Accept": "Application/json"
-      }, body: {
-        'tran_no': tran,
-        'itm_code': itmcode,
-        'item_desc': desc,
-        'uom': uom,
-        'amt': amt,
-        'qty': qty,
-        'tot_amt': itmtotal,
-        'itm_cat': categ,
-      });
-      var convertedDatatoJson = jsonDecode(response.body);
-      return convertedDatatoJson;
-    } on SocketException {
-      return 'ERROR';
-    } on HttpException {
-      return 'ERROR';
-    } on FormatException {
-      return 'ERROR';
-    }
-  }
+  // Future setReturnLineStatus(String tran, String itmcode, String desc,
+  //     String uom, String amt, String qty, String itmtotal, String categ) async {
+  //   try {
+  //     // String url = UrlAddress.url + '/addreturnline';
+  //     var url = Uri.parse(UrlAddress.url + '/addreturnline');
+  //     final response = await http.post(url, headers: {
+  //       "Accept": "Application/json"
+  //     }, body: {
+  //       'tran_no': tran,
+  //       'itm_code': itmcode,
+  //       'item_desc': desc,
+  //       'uom': uom,
+  //       'amt': amt,
+  //       'qty': qty,
+  //       'tot_amt': itmtotal,
+  //       'itm_cat': categ,
+  //     });
+  //     var convertedDatatoJson = jsonDecode(response.body);
+  //     return convertedDatatoJson;
+  //   } on SocketException {
+  //     return 'ERROR';
+  //   } on HttpException {
+  //     return 'ERROR';
+  //   } on FormatException {
+  //     return 'ERROR';
+  //   }
+  // }
 
   Future addfav(cusCode, itmCode, uom) async {
     var client = await db;
