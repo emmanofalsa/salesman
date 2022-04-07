@@ -128,7 +128,7 @@ class _SyncHepeState extends State<SyncHepe> {
     // String tranNo = '';
     // String pmeth = '';
     // String lineRsp = '';
-    List _chequeList = [];
+    // List _chequeList = [];
     // List _retList = [];
     // List _unsrvdList = [];
     // List _tempList = [];

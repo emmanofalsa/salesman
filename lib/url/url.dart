@@ -21,7 +21,7 @@ class UrlAddress {
   static String url = 'https://distapp1.alturush.com/';
   // static String userImg = 'https://distApp2.alturush.com/img/user/';
   static String userImg = url + 'img/user/';
-  static String itemImg = 'https://distApp2.alturush.com/img/';
+  static String itemImg = url + 'img/';
   static String chequeImg = 'https://distApp2.alturush.com/img/cheque/';
   static String categImg = 'https://distApp2.alturush.com/img/category/';
   static String appLink =

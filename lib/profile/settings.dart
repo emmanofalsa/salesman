@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:salesman/providers/img_download.dart';
 // import 'package:salesman/dialogs/downloadingimage.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/url/url.dart';
@@ -75,6 +77,8 @@ class _ViewSettingsState extends State<ViewSettings> {
             downloading = true;
             GlobalVariables.progressString = "Preparing Download...";
           });
+          Provider.of<DownloadStat>(context, listen: false)
+              .changeCap('Preparing Download...');
           // showDialog(
           //     barrierDismissible: false,
           //     context: context,
@@ -99,25 +103,33 @@ class _ViewSettingsState extends State<ViewSettings> {
     try {
       await dio.download(_zipPath, "$_dir/$_localZipFileName",
           onReceiveProgress: (int rec, int total) {
-        setState(() {
-          print("Rec: $rec, Total: $total");
-          GlobalVariables.progressString =
-              "Downloading " + ((rec / total) * 100).toStringAsFixed(0) + "%";
-          print(GlobalVariables.progressString);
-        });
+        // setState(() {
+        //   print("Rec: $rec, Total: $total");
+        //   GlobalVariables.progressString =
+        //       "Downloading " + ((rec / total) * 100).toStringAsFixed(0) + "%";
+        //   print(GlobalVariables.progressString);
+        // });
+
+        //
+        Provider.of<DownloadStat>(context, listen: false).changeCap(
+            'Downloading...' + ((rec / total) * 100).toStringAsFixed(0) + "%");
+        // print(GlobalVariables.progressString);
       });
       await unarchiveAndSave();
       setState(() {
         _images.addAll(_tempImages);
         downloading = false;
-        GlobalVariables.progressString = 'Completed';
+        // GlobalVariables.progressString = 'Completed';
       });
+      Provider.of<DownloadStat>(context, listen: false).changeCap('Completed');
     } catch (e) {
       print(e);
-      setState(() {
-        GlobalVariables.progressString = 'Error when Downloading';
-        downloading = false;
-      });
+      // setState(() {
+      //   GlobalVariables.progressString = 'Error when Downloading';
+      //   downloading = false;
+      // });
+      Provider.of<DownloadStat>(context, listen: false)
+          .changeCap('Error when downloading...');
     }
     setState(() {
       //   _images.addAll(_tempImages);
@@ -132,7 +144,9 @@ class _ViewSettingsState extends State<ViewSettings> {
     print('NAHUMAN NAG DOWNLOAD');
     var file = '$_dir/$_localZipFileName';
 
-    GlobalVariables.progressString = 'Extracting Zipped File...';
+    // GlobalVariables.progressString = 'Extracting Zipped File...';
+    Provider.of<DownloadStat>(context, listen: false)
+        .changeCap('Extracting Zipped File...');
     var bytes = File(file).readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
     for (var file in archive) {
@@ -283,7 +297,8 @@ class _ViewSettingsState extends State<ViewSettings> {
             color: Colors.greenAccent,
           ),
           Text(
-            GlobalVariables.progressString,
+            // GlobalVariables.progressString,
+            Provider.of<DownloadStat>(context).cap,
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
