@@ -1,17 +1,20 @@
 import 'dart:async';
-import 'dart:convert';
-
+// import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:salesman/db/db_helper.dart';
+import 'package:salesman/dialogs/confirm_sync.dart';
 import 'package:salesman/dialogs/confirmupload.dart';
-import 'package:salesman/dialogs/syncloading.dart';
+// import 'package:salesman/dialogs/syncloading.dart';
 import 'package:salesman/dialogs/syncsuccess.dart';
 import 'package:salesman/dialogs/uploadloading.dart';
+import 'package:salesman/providers/sync_cap.dart';
+import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/session/session_timer.dart';
-import 'package:salesman/url/url.dart';
-import 'package:http/http.dart' as http;
+// import 'package:salesman/url/url.dart';
+// import 'package:http/http.dart' as http;
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/colors.dart';
 import 'package:salesman/widgets/elevated_button.dart';
@@ -66,6 +69,7 @@ class _SyncHepeState extends State<SyncHepe> {
   List _updateLog = [];
 
   void initState() {
+    GlobalVariables.updateBy = 'Jefe';
     GlobalVariables.updateSpinkit = false;
     GlobalVariables.uploadSpinkit = false;
     GlobalVariables.upload = false;
@@ -133,12 +137,15 @@ class _SyncHepeState extends State<SyncHepe> {
     // List _unsrvdList = [];
     // List _tempList = [];
     int z = 0;
+    Provider.of<UploadLength>(context, listen: false).setTotal(z);
     int listLength = 0;
     if (NetworkData.errorMsgShow == false &&
         uploading == false &&
         !GlobalVariables.uploaded) {
       listLength = _toList.length;
       _toList.forEach((element) async {
+        Provider.of<SyncCaption>(context, listen: false)
+            .changeCap('Uploading ' + element['tran_no'] + '...');
         uploading = true;
         //KUNG NA DELIVER
         print(element['tran_no']);
@@ -209,6 +216,7 @@ class _SyncHepeState extends State<SyncHepe> {
                 }
               }
             });
+            Provider.of<UploadLength>(context, listen: false).setTotal(z);
           }
         }
         //KUNG NA RETURN TBOOK TRANSACTION
@@ -252,6 +260,7 @@ class _SyncHepeState extends State<SyncHepe> {
                 }
               }
             });
+            Provider.of<UploadLength>(context, listen: false).setTotal(z);
           } else {
             print("FAILED");
           }
@@ -1836,432 +1845,6 @@ class _SyncHepeState extends State<SyncHepe> {
             fontSize: 45,
             fontWeight: FontWeight.bold),
       ),
-    );
-  }
-}
-
-class ConfirmDialog extends StatefulWidget {
-  final String? title, description, buttonText;
-
-  ConfirmDialog({this.title, this.description, this.buttonText});
-
-  @override
-  _ConfirmDialogState createState() => _ConfirmDialogState();
-}
-
-class _ConfirmDialogState extends State<ConfirmDialog> {
-  bool loadSpinkit = false;
-  List itemList = [];
-  List categList = [];
-  List itemImgList = [];
-  List customerList = [];
-  List discountList = [];
-  List bankList = [];
-  List salesmanList = [];
-  List tranHeadList = [];
-  List linelist = [];
-  List returnList = [];
-  List unsrvlist = [];
-  List chequeList = [];
-  List hepeList = [];
-
-  String updateType = 'Jefe';
-
-  final date = DateFormat("yyyy-MM-dd HH:mm:ss").format(new DateTime.now());
-  final db = DatabaseHelper();
-
-  updateTransactions() async {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => LoadingSpinkit());
-    //UNSERVED UPDATE
-    // var rsp = await db.getHepeList();
-    // linelist = rsp;
-    // int x = 1;
-    // linelist.forEach((element) async {
-    //   if (x < linelist.length) {
-    //     x++;
-    //     if (x == linelist.length) {
-    //       await db.deleteTable('tb_tran_line');
-    //       await db.insertTable(linelist, 'tb_tran_line');
-    //       await db.updateTable('tb_tran_line', date.toString());
-    //       print('Transaction Line Created');
-    //     }
-    //   }
-    // });
-    //RETURNED TRAN LIST
-    var retlist = await db.getReturnedTranList(context);
-    returnList = retlist;
-    int v = 1;
-    returnList.forEach((element) async {
-      if (v < returnList.length) {
-        v++;
-        if (v == returnList.length) {
-          await db.deleteTable('tb_returned_tran');
-          await db.insertTable(returnList, 'tb_returned_tran');
-          await db.updateTable('tb_returned_tran', date.toString());
-          print('RETURNED TRAN Updated');
-        }
-      }
-    });
-
-    //RETURNED/UNSERVED LIST
-    var uslist = await db.getUnservedList(context);
-    unsrvlist = uslist;
-    int w = 1;
-    unsrvlist.forEach((element) async {
-      if (w < unsrvlist.length) {
-        w++;
-        if (w == unsrvlist.length) {
-          await db.deleteTable('tb_unserved_items');
-          await db.insertTable(unsrvlist, 'tb_unserved_items');
-          await db.updateTable('tb_unserved_items', date.toString());
-          print('Unserved List Updated');
-        }
-      }
-    });
-
-    //CHEQUE DATA UPDATE
-    // var chqdata = await db.getChequeList();
-    // chequeList = chqdata;
-    // int x = 1;
-    // chequeList.forEach((element) async {
-    //   if (x < chequeList.length) {
-    //     x++;
-    //     if (x == chequeList.length) {
-    //       await db.deleteTable('tb_cheque_data');
-    //       await db.insertTable(chequeList, 'tb_cheque_data');
-    //       await db.updateTable('tb_cheque_data', date.toString());
-    //       print('Cheque Data List Updated');
-    //     }
-    //   }
-    // });
-
-    //LINE UPDATE
-    var linersp = await db.getTranLine(context);
-    linelist = linersp;
-    int y = 1;
-    linelist.forEach((element) async {
-      if (y < linelist.length) {
-        y++;
-        if (y == linelist.length) {
-          await db.deleteTable('tb_tran_line');
-          await db.insertTable(linelist, 'tb_tran_line');
-          await db.updateTable('tb_tran_line', date.toString());
-          print('Transaction Line Updated');
-        }
-      }
-    });
-    //TRAN UPDATE
-    var thead = await db.getTranHead(context);
-    tranHeadList = thead;
-    int z = 0;
-    tranHeadList.forEach((element) async {
-      if (z < tranHeadList.length) {
-        z++;
-        if (z == tranHeadList.length) {
-          print(tranHeadList.length);
-          await db.deleteTable('tb_tran_head');
-          await db.insertTable(tranHeadList, 'tb_tran_head');
-          await db.updateTable('tb_tran_head ', date.toString());
-          await db.addUpdateTableLog(
-              date.toString(), 'Transactions', 'Completed', updateType);
-          print('Transaction Head Updated');
-          GlobalVariables.updateSpinkit = true;
-        }
-      }
-    });
-  }
-
-  updateItemMasterfile() async {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => LoadingSpinkit());
-
-    var rsp = await db.getItemImgList(context);
-    itemImgList = rsp;
-    int x = 0;
-    itemImgList.forEach((element) async {
-      if (x < itemImgList.length) {
-        x++;
-        if (x == itemImgList.length) {
-          await db.insertItemImgList(itemImgList);
-          await db.updateTable('tbl_item_image', date.toString());
-          print('Item Image List Updated');
-        }
-      }
-    });
-
-    // //CATEGORY
-
-    var rsp1 = await db.getCategList(context);
-    categList = rsp1;
-    int y = 0;
-    categList.forEach((element) async {
-      if (y < categList.length) {
-        final imgBase64Str = await networkImageToBase64(
-            UrlAddress.categImg + element['category_image']);
-        // setState(() {
-        element['category_image'] = imgBase64Str;
-        // });
-        y++;
-        if (y == categList.length) {
-          await db.deleteTable('tbl_category_masterfile');
-          await db.updateCategList(categList);
-          await db.updateTable('tbl_category_masterfile', date.toString());
-          print('Categ List Updated');
-        }
-      }
-    });
-
-    var resp = await db.getItemList(context);
-    itemList = resp;
-    int z = 0;
-    itemList.forEach((element) async {
-      if (z < itemList.length) {
-        z++;
-        if (z == itemList.length) {
-          await db.deleteTable('item_masterfiles');
-          await db.insertItemList(itemList);
-          await db.updateTable('item_masterfiles', date.toString());
-          await db.addUpdateTableLog(
-              date.toString(), 'Item Masterfile', 'Completed', updateType);
-          print('Item Masterfile Updated');
-          GlobalVariables.updateSpinkit = true;
-        }
-      }
-    });
-  }
-
-  Future<String> networkImageToBase64(String imageUrl) async {
-    var imgUri = Uri.parse(imageUrl);
-    http.Response response = await http.get(imgUri);
-    final bytes = response.bodyBytes;
-    // return (bytes != null ? base64Encode(bytes) : null);
-    return (base64Encode(bytes));
-  }
-
-  updateCustomer() async {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => LoadingSpinkit());
-
-    var rsp = await db.getDiscountList(context);
-    discountList = rsp;
-    int x = 1;
-    discountList.forEach((element) async {
-      if (x < discountList.length) {
-        x++;
-        if (x == discountList.length) {
-          await db.deleteTable('tbl_discounts');
-          await db.insertTable(discountList, 'tbl_discounts');
-          await db.updateTable('tbl_discounts ', date.toString());
-          print('Discount List Updated');
-        }
-      }
-    });
-
-    var rsp1 = await db.getBankListonLine(context);
-    bankList = rsp1;
-    int y = 1;
-    bankList.forEach((element) async {
-      if (y < bankList.length) {
-        y++;
-        if (y == bankList.length) {
-          await db.deleteTable('tb_bank_list');
-          await db.insertTable(bankList, 'tb_bank_list');
-          await db.updateTable('tb_bank_list', date.toString());
-          print('Bank List Updated');
-        }
-      }
-    });
-
-    var resp = await db.getCustomersList(context);
-    customerList = resp;
-    int z = 1;
-    customerList.forEach((element) async {
-      if (z < customerList.length) {
-        z++;
-        if (z == customerList.length) {
-          await db.deleteTable('customer_master_files');
-          await db.insertTable(customerList, 'customer_master_files');
-          await db.updateTable('customer_master_files ', date.toString());
-          await db.addUpdateTableLog(
-              date.toString(), 'Customer Masterfile', 'Completed', updateType);
-          print('Customer List Updated');
-          GlobalVariables.updateSpinkit = true;
-        }
-      }
-    });
-  }
-
-  updateSalesman() async {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => LoadingSpinkit());
-
-    var rsp = await db.getHepeList(context);
-    hepeList = rsp;
-    int x = 1;
-    hepeList.forEach((element) async {
-      if (x < hepeList.length) {
-        x++;
-        if (x == hepeList.length) {
-          await db.deleteTable('tbl_hepe_de_viaje');
-          await db.insertTable(hepeList, 'tbl_hepe_de_viaje');
-          await db.updateTable('tbl_hepe_de_viaje', date.toString());
-          print('Hepe List Updated');
-        }
-      }
-    });
-
-    var resp = await db.getSalesmanList(context);
-    salesmanList = resp;
-    int y = 1;
-    salesmanList.forEach((element) async {
-      if (y < salesmanList.length) {
-        y++;
-        if (y == salesmanList.length) {
-          await db.deleteTable('salesman_lists');
-          await db.insertTable(salesmanList, 'salesman_lists');
-          await db.updateTable('salesman_lists ', date.toString());
-          await db.addUpdateTableLog(
-              date.toString(), 'Salesman Masterfile', 'Completed', updateType);
-          print('Salesman List Updated');
-          GlobalVariables.updateSpinkit = true;
-        }
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: confirmContent(context),
-    );
-  }
-
-  confirmContent(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(top: 5, bottom: 16, right: 5, left: 5),
-          margin: EdgeInsets.only(top: 16),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10.0,
-                  offset: Offset(0.0, 10.0),
-                ),
-              ]),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                Icons.help_outline,
-                color: ColorsTheme.mainColor,
-                size: 72,
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 5),
-                height: 70,
-                width: MediaQuery.of(context).size.width,
-                color: Colors.white,
-                // decoration: BoxDecoration(),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      child: Text(
-                        widget.title.toString(),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      child: Text(
-                        widget.description.toString(),
-                        style: TextStyle(fontSize: 12),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ElevatedButton(
-                      style: raisedButtonDialogStyle,
-                      onPressed: () {
-                        loadSpinkit = true;
-                        if (GlobalVariables.updateType == 'Transactions') {
-                          Navigator.pop(context);
-                          updateTransactions();
-                        }
-                        if (GlobalVariables.updateType == 'Item Masterfile') {
-                          Navigator.pop(context);
-                          updateItemMasterfile();
-                        }
-                        if (GlobalVariables.updateType ==
-                            'Customer Masterfile') {
-                          Navigator.pop(context);
-                          updateCustomer();
-                        }
-                        if (GlobalVariables.updateType ==
-                            'Salesman Masterfile') {
-                          Navigator.pop(context);
-                          updateSalesman();
-                        }
-                      },
-                      child: Text(
-                        widget.buttonText.toString(),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    ElevatedButton(
-                      style: raisedButtonStyleWhite,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(color: ColorsTheme.mainColor),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

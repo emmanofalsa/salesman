@@ -123,6 +123,7 @@ class GlobalVariables {
   static bool consolidatedOrder = false;
   static String appVersion = '01';
   static String updateType = '';
+  static String updateBy = '';
   // static String dlPercentage = '';
   static String progressString = '';
   static bool updateSpinkit = true;

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import 'package:salesman/providers/sync_cap.dart';
+import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/userdata.dart';
 
 class UploadingSpinkit extends StatefulWidget {
@@ -45,10 +48,26 @@ class _UploadingSpinkitState extends State<UploadingSpinkit> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  'Uploading ' +
-                      GlobalVariables.uploadLength! +
-                      ' transactions' +
-                      '. . .',
+                  // 'Uploading ' +
+                  //     GlobalVariables.uploadLength! +
+                  //     ' transactions' +
+                  //     '. . .',
+                  context.watch<SyncCaption>().cap,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+                Text(
+                  // 'Uploading ' +
+                  //     GlobalVariables.uploadLength! +
+                  //     ' transactions' +
+                  //     '. . .',
+                  '(' +
+                      context.watch<UploadLength>().itmNo.toString() +
+                      '/' +
+                      GlobalVariables.uploadLength.toString() +
+                      ')',
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
