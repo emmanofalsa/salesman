@@ -82,7 +82,6 @@ class _CustomerCartState extends State<CustomerCart> {
       computeTotal();
       _getColor();
       loadMinOrder();
-      // GlobalVariables.minOrder = '0.00';
     });
     OrderData.setSign = false;
     OrderData.signature = '';
@@ -119,14 +118,15 @@ class _CustomerCartState extends State<CustomerCart> {
   }
 
   loadMinOrder() async {
-    var gOrderLimit = await db.getOrderLimit();
-    _limit = gOrderLimit;
-    if (!mounted) return;
-    _limit.forEach((element) {
-      setState(() {
-        GlobalVariables.minOrder = element['min_order_amt'];
-      });
-    });
+    // var gOrderLimit = await db.getOrderLimit();
+    // _limit = gOrderLimit;
+    // if (!mounted) return;
+    // _limit.forEach((element) {
+    //   setState(() {
+    //     GlobalVariables.minOrder = element['min_order_amt'];
+    //   });
+    // });
+    GlobalVariables.minOrder = '2500.00';
     viewSpinkit = false;
   }
 

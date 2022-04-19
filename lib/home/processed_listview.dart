@@ -96,6 +96,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
       OrderData.totamt = '0';
       OrderData.retAmt = '0';
       _remlist = json.decode(json.encode(getO));
+      // print(_remlist);
       GlobalVariables.returnList.clear();
       if (!mounted) return;
       setState(() {
@@ -103,8 +104,8 @@ class _ProcessedListViewState extends State<ProcessedListView> {
         _remlist.forEach((element) async {
           var getImg = await db.getItemImg(element['itm_code'], element['uom']);
           _imgpath = json.decode(json.encode(getImg));
-
-          element['image'] = _imgpath[0]['image'];
+          // _imgpath = getImg;
+          if (_imgpath.isNotEmpty) element['image'] = _imgpath[0]['image'];
           setState(() {
             itmCat = "";
             categ = false;

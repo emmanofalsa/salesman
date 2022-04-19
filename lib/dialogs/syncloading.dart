@@ -177,8 +177,11 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
             await db.deleteTable('tb_tran_head');
             await db.insertTable(tranHeadList, 'tb_tran_head');
             await db.updateTable('tb_tran_head ', date.toString());
-            await db.addUpdateTableLog(date.toString(), 'Transactions',
-                'Completed', GlobalVariables.updateType);
+            await db.addUpdateTableLog(
+                date.toString(),
+                GlobalVariables.updateType,
+                'Completed',
+                GlobalVariables.updateBy);
             print('Transaction Head Created');
             GlobalVariables.updateSpinkit = true;
           }
@@ -249,8 +252,11 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
           await db.deleteTable('item_masterfiles');
           await db.insertItemList(itemList);
           await db.updateTable('item_masterfiles', date.toString());
-          await db.addUpdateTableLog(date.toString(), 'Item Masterfile',
-              'Completed', GlobalVariables.updateType);
+          await db.addUpdateTableLog(
+              date.toString(),
+              GlobalVariables.updateType,
+              'Completed',
+              GlobalVariables.updateBy);
           print('Item Masterfile Updated');
           GlobalVariables.updateSpinkit = true;
         }
@@ -311,8 +317,11 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
           await db.deleteTable('customer_master_files');
           await db.insertTable(customerList, 'customer_master_files');
           await db.updateTable('customer_master_files ', date.toString());
-          await db.addUpdateTableLog(date.toString(), 'Customer Masterfile',
-              'Completed', GlobalVariables.updateType);
+          await db.addUpdateTableLog(
+              date.toString(),
+              GlobalVariables.updateType,
+              'Completed',
+              GlobalVariables.updateBy);
           print('Customer List Created');
           GlobalVariables.updateSpinkit = true;
         }
@@ -333,8 +342,11 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
           await db.deleteTable('salesman_lists');
           await db.insertTable(salesmanList, 'salesman_lists');
           await db.updateTable('salesman_lists ', date.toString());
-          await db.addUpdateTableLog(date.toString(), 'Salesman Masterfile',
-              'Completed', GlobalVariables.updateType);
+          await db.addUpdateTableLog(
+              date.toString(),
+              GlobalVariables.updateType,
+              'Completed',
+              GlobalVariables.updateBy);
           print('Salesman List Created');
           updateJefe();
         }

@@ -237,6 +237,7 @@ class _SyncSalesmanState extends State<SyncSalesman> {
   loadUpdateLog() async {
     String updateType = 'Salesman';
     var rsp = await db.ofFetchUpdateLog(updateType);
+    // print(rsp);
     _updateLog = rsp;
   }
 
