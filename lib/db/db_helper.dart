@@ -2848,7 +2848,7 @@ class DatabaseHelper {
   Future getApprovedOrders() async {
     var client = await db;
     return client.rawQuery(
-        'SELECT * FROM tb_tran_head WHERE tran_stat ="Approved" ORDER BY store_name ASC',
+        'SELECT * FROM tb_tran_head WHERE tran_stat ="Approved" AND hepe_upload = "FALSE"  ORDER BY store_name ASC',
         null);
   }
 

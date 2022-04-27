@@ -477,7 +477,7 @@ class _HomeState extends State<Home> {
                                 Text(
                                   processedPressed
                                       ? formatCurrency.format(double.parse(
-                                          _toList[index]['tot_amt']))
+                                          _toList[index]['tot_del_amt']))
                                       : formatCurrency.format(double.parse(
                                           _toList[index]['total'].toString())),
                                   // 'Tot amt',

@@ -126,7 +126,7 @@ class _CustomerCartState extends State<CustomerCart> {
     //     GlobalVariables.minOrder = element['min_order_amt'];
     //   });
     // });
-    GlobalVariables.minOrder = '2500.00';
+    GlobalVariables.minOrder = '1500.00';
     viewSpinkit = false;
   }
 

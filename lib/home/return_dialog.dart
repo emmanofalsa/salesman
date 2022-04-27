@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/home/return_reason.dart';
 import 'package:salesman/home/signature.dart';
@@ -132,9 +133,14 @@ class ReturnDialog extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ReturnReason();
-            }));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return ReturnReason();
+            // }));
+            Navigator.push(
+                context,
+                PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    child: ReturnReason()));
           },
           child: Container(
             color: Colors.white,
@@ -166,13 +172,22 @@ class ReturnDialog extends StatelessWidget {
           onTap: () {
             OrderData.setSign = false;
             if (OrderData.signature!.isNotEmpty) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ViewSignature();
-              }));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) {
+              //   return ViewSignature();
+              // }));
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.rightToLeft,
+                      child: ViewSignature()));
             } else {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return MyApp();
-              }));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) {
+              //   return MyApp();
+              // }));
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.rightToLeft, child: MyApp()));
             }
           },
           child: Container(

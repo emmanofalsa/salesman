@@ -17,7 +17,7 @@ class SessionTimer {
     }
 
     GlobalTimer.timerSessionInactivity =
-        Timer(const Duration(minutes: 30), () async {
+        Timer(const Duration(minutes: 90), () async {
       print('session over');
 
       // if (GlobalVariables.timerCheckIfCustomerLogIn != null) {
