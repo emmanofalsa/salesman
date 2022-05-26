@@ -822,7 +822,7 @@ class DatabaseHelper {
     // String status = 'Delivered';
     var client = await db;
     return client.rawQuery(
-        "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat ='Pending' OR tran_stat ='On-Process' OR tran_stat ='Approved' ORDER BY date_req ASC",
+        "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat ='Pending' OR tran_stat ='On-Process' OR tran_stat ='Approved' ORDER BY date_app DESC",
         null);
   }
 
@@ -830,7 +830,7 @@ class DatabaseHelper {
     String status = 'Delivered';
     var client = await db;
     return client.rawQuery(
-        "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat ='$status' ORDER BY date_req ASC",
+        "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat ='$status' ORDER BY date_del DESC",
         null);
   }
 
@@ -838,7 +838,7 @@ class DatabaseHelper {
     // String status = 'Delivered';
     var client = await db;
     return client.rawQuery(
-        "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat ='Cancelled' OR tran_stat ='Returned' ORDER BY date_req ASC",
+        "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat ='Cancelled' OR tran_stat ='Returned' ORDER BY date_del DESC",
         null);
   }
 
@@ -852,7 +852,7 @@ class DatabaseHelper {
   Future ofFetchHepeOngoingHistory(code) async {
     var client = await db;
     return client.rawQuery(
-        "SELECT *,'' as newdate FROM tb_tran_head WHERE hepe_code ='$code' AND tran_stat ='Pending' OR tran_stat ='On-Process' OR tran_stat ='Approved' ORDER BY date_req ASC",
+        "SELECT *,'' as newdate FROM tb_tran_head WHERE hepe_code ='$code' AND tran_stat ='Pending' OR tran_stat ='On-Process' OR tran_stat ='Approved' ORDER BY date_app DESC",
         null);
   }
 
@@ -860,14 +860,14 @@ class DatabaseHelper {
     String status = 'Delivered';
     var client = await db;
     return client.rawQuery(
-        "SELECT *,'' as newdate FROM tb_tran_head WHERE hepe_code ='$code' AND tran_stat ='$status'  ORDER BY date_req ASC",
+        "SELECT *,'' as newdate FROM tb_tran_head WHERE hepe_code ='$code' AND tran_stat ='$status'  ORDER BY date_del DESC",
         null);
   }
 
   Future ofFetchHepeCancelHistory(code) async {
     var client = await db;
     return client.rawQuery(
-        "SELECT *,'' as newdate FROM tb_tran_head WHERE hepe_code ='$code' AND tran_stat ='Cancelled' OR tran_stat ='Returned' ORDER BY date_req ASC",
+        "SELECT *,'' as newdate FROM tb_tran_head WHERE hepe_code ='$code' AND tran_stat ='Cancelled' OR tran_stat ='Returned' ORDER BY date_del DESC",
         null);
   }
 
@@ -1039,6 +1039,13 @@ class DatabaseHelper {
     var client = await db;
     return client.rawQuery(
         "SELECT * FROM tbl_category_masterfile WHERE category_name LIKE '%$text%'",
+        null);
+  }
+
+  Future storeSearch(text) async {
+    var client = await db;
+    return client.rawQuery(
+        "SELECT * FROM tb_tran_head WHERE store_name LIKE '%$text%' AND tran_stat ='Approved' AND hepe_upload = 'FALSE'  ORDER BY store_name ASC",
         null);
   }
 
@@ -2895,6 +2902,7 @@ class DatabaseHelper {
     int fqty = 0;
     double ftotal = 0.00;
     String itmStat = "Returned";
+    String date = DateFormat("yyyy-MM-dd HH:mm:ss").format(new DateTime.now());
     var client = await db;
 
     List<Map> res = await client.rawQuery(
@@ -2903,7 +2911,7 @@ class DatabaseHelper {
     if (res.isEmpty) {
       return client.insert('tb_unserved_items', {
         'tran_no': tranNo,
-        'date': globaldate,
+        'date': date,
         'itm_code': itemCode,
         'item_desc': itemDesc,
         'qty': itemQty,
@@ -3072,11 +3080,12 @@ class DatabaseHelper {
   Future addtoReturnedTran(tranNo, accountCode, storeName, itemCount, totAmt,
       hepeCode, reason, sign) async {
     String stat = 'FALSE';
+    String date = DateFormat("yyyy-MM-dd HH:mm:ss").format(new DateTime.now());
     var client = await db;
 
     return client.insert('tb_returned_tran', {
       'tran_no': tranNo,
-      'date': globaldate,
+      'date': date,
       'account_code': accountCode,
       'store_name': storeName,
       'itm_count': itemCount,
@@ -3090,6 +3099,7 @@ class DatabaseHelper {
 
   Future updateReturnStatus(tranNo, hepeCode, status, amount, sign) async {
     var client = await db;
+    String date = DateFormat("yyyy-MM-dd HH:mm:ss").format(new DateTime.now());
 
     return client.update(
         'tb_tran_head',
@@ -3097,7 +3107,7 @@ class DatabaseHelper {
           'tran_stat': status,
           'hepe_code': hepeCode,
           'tot_del_amt': amount,
-          'date_del': globaldate,
+          'date_del': date,
           'signature': sign,
         },
         where: 'tran_no = ?',
@@ -3107,13 +3117,14 @@ class DatabaseHelper {
   Future getStatus(
       tranNo, status, amt, itmdelcount, hepecode, type, sign) async {
     var client = await db;
+    String date = DateFormat("yyyy-MM-dd HH:mm:ss").format(new DateTime.now());
 
     return client.update(
         'tb_tran_head',
         {
           'tran_stat': status,
           'tot_del_amt': amt,
-          'date_del': globaldate,
+          'date_del': date,
           'itm_del_count': itmdelcount,
           'hepe_code': hepecode,
           'pmeth_type': type,
@@ -3153,12 +3164,13 @@ class DatabaseHelper {
       status,
       img) async {
     var client = await db;
+    String date = DateFormat("yyyy-MM-dd HH:mm:ss").format(new DateTime.now());
     return client.insert('tb_cheque_data', {
       'tran_no': tranNo,
       'account_code': accountcode,
       'sm_code': smcode,
       'hepe_code': hepecode,
-      'datetime': globaldate,
+      'datetime': date,
       'payee_name': payeename,
       'payor_name': payorname,
       'bank_name': bankname,

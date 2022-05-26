@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:provider/provider.dart';
 import 'package:salesman/data_privacy_notice/privacy_notice.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/hepe_sync/sync.dart';
+import 'package:salesman/providers/delivery_items.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/colors.dart';
@@ -256,7 +258,44 @@ class _MenuState extends State<Menu> {
                 _currentIndex, // this will be set when a new tab is tapped
             items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: (int.parse(Provider.of<DeliveryCounter>(context)
+                            .itmNo
+                            .toString()) ==
+                        0)
+                    ? Icon(Icons.home)
+                    : Container(
+                        width: 30,
+                        child: Stack(
+                          children: [
+                            Icon(Icons.home),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Container(
+                                  // margin: EdgeInsets.only(top: 2),
+                                  padding: EdgeInsets.only(top: 0),
+                                  width: 20,
+                                  height: 15,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.green),
+                                  child: Text(
+                                    Provider.of<DeliveryCounter>(context)
+                                        .itmNo
+                                        .toString(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                 label: 'Home',
               ),
               BottomNavigationBarItem(

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/home/consolidated_listview.dart';
+import 'package:salesman/providers/delivery_items.dart';
 import 'package:salesman/variables/colors.dart';
 import 'package:salesman/widgets/elevated_button.dart';
 import 'userdata.dart';
@@ -33,6 +35,7 @@ class _HomeState extends State<Home> {
 
   String reqDate = "";
   String nreqDate = "";
+  String _searchController = "";
 
   List _toList = [];
   List _sList = [];
@@ -105,6 +108,16 @@ class _HomeState extends State<Home> {
       }
     });
     GlobalVariables.processedPressed = true;
+    Provider.of<DeliveryCounter>(context, listen: false)
+        .setTotal(_toList.length);
+  }
+
+  searchStore() async {
+    var getC = await db.storeSearch(_searchController);
+    if (!mounted) return;
+    setState(() {
+      _toList = json.decode(json.encode(getC));
+    });
   }
 
   checkifDiscounted() async {
@@ -226,7 +239,8 @@ class _HomeState extends State<Home> {
                       fontSize: 45,
                       fontWeight: FontWeight.bold),
                 ),
-                buildOrderOption(),
+                // buildOrderOption(),
+                buildSearchField(),
               ],
             ),
           ),
@@ -525,87 +539,184 @@ class _HomeState extends State<Home> {
       height: 50,
       width: ScreenData.scrWidth * .87,
       // margin: EdgeInsets.only(top: 0, bottom: 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Stack(
         children: [
-          new SizedBox(
-            width: ScreenData.scrWidth * .43,
-            // height: 35,
-            child: new ElevatedButton(
-              style: raisedButtonStyleWhite,
-              onPressed: () {
-                setState(() {
-                  viewSpinkit = true;
-                  loadProcessed();
-                  OrderData.visible = true;
-                  processedPressed = true;
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  RichText(
-                    // overflow: TextOverflow.ellipsis,
-                    text: TextSpan(
-                      text: "On-Processed Orders",
-                      // recognizer: _tapGestureRecognizer,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              new SizedBox(
+                width: ScreenData.scrWidth * .43,
+                // height: 35,
+                child: new ElevatedButton(
+                  style: raisedButtonStyleWhite,
+                  onPressed: () {
+                    setState(() {
+                      viewSpinkit = true;
+                      loadProcessed();
+                      OrderData.visible = true;
+                      processedPressed = true;
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      RichText(
+                        // overflow: TextOverflow.ellipsis,
+                        text: TextSpan(
+                          text: "On-Processed Orders",
+                          // recognizer: _tapGestureRecognizer,
 
-                      style: TextStyle(
-                        fontSize: ScreenData.scrWidth * .032,
-                        fontWeight: processedPressed
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                        decoration: TextDecoration.underline,
-                        color: processedPressed ? orangeColor : Colors.grey,
+                          style: TextStyle(
+                            fontSize: ScreenData.scrWidth * .032,
+                            fontWeight: processedPressed
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            decoration: TextDecoration.underline,
+                            color: processedPressed ? orangeColor : Colors.grey,
+                          ),
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 2,
+              ),
+              new SizedBox(
+                width: ScreenData.scrWidth * .43,
+                // height: 35,
+                child: new ElevatedButton(
+                  style: raisedButtonStyleWhite,
+                  onPressed: () {
+                    setState(() {
+                      // viewSpinkit = true;
+                      // loadPending();
+                      loadConsolidated();
+                      // print('CLICKED!');
+                      OrderData.visible = false;
+                      processedPressed = false;
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      RichText(
+                          // overflow: TextOverflow.ellipsis,
+                          text: TextSpan(
+                        text: "Consolidated Orders",
+                        // recognizer: _tapGestureRecognizer,
+                        style: TextStyle(
+                          fontSize: ScreenData.scrWidth * .032,
+                          fontWeight: processedPressed
+                              ? FontWeight.normal
+                              : FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          color: processedPressed ? Colors.grey : orangeColor,
+                        ),
+                      ))
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Visibility(
+            visible: _toList.isNotEmpty,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  // margin: EdgeInsets.only(top: 2),
+                  padding: EdgeInsets.only(top: 3),
+                  width: 25,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: ColorsTheme.mainColor),
+                  child: Text(
+                    _toList.length.toString(),
+                    // Provider.of<CartItemCounter>(context)
+                    //     .itmNo
+                    //     .toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 2,
-          ),
-          new SizedBox(
-            width: ScreenData.scrWidth * .43,
-            // height: 35,
-            child: new ElevatedButton(
-              style: raisedButtonStyleWhite,
-              onPressed: () {
-                setState(() {
-                  // viewSpinkit = true;
-                  // loadPending();
-                  loadConsolidated();
-                  // print('CLICKED!');
-                  OrderData.visible = false;
-                  processedPressed = false;
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  RichText(
-                      // overflow: TextOverflow.ellipsis,
-                      text: TextSpan(
-                    text: "Consolidated Orders",
-                    // recognizer: _tapGestureRecognizer,
-                    style: TextStyle(
-                      fontSize: ScreenData.scrWidth * .032,
-                      fontWeight: processedPressed
-                          ? FontWeight.normal
-                          : FontWeight.bold,
-                      decoration: TextDecoration.underline,
-                      color: processedPressed ? Colors.grey : orangeColor,
-                    ),
-                  ))
-                ],
+                ),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Container buildSearchField() {
+    return Container(
+      height: 50,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(top: 0, bottom: 0),
+      child: Form(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  // width: MediaQuery.of(context).size.width - 130,
+                  width: MediaQuery.of(context).size.width - 50,
+                  height: 40,
+                  child: TextFormField(
+                    // controller: searchController,
+                    onChanged: (String str) {
+                      setState(() {
+                        _searchController = str;
+                        searchStore();
+                      });
+                    },
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black87),
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                        hintText: 'Search Store Name'),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                // Container(
+                //   width: 80,
+                //   height: 35,
+                //   // color: ColorsTheme.mainColor,
+                //   child: RaisedButton(
+                //     shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(5)),
+                //     color: ColorsTheme.mainColor,
+                //     // padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                //     onPressed: () {},
+                //     child: Text(
+                //       'Search',
+                //       style: TextStyle(color: Colors.white, fontSize: 12),
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

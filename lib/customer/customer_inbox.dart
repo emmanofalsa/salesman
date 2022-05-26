@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:salesman/customer/customer_chatroom.dart';
 import 'package:salesman/customer/customer_profile.dart';
 import 'package:salesman/db/db_helper.dart';
@@ -195,10 +196,15 @@ class _CustomerInboxState extends State<CustomerInbox> {
                                   ChatData.refNo = msgList[index]['ref_no'];
                                   ChatData.status = msgList[index]['status'];
                                   // dispose();
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ChatRoom();
-                                  }));
+                                  // Navigator.push(context,
+                                  //     MaterialPageRoute(builder: (context) {
+                                  //   return ChatRoom();
+                                  // }));
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.rightToLeft,
+                                          child: ChatRoom()));
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.only(top: 20),

@@ -62,7 +62,7 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
     var retlist = await db.getReturnedTranList(context);
     returnList = retlist;
     if (returnList.isNotEmpty) {
-      int v = 1;
+      int v = 0;
       returnList.forEach((element) async {
         if (v < returnList.length) {
           v++;
@@ -89,7 +89,7 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
     var uslist = await db.getUnservedList(context);
     unsrvlist = uslist;
     if (unsrvlist.isNotEmpty) {
-      int w = 1;
+      int w = 0;
       unsrvlist.forEach((element) async {
         if (w < unsrvlist.length) {
           w++;
@@ -172,7 +172,7 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
       tranHeadList.forEach((element) async {
         if (z < tranHeadList.length) {
           z++;
-          print(tranHeadList.length);
+          // print(tranHeadList.length);
           if (z == tranHeadList.length) {
             await db.deleteTable('tb_tran_head');
             await db.insertTable(tranHeadList, 'tb_tran_head');

@@ -155,6 +155,7 @@ class _HistoryState extends State<History> {
   loadSalesmanCompletedHistory() async {
     var getC = await db.ofFetchSalesmanCompletedHistory(UserData.id);
     if (!mounted) return;
+
     setState(() {
       _completedList = json.decode(json.encode(getC));
       viewSpinkit = false;

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/profile/message_chat.dart';
 import 'package:salesman/session/session_timer.dart';
@@ -212,10 +213,15 @@ class _MessageInboxState extends State<MessageInbox> {
                                   ChatData.refNo = msgList[index]['ref_no'];
                                   ChatData.status = msgList[index]['status'];
                                   // dispose();
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ChatBox();
-                                  }));
+                                  // Navigator.push(context,
+                                  //     MaterialPageRoute(builder: (context) {
+                                  //   return ChatBox();
+                                  // }));
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.rightToLeft,
+                                          child: ChatBox()));
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.only(top: 10),
