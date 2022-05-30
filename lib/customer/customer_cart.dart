@@ -36,7 +36,7 @@ class _CustomerCartState extends State<CustomerCart> {
   bool noImage = true;
   // List _temp = [];
   List templist = [];
-  List _limit = [];
+  // List _limit = [];
   List rows = [];
 
   double botmHeight = 150.00;

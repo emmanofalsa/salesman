@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+// import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:salesman/customer/customer_cart.dart';
 import 'package:salesman/customer/customer_profile.dart';
@@ -189,7 +189,7 @@ class _CustomerState extends State<Customer> {
           ],
           body: Column(
             children: [
-              buildCustCont(),
+              Expanded(child: buildCustCont()),
             ],
           ),
         ),
@@ -249,277 +249,389 @@ class _CustomerState extends State<Customer> {
   Container buildCustCont() {
     if (viewSpinkit == true) {
       return Container(
-        child: Expanded(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Center(
-              child: SpinKitFadingCircle(
-                color: ColorsTheme.mainColor,
-                size: 50,
+          padding: EdgeInsets.only(left: 15, right: 15, top: 0),
+          // child: Column(
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     Expanded(
+          //       child: ListView.separated(
+          //           // shrinkWrap: true,
+          //           itemBuilder: (context, index) => const CardSkeleton(),
+          //           separatorBuilder: (context, index) => const SizedBox(
+          //                 height: 8,
+          //               ),
+          //           itemCount: 7),
+          //     ),
+          //   ],
+          // ));
+          child: Column(
+            children: [
+              CardSkeleton(),
+              SizedBox(height: 8),
+              CardSkeleton(),
+              SizedBox(height: 8),
+              CardSkeleton(),
+              SizedBox(height: 8),
+              CardSkeleton(),
+              SizedBox(
+                height: 8,
               ),
-            ),
-          ),
-        ),
-      );
+              CardSkeleton(),
+              SizedBox(height: 8),
+              CardSkeleton(),
+              SizedBox(height: 8),
+              CardSkeleton(),
+            ],
+          ));
     }
     return Container(
-      child: Expanded(
-        child: Container(
-          padding: EdgeInsets.only(left: 15, right: 15),
-          // height: 620,
-          width: MediaQuery.of(context).size.width,
-          // color: Colors.white,
-          child: RefreshIndicator(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(0),
-              itemCount: _custList.length,
-              // scrollDirection: Axis.vertical,
-              itemBuilder: (context, index) {
-                CustomerData.colorCode =
-                    _custList[index]['account_classification_id'];
-                _getColor();
-                if (_custList[index]['account_classification_id'] == 'N/A') {
-                  _custList[index]['account_description'] = 'N/A';
-                }
-                return SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          CustomerData.accountCode =
-                              _custList[index]['account_code'];
-                          CustomerData.accountName =
-                              _custList[index]['account_name'];
-                          CustomerData.accountDescription =
-                              _custList[index]['account_description'];
-                          CustomerData.province = _custList[index]['address1'];
-                          CustomerData.city = _custList[index]['address3'];
-                          CustomerData.district = _custList[index]['address2'];
-                          CustomerData.groupCode =
-                              _custList[index]['account_group_code'];
-                          CustomerData.paymentType =
-                              _custList[index]['payment_type'];
-                          CustomerData.status = _custList[index]['status'];
-                          CustomerData.colorCode =
-                              _custList[index]['account_classification_id'];
-                          CustomerData.contactNo =
-                              _custList[index]['cus_mobile_number'];
-                          CustomerData.creditLimit = '0.00';
+      padding: EdgeInsets.only(left: 15, right: 15),
+      // height: 620,
+      width: MediaQuery.of(context).size.width,
+      // color: Colors.white,
+      child: RefreshIndicator(
+        child: ListView.builder(
+          padding: const EdgeInsets.all(0),
+          itemCount: _custList.length,
+          // scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) {
+            CustomerData.colorCode =
+                _custList[index]['account_classification_id'];
+            _getColor();
+            if (_custList[index]['account_classification_id'] == 'N/A') {
+              _custList[index]['account_description'] = 'N/A';
+            }
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      CustomerData.accountCode =
+                          _custList[index]['account_code'];
+                      CustomerData.accountName =
+                          _custList[index]['account_name'];
+                      CustomerData.accountDescription =
+                          _custList[index]['account_description'];
+                      CustomerData.province = _custList[index]['address1'];
+                      CustomerData.city = _custList[index]['address3'];
+                      CustomerData.district = _custList[index]['address2'];
+                      CustomerData.groupCode =
+                          _custList[index]['account_group_code'];
+                      CustomerData.paymentType =
+                          _custList[index]['payment_type'];
+                      CustomerData.status = _custList[index]['status'];
+                      CustomerData.colorCode =
+                          _custList[index]['account_classification_id'];
+                      CustomerData.contactNo =
+                          _custList[index]['cus_mobile_number'];
+                      CustomerData.creditLimit = '0.00';
 
-                          if (CustomerData.creditLimit == null ||
-                              CustomerData.creditLimit == 'NA') {
-                            CustomerData.creditLimit = "0.00";
-                          }
-                          if (CustomerData.groupCode == null ||
-                              CustomerData.groupCode == 'NA' ||
-                              CustomerData.groupCode == '') {
-                            CustomerData.groupCode = 'N/A';
-                          }
+                      if (CustomerData.creditLimit == null ||
+                          CustomerData.creditLimit == 'NA') {
+                        CustomerData.creditLimit = "0.00";
+                      }
+                      if (CustomerData.groupCode == null ||
+                          CustomerData.groupCode == 'NA' ||
+                          CustomerData.groupCode == '') {
+                        CustomerData.groupCode = 'N/A';
+                      }
 
-                          checkCustInfo();
+                      checkCustInfo();
 
-                          if (!incInfo) {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.rightToLeft,
-                                    child: CustomerProfile()));
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 8),
-                          height: 80,
-                          width: MediaQuery.of(context).size.width,
-                          color: Colors.white,
-                          child: Stack(children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      if (!incInfo) {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: CustomerProfile()));
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 8),
+                      height: 80,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.white,
+                      child: Stack(children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              // margin: EdgeInsets.all(0),
+                              width: 5,
+                              height: 80,
+                              color: CustomerData.custColor,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 200,
+                                    child: Text(
+                                      _custList[index]['account_name'],
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Text(
+                                    _custList[index]['address2'] +
+                                        ', ' +
+                                        _custList[index]['address3'] +
+                                        ', ' +
+                                        _custList[index]['address1'],
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Column(
                               children: <Widget>[
                                 Container(
-                                  // margin: EdgeInsets.all(0),
-                                  width: 5,
-                                  height: 80,
-                                  color: CustomerData.custColor,
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                200,
-                                        child: Text(
-                                          _custList[index]['account_name'],
-                                          textAlign: TextAlign.left,
+                                  height: 30,
+                                  width: 150,
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: CustomerData.custColor,
+                                      minimumSize: Size(88, 36),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5)),
+                                      ),
+                                    ),
+                                    onPressed: () => {},
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          _custList[index]
+                                              ['account_description'],
                                           style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold),
-                                          overflow: TextOverflow.ellipsis,
+                                            fontSize: 12,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.normal,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        _custList[index]['address2'] +
-                                            ', ' +
-                                            _custList[index]['address3'] +
-                                            ', ' +
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: CustomerData.placeOrder,
+                                  child: Container(
+                                    height: 30,
+                                    width: 150,
+                                    margin: EdgeInsets.only(top: 5),
+                                    child: ElevatedButton(
+                                      style: raisedButtonStyleWhite,
+                                      onPressed: () => {
+                                        CustomerData.accountCode =
+                                            _custList[index]['account_code'],
+                                        CustomerData.accountName =
+                                            _custList[index]['account_name'],
+                                        CustomerData.accountDescription =
+                                            _custList[index]
+                                                ['account_description'],
+                                        CustomerData.province =
                                             _custList[index]['address1'],
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.normal),
+                                        CustomerData.city =
+                                            _custList[index]['address3'],
+                                        CustomerData.district =
+                                            _custList[index]['address2'],
+                                        CustomerData.groupCode =
+                                            _custList[index]
+                                                ['account_group_code'],
+                                        CustomerData.paymentType =
+                                            _custList[index]['payment_type'],
+                                        CustomerData.status =
+                                            _custList[index]['status'],
+                                        CustomerData.colorCode =
+                                            _custList[index]
+                                                ['account_classification_id'],
+                                        CustomerData.contactNo =
+                                            _custList[index]
+                                                ['cus_mobile_number'],
+                                        CustomerData.creditLimit = '0.00',
+                                        if (CustomerData.creditLimit == null ||
+                                            CustomerData.creditLimit == 'NA')
+                                          {
+                                            CustomerData.creditLimit = "0.00",
+                                          },
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return CustomerCart();
+                                        })),
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            'Place an Order',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: ColorsTheme.mainColor,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            child: Icon(
+                                              Icons.add_circle_outline,
+                                              color: ColorsTheme.mainColor,
+                                              size: 20,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Container(
-                                      height: 30,
-                                      width: 150,
-                                      margin: EdgeInsets.only(top: 10),
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary: CustomerData.custColor,
-                                          minimumSize: Size(88, 36),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 16),
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5)),
-                                          ),
-                                        ),
-                                        onPressed: () => {},
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              _custList[index]
-                                                  ['account_description'],
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: CustomerData.placeOrder,
-                                      child: Container(
-                                        height: 30,
-                                        width: 150,
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: ElevatedButton(
-                                          style: raisedButtonStyleWhite,
-                                          onPressed: () => {
-                                            CustomerData.accountCode =
-                                                _custList[index]
-                                                    ['account_code'],
-                                            CustomerData.accountName =
-                                                _custList[index]
-                                                    ['account_name'],
-                                            CustomerData.accountDescription =
-                                                _custList[index]
-                                                    ['account_description'],
-                                            CustomerData.province =
-                                                _custList[index]['address1'],
-                                            CustomerData.city =
-                                                _custList[index]['address3'],
-                                            CustomerData.district =
-                                                _custList[index]['address2'],
-                                            CustomerData.groupCode =
-                                                _custList[index]
-                                                    ['account_group_code'],
-                                            CustomerData.paymentType =
-                                                _custList[index]
-                                                    ['payment_type'],
-                                            CustomerData.status =
-                                                _custList[index]['status'],
-                                            CustomerData.colorCode = _custList[
-                                                    index]
-                                                ['account_classification_id'],
-                                            CustomerData.contactNo =
-                                                _custList[index]
-                                                    ['cus_mobile_number'],
-                                            CustomerData.creditLimit = '0.00',
-                                            if (CustomerData.creditLimit ==
-                                                    null ||
-                                                CustomerData.creditLimit ==
-                                                    'NA')
-                                              {
-                                                CustomerData.creditLimit =
-                                                    "0.00",
-                                              },
-                                            Navigator.push(context,
-                                                MaterialPageRoute(
-                                                    builder: (context) {
-                                              return CustomerCart();
-                                            })),
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                'Place an Order',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: ColorsTheme.mainColor,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              Container(
-                                                width: 20,
-                                                height: 20,
-                                                child: Icon(
-                                                  Icons.add_circle_outline,
-                                                  color: ColorsTheme.mainColor,
-                                                  size: 20,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ]),
+                          ],
                         ),
-                      ),
-                    ],
+                      ]),
+                    ),
                   ),
-                );
-              },
-            ),
-            onRefresh: _getData,
-          ),
+                ],
+              ),
+            );
+          },
         ),
+        onRefresh: _getData,
       ),
+    );
+  }
+}
+
+class CardSkeleton extends StatelessWidget {
+  const CardSkeleton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Skeleton(
+            height: 80,
+            width: 5,
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Skeleton(
+                  width: 130,
+                  height: 25,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Skeleton(
+                  width: 150,
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 50,
+          ),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Skeleton(
+                width: 150,
+                height: 35,
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Skeleton(
+                width: 150,
+                height: 35,
+              ),
+            ],
+          ))
+        ],
+      ),
+    );
+  }
+}
+
+class Skeleton extends StatelessWidget {
+  const Skeleton({
+    Key? key,
+    this.height,
+    this.width,
+  }) : super(key: key);
+
+  final double? height, width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      // padding: EdgeInsets.all(8),
+
+      decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.04),
+          borderRadius: const BorderRadius.all(Radius.circular(16))),
+
+      // child: Expanded(
+      //   child: Container(
+      //     width: MediaQuery.of(context).size.width,
+      //     child: Center(
+      //       child: SpinKitFadingCircle(
+      //         color: ColorsTheme.mainColor,
+      //         size: 50,
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
