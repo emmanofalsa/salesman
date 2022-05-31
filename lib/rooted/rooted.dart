@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:salesman/variables/assets.dart';
 import 'package:salesman/widgets/elevated_button.dart';
