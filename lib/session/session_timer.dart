@@ -49,7 +49,7 @@ class SessionTimer {
                   color: Colors.red,
                 ),
                 Text(
-                  " You are inactive for 30 minutes.",
+                  " You are inactive for 90 minutes.",
                   style: TextStyle(fontSize: 14),
                 ),
               ],

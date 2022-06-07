@@ -95,9 +95,18 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  void _launchURL() async => await canLaunch(UrlAddress.appLink)
-      ? await launch(UrlAddress.appLink)
-      : throw 'Could not launch $UrlAddress.appLink';
+  // void _launchURL() async => await canLaunch(UrlAddress.appLink)
+  //     ? await launch(UrlAddress.appLink)
+  //     : throw 'Could not launch $UrlAddress.appLink';
+
+  Future<void> _launchURL(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch $url';
+    }
+  }
 
   void handleUserInteraction([_]) {
     // _initializeTimer();
@@ -429,7 +438,7 @@ class _ProfileState extends State<Profile> {
           ElevatedButton(
             style: raisedButtonStyle,
             onPressed: () {
-              _launchURL();
+              _launchURL(Uri.parse(UrlAddress.appLink));
             },
             child: Text(
               'Update',
