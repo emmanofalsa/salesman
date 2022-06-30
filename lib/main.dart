@@ -20,6 +20,7 @@ import 'package:salesman/providers/cart_total.dart';
 import 'package:salesman/providers/delivery_items.dart';
 import 'package:salesman/providers/img_download.dart';
 import 'package:salesman/providers/sync_cap.dart';
+import 'package:salesman/providers/upload_count.dart';
 import 'package:salesman/providers/upload_length.dart';
 // import 'package:salesman/rooted/rooted.dart';
 // import 'package:salesman/router/router.dart';
@@ -36,6 +37,7 @@ void main() {
     ChangeNotifierProvider(create: (_) => CartItemCounter()),
     ChangeNotifierProvider(create: (_) => CartTotalCounter()),
     ChangeNotifierProvider(create: (_) => UploadLength()),
+    ChangeNotifierProvider(create: (_) => UploadCount()),
     ChangeNotifierProvider(create: (_) => DeliveryCounter()),
   ], child: MyApp()));
 }

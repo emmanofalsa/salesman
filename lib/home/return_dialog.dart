@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/home/return_reason.dart';
 import 'package:salesman/home/signature.dart';
 import 'package:salesman/home/view_signature.dart';
+import 'package:salesman/providers/upload_length.dart';
 // import 'package:salesman/menu.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/colors.dart';
@@ -251,6 +253,8 @@ class ReturnDialog extends StatelessWidget {
                     //     MaterialPageRoute(builder: (context) {
                     //   return Menu();
                     // }));
+                    Provider.of<UploadLength>(context, listen: false)
+                        .addTotal(1);
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         '/hepemenu', (Route<dynamic> route) => false);
                   }

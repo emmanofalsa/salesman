@@ -1708,6 +1708,8 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:salesman/userdata.dart';
+import 'package:salesman/variables/colors.dart';
 
 class HepeSalesPage extends StatefulWidget {
   const HepeSalesPage({Key? key}) : super(key: key);
@@ -1719,6 +1721,31 @@ class HepeSalesPage extends StatefulWidget {
 class _HepeSalesPageState extends State<HepeSalesPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: ScreenData.scrHeight * .085,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Sales",
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                  color: ColorsTheme.mainColor,
+                  fontSize: 45,
+                  fontWeight: FontWeight.bold),
+            ),
+            // SizedBox(height: 50),
+          ],
+        ),
+      ),
+      body: Column(
+        children: [],
+      ),
+    );
   }
 }

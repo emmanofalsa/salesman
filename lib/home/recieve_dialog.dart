@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/home/signature.dart';
 import 'package:salesman/home/view_signature.dart';
+import 'package:salesman/providers/upload_length.dart';
 // import 'package:salesman/menu.dart';
 import 'package:salesman/widgets/dialogs.dart';
 import 'package:salesman/widgets/snackbar.dart';
@@ -224,6 +226,7 @@ class ReceivedDialog extends StatelessWidget {
                   //   return Menu();
                   // }));
                   // Navigator.popAndPushNamed(context, '/hepemenu');
+                  Provider.of<UploadLength>(context, listen: false).addTotal(1);
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       '/hepemenu', (Route<dynamic> route) => false);
                 }

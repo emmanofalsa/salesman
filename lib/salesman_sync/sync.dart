@@ -11,6 +11,7 @@ import 'package:salesman/dialogs/confirmupload.dart';
 import 'package:salesman/dialogs/syncsuccess.dart';
 import 'package:salesman/dialogs/uploadloading.dart';
 import 'package:salesman/providers/sync_cap.dart';
+import 'package:salesman/providers/upload_count.dart';
 import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/session/session_timer.dart';
 // import 'package:salesman/url/url.dart';
@@ -151,7 +152,7 @@ class _SyncSalesmanState extends State<SyncSalesman> {
     // String tranNo = '';
     // List _rspList = [];
     int x = 0;
-    Provider.of<UploadLength>(context, listen: false).setTotal(x);
+    Provider.of<UploadCount>(context, listen: false).setTotal(x);
     if (NetworkData.errorMsgShow == false &&
         uploading == false &&
         !GlobalVariables.uploaded) {
@@ -193,7 +194,7 @@ class _SyncSalesmanState extends State<SyncSalesman> {
             //PA CHANGE STATUS SA SQLITE
             db.updateTranUploadStatSM(element['tran_no'], rsp);
             db.updateLineUploadStat(element['tran_no'], rsp);
-            Provider.of<UploadLength>(context, listen: false).setTotal(x);
+            Provider.of<UploadCount>(context, listen: false).setTotal(x);
             print(x);
             if (x == _toList.length) {
               GlobalVariables.uploaded = true;

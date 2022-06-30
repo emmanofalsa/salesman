@@ -10,6 +10,7 @@ import 'package:salesman/dialogs/confirmupload.dart';
 import 'package:salesman/dialogs/syncsuccess.dart';
 import 'package:salesman/dialogs/uploadloading.dart';
 import 'package:salesman/providers/sync_cap.dart';
+import 'package:salesman/providers/upload_count.dart';
 import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/userdata.dart';
@@ -28,6 +29,7 @@ class _SyncHepeState extends State<SyncHepe> {
   bool downloadPressed = false;
   bool errorMsgShow = true;
   bool uploading = false;
+  bool uploadError = false;
 
   bool upTrans = false;
   bool upItem = false;
@@ -134,7 +136,7 @@ class _SyncHepeState extends State<SyncHepe> {
     // List _unsrvdList = [];
     // List _tempList = [];
     int z = 0;
-    Provider.of<UploadLength>(context, listen: false).setTotal(z);
+    Provider.of<UploadCount>(context, listen: false).setTotal(z);
     int listLength = 0;
     if (NetworkData.errorMsgShow == false &&
         uploading == false &&
@@ -195,7 +197,24 @@ class _SyncHepeState extends State<SyncHepe> {
               tmpretLine);
           print('PRINT UPDATE TRAN SA SERVER RSP: ' + rsp.toString());
 
-          if (rsp != 0) {
+          // if (rsp == null || rsp == 0) {
+          //   print('NISUD SA NULL');
+          //   var rsp = await db.updateDeliveredTranStat(
+          //       context,
+          //       element['tran_no'],
+          //       element['tran_stat'],
+          //       element['itm_del_count'],
+          //       element['tot_del_amt'],
+          //       element['date_del'],
+          //       element['hepe_code'],
+          //       element['pmeth_type'],
+          //       element['signature'],
+          //       tmpTranLine,
+          //       tmpretLine);
+          //   print('SECOND ATTEMPT PRINT UPDATE TRAN SA SERVER RSP: ' + rsp.toString());
+          // }
+
+          if (rsp != 0 || rsp != null) {
             var changestatrsp = await db.updateTranUploadStatHEPE(rsp);
             print('CHANGESTAT RETURN: ' + changestatrsp.toString());
             setState(() {
@@ -208,12 +227,32 @@ class _SyncHepeState extends State<SyncHepe> {
                   setState(() {
                     uploading = false;
                     GlobalVariables.uploaded = true;
+                    Provider.of<UploadCount>(context, listen: false)
+                        .setTotal(0);
                     Navigator.pop(context);
                   });
                 }
               }
             });
-            Provider.of<UploadLength>(context, listen: false).setTotal(z);
+            Provider.of<UploadCount>(context, listen: false).setTotal(z);
+            Provider.of<UploadLength>(context, listen: false).minusTotal(1);
+          } else {
+            uploadError = true;
+            // print('RSP NA NULL :' + element['tran_no'].toString());
+            // var rsp = await db.updateDeliveredTranStat(
+            //     context,
+            //     element['tran_no'],
+            //     element['tran_stat'],
+            //     element['itm_del_count'],
+            //     element['tot_del_amt'],
+            //     element['date_del'],
+            //     element['hepe_code'],
+            //     element['pmeth_type'],
+            //     element['signature'],
+            //     tmpTranLine,
+            //     tmpretLine);
+            // print('SECOND ATTEMPT PRINT UPDATE TRAN SA SERVER RSP: ' +
+            //     rsp.toString());
           }
         }
         //KUNG NA RETURN TBOOK TRANSACTION
@@ -238,8 +277,23 @@ class _SyncHepeState extends State<SyncHepe> {
               retTran,
               retLine);
           print('PRINT UPDATE TRAN SA SERVER RETURNED RSP: ' + smp.toString());
+          if (smp == null || smp == 0) {
+            print('NISUD SA NULL');
+            var smp = await db.updateReturnedTranStat(
+                context,
+                element['tran_no'],
+                element['tran_stat'],
+                element['tot_del_amt'],
+                element['date_del'],
+                element['hepe_code'],
+                element['signature'],
+                retTran,
+                retLine);
+            print(
+                'PRINT UPDATE TRAN SA SERVER RETURNED RSP: ' + smp.toString());
+          }
 
-          if (smp != 0) {
+          if (smp != 0 || smp != null) {
             var changestatrsp = await db.updateTranUploadStatHEPE(smp);
             print('CHANGESTAT RETURN: ' + changestatrsp.toString());
             setState(() {
@@ -252,14 +306,27 @@ class _SyncHepeState extends State<SyncHepe> {
                   setState(() {
                     uploading = false;
                     GlobalVariables.uploaded = true;
+                    Provider.of<UploadCount>(context, listen: false)
+                        .setTotal(0);
                     Navigator.pop(context);
                   });
                 }
               }
             });
-            Provider.of<UploadLength>(context, listen: false).setTotal(z);
+            Provider.of<UploadCount>(context, listen: false).setTotal(z);
+            Provider.of<UploadLength>(context, listen: false).minusTotal(1);
           } else {
             print("FAILED");
+            uploadError = true;
+          }
+
+          if (z == listLength && uploadError == true) {
+            setState(() {
+              uploading = false;
+              GlobalVariables.uploaded = true;
+              // Provider.of<UploadCount>(context, listen: false).setTotal(0);
+              Navigator.pop(context);
+            });
           }
 
           // print(element['signature']);
@@ -336,12 +403,15 @@ class _SyncHepeState extends State<SyncHepe> {
     if (!mounted) return;
     setState(() {
       _toList = getP;
+
       // print(_toList);
       if (_toList.isEmpty) {
         uploading = false;
+        Provider.of<UploadCount>(context, listen: false).setTotal(0);
       } else {
         GlobalVariables.uploaded = false;
-        GlobalVariables.uploadLength = _toList.length.toString();
+        // Provider.of<UploadLength>(context, listen: false)
+        //     .setTotal(_toList.length);
       }
     });
   }
@@ -388,6 +458,8 @@ class _SyncHepeState extends State<SyncHepe> {
 
     if (GlobalVariables.upload == true) {
       if (NetworkData.uploaded == false && uploading == false) {
+        GlobalVariables.uploadLength = _toList.length.toString();
+
         showDialog(
             barrierDismissible: false,
             context: context,
@@ -395,6 +467,9 @@ class _SyncHepeState extends State<SyncHepe> {
         GlobalVariables.uploadSpinkit = true;
         await upload();
       }
+    } else {
+      Provider.of<UploadLength>(context, listen: false)
+          .setTotal(_toList.length);
     }
   }
 

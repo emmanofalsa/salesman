@@ -22,8 +22,8 @@ class UrlAddress {
   // static String userImg = 'https://distApp2.alturush.com/img/user/';
   static String userImg = url + 'img/user/';
   static String itemImg = url + 'img/';
-  static String chequeImg = 'https://distApp2.alturush.com/img/cheque/';
-  static String categImg = 'https://distApp2.alturush.com/img/category/';
+  static String chequeImg = url + 'img/cheque/';
+  static String categImg = url + 'img/category/';
   static String appLink =
       'https://distribution.alturush.com/downloads/salesmanApp.apk';
   // static String sliderImg =

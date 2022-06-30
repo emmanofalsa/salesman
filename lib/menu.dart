@@ -8,6 +8,7 @@ import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/hepe_sales/sales.dart';
 import 'package:salesman/hepe_sync/sync.dart';
 import 'package:salesman/providers/delivery_items.dart';
+import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/colors.dart';
@@ -306,7 +307,7 @@ class _MenuState extends State<Menu> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.history), label: 'History'),
               BottomNavigationBarItem(
-                  icon: (int.parse(Provider.of<DeliveryCounter>(context)
+                  icon: (int.parse(Provider.of<UploadLength>(context)
                               .itmNo
                               .toString()) ==
                           0)
@@ -329,7 +330,7 @@ class _MenuState extends State<Menu> {
                                         shape: BoxShape.circle,
                                         color: Colors.green),
                                     child: Text(
-                                      Provider.of<DeliveryCounter>(context)
+                                      Provider.of<UploadLength>(context)
                                           .itmNo
                                           .toString(),
                                       textAlign: TextAlign.center,
