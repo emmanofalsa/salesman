@@ -37,6 +37,12 @@ class UserData {
   static String? getImgfrom;
 }
 
+class UserAccess {
+  static bool noMinOrder = false;
+  static bool multiSalesman = false;
+  static List customerList = [];
+}
+
 class OrderData {
   static String? trans;
   static String? pmeth;
@@ -87,6 +93,7 @@ class CustomerData {
   static bool discounted = false;
   static bool placeOrder = true;
   static List tranNoList = [];
+  static bool minOrderLock = true;
 }
 
 class CartData {

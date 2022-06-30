@@ -7,14 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/dialogs/confirm_sync.dart';
 import 'package:salesman/dialogs/confirmupload.dart';
-// import 'package:salesman/dialogs/syncloading.dart';
 import 'package:salesman/dialogs/syncsuccess.dart';
 import 'package:salesman/dialogs/uploadloading.dart';
 import 'package:salesman/providers/sync_cap.dart';
 import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/session/session_timer.dart';
-// import 'package:salesman/url/url.dart';
-// import 'package:http/http.dart' as http;
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/colors.dart';
 import 'package:salesman/widgets/elevated_button.dart';
@@ -1526,7 +1523,7 @@ class _SyncHepeState extends State<SyncHepe> {
           } else {
             uploaded = true;
           }
-          amount = _toList[index]['tot_amt'];
+          amount = _toList[index]['tot_del_amt'];
           return SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -1575,7 +1572,7 @@ class _SyncHepeState extends State<SyncHepe> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                _toList[index]['date_req'],
+                                _toList[index]['date_del'],
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     color: Colors.black,

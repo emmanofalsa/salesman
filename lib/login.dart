@@ -498,12 +498,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   ),
                 ),
               ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Password cannot be empty';
-                }
-                return null;
-              },
             ),
           ]))
     ]);

@@ -37,6 +37,7 @@ class _CustomerCartState extends State<CustomerCart> {
   // List _temp = [];
   List templist = [];
   // List _limit = [];
+  List tmp = [];
   List rows = [];
 
   double botmHeight = 150.00;
@@ -51,6 +52,7 @@ class _CustomerCartState extends State<CustomerCart> {
   void initState() {
     super.initState();
     loadTemp();
+    checkOrders();
   }
 
   // viewSampleTable() async {
@@ -60,6 +62,19 @@ class _CustomerCartState extends State<CustomerCart> {
   //     print(templist);
   //   });
   // }
+
+  checkOrders() async {
+    CustomerData.minOrderLock = true;
+    var rsp = await db.ofFetchForUploadCustomer(CustomerData.accountCode);
+    tmp = rsp;
+    print(rsp);
+    if (tmp.isEmpty) {
+      CustomerData.minOrderLock = true;
+    } else {
+      CustomerData.minOrderLock = false;
+    }
+    print(CustomerData.minOrderLock);
+  }
 
   loadTemp() async {
     // viewSampleTable();
@@ -550,44 +565,56 @@ class _CustomerCartState extends State<CustomerCart> {
                                           Colors.blue,
                                           Colors.white);
                                     } else {
-                                      if (double.parse(CartData.totalAmount) <
-                                          double.parse(
-                                              GlobalVariables.minOrder)) {
-                                        String msg =
-                                            'Order amount did not reached the minimum amount of ' +
-                                                formatCurrencyAmt.format(
-                                                    double.parse(GlobalVariables
-                                                        .minOrder)) +
-                                                '.' +
-                                                ' Add more items?';
-                                        final action = await Dialogs.openDialog(
-                                            context,
-                                            "Information",
-                                            msg,
-                                            false,
-                                            'No',
-                                            'Yes');
-                                        if (action == DialogAction.yes) {
-                                          // Navigator.push(context,
-                                          //     MaterialPageRoute(
-                                          //         builder: (context) {
-                                          //   return ProductPage();
-                                          // }));
-                                          Navigator.popAndPushNamed(
-                                              context, '/prodpage');
-                                        } else {}
-                                      } else {
-                                        // Navigator.push(context,
-                                        //     MaterialPageRoute(
-                                        //         builder: (context) {
-                                        //   return CheckOut();
-                                        // }));
+                                      if (UserAccess.noMinOrder == true) {
                                         Navigator.push(
                                             context,
                                             PageTransition(
                                                 type: PageTransitionType
                                                     .rightToLeft,
                                                 child: CheckOut()));
+                                      } else {
+                                        //KUNG NAA PAY EXISTING NGA ORDER NGA WALA PA NA SYNC MAKA ORDER SYA BSAN DI KAABOT SA MIN ORDER
+                                        if (CustomerData.minOrderLock == true) {
+                                          if (double.parse(
+                                                  CartData.totalAmount) <
+                                              double.parse(
+                                                  GlobalVariables.minOrder)) {
+                                            String msg =
+                                                'Order amount did not reached the minimum amount of ' +
+                                                    formatCurrencyAmt.format(
+                                                        double.parse(
+                                                            GlobalVariables
+                                                                .minOrder)) +
+                                                    '.' +
+                                                    ' Add more items?';
+                                            final action =
+                                                await Dialogs.openDialog(
+                                                    context,
+                                                    "Information",
+                                                    msg,
+                                                    false,
+                                                    'No',
+                                                    'Yes');
+                                            if (action == DialogAction.yes) {
+                                              Navigator.popAndPushNamed(
+                                                  context, '/prodpage');
+                                            } else {}
+                                          } else {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .rightToLeft,
+                                                    child: CheckOut()));
+                                          }
+                                        } else {
+                                          Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  type: PageTransitionType
+                                                      .rightToLeft,
+                                                  child: CheckOut()));
+                                        }
                                       }
                                     }
                                   },

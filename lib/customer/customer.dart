@@ -19,29 +19,93 @@ class _CustomerState extends State<Customer> {
   String _searchController = "";
   var colorCode = '';
   List _custList = [];
+  List accessList = [];
 
   bool viewSpinkit = true;
   bool incInfo = false;
 
   void initState() {
     super.initState();
+    // loadUserAccess();
     loadCustomers();
     _getColor();
   }
 
   loadCustomers() async {
-    if (_custList.isEmpty) {
-      var getC = await db.viewCustomersList(UserData.id!);
-      _custList = getC;
+    print(UserAccess.multiSalesman);
+    if (UserAccess.multiSalesman == false) {
+      if (_custList.isEmpty) {
+        var getC = await db.viewCustomersList(UserData.id!);
+        _custList = getC;
 
-      setState(() {
+        setState(() {
+          if (_custList.isEmpty) {
+            viewSpinkit = true;
+            print('No Customer Found!');
+          }
+          viewSpinkit = false;
+        });
+      }
+    } else {
+      _custList.clear();
+      UserAccess.customerList.forEach((element) async {
+        print(element);
+
         if (_custList.isEmpty) {
-          viewSpinkit = true;
-          print('No Customer Found!');
+          var getC = await db.viewMultiCustomersList(element);
+          // _custList.add(getC);
+          _custList.addAll(getC);
+          // print(getC);
+
+          setState(() {
+            if (_custList.isEmpty) {
+              viewSpinkit = true;
+              print('No Customer Found!');
+            }
+            viewSpinkit = false;
+          });
         }
-        viewSpinkit = false;
       });
     }
+  }
+
+  loadUserAccess() async {
+    var ulist = await db.ofFetchUserAccess();
+    accessList = ulist;
+    assignAccess();
+    // print(accessList);
+    loadCustomers();
+  }
+
+  assignAccess() {
+    UserAccess.multiSalesman = false;
+    UserAccess.noMinOrder = false;
+    accessList.forEach((element) {
+      print(element['ua_action']);
+      //PARA SA MULTIPLE SALESMAN PER CUSTOMER
+      if (element['ua_userid'] == UserData.id &&
+          element['ua_code'] == 'MULTI_SALESMAN' &&
+          element['ua_action'] == '1') {
+        setState(() {
+          UserAccess.multiSalesman = true;
+        });
+
+        //SPLITTING CUSTOMER LIST
+        if (element['ua_cust'] != '' || element['ua_cust'] != null) {
+          UserAccess.customerList.clear();
+          final cust = element['ua_cust'];
+          final t = cust.split(',');
+          for (int i = 0; i < t.length; i++) UserAccess.customerList.add(t[i]);
+        }
+      }
+      if (element['ua_userid'] == UserData.id &&
+          element['ua_code'] == 'NO_MIN_ORDER' &&
+          element['ua_action'] == '1') {
+        setState(() {
+          UserAccess.noMinOrder = true;
+        });
+      }
+    });
   }
 
   checkCustInfo() {
@@ -620,18 +684,6 @@ class Skeleton extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.04),
           borderRadius: const BorderRadius.all(Radius.circular(16))),
-
-      // child: Expanded(
-      //   child: Container(
-      //     width: MediaQuery.of(context).size.width,
-      //     child: Center(
-      //       child: SpinKitFadingCircle(
-      //         color: ColorsTheme.mainColor,
-      //         size: 50,
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

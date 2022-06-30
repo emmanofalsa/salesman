@@ -1707,3 +1707,18 @@
 //     );
 //   }
 // }
+import 'package:flutter/material.dart';
+
+class HepeSalesPage extends StatefulWidget {
+  const HepeSalesPage({Key? key}) : super(key: key);
+
+  @override
+  State<HepeSalesPage> createState() => _HepeSalesPageState();
+}
+
+class _HepeSalesPageState extends State<HepeSalesPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
+  }
+}

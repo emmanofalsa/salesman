@@ -194,14 +194,13 @@ class _SyncSalesmanState extends State<SyncSalesman> {
             db.updateTranUploadStatSM(element['tran_no'], rsp);
             db.updateLineUploadStat(element['tran_no'], rsp);
             Provider.of<UploadLength>(context, listen: false).setTotal(x);
-          }
-          print(x);
-
-          if (x == _toList.length) {
-            GlobalVariables.uploaded = true;
-            NetworkData.uploaded = false;
-            GlobalVariables.upload = false;
-            Navigator.pop(context);
+            print(x);
+            if (x == _toList.length) {
+              GlobalVariables.uploaded = true;
+              NetworkData.uploaded = false;
+              GlobalVariables.upload = false;
+              Navigator.pop(context);
+            }
           }
         });
       });

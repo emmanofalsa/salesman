@@ -18,9 +18,9 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._();
   static Database? _database;
   //TEST VERSION
-  static final _dbName = 'DISTAPPDBB77.db';
+  static final _dbName = 'DISTAPPDBB81.db';
   //LIVE VERSION
-  // static final _dbName = 'DISTRIBUTION1.db';
+  // static final _dbName = 'DISTRIBUTION2.db';
   static final _dbVersion = 1;
 
   String globaldate =
@@ -270,6 +270,7 @@ class DatabaseHelper {
         date_del TEXT,
         lrate TEXT,
         rated TEXT,
+        manually_included TEXT,
         image TEXT)''');
 
     ///UNSERVED ITEMS
@@ -360,6 +361,17 @@ class DatabaseHelper {
         banner_img TEXT,
         img_path TEXT)''');
 
+    ///BANNER USER ACCESS
+    db.execute('''
+      CREATE TABLE user_access (
+        doc_no INTEGER PRIMARY KEY,
+        ua_userid TEXT,
+        ua_code TEXT,
+        ua_action TEXT,
+        ua_cust TEXT,
+        ua_add_date TEXT,
+        ua_update_date TEXT)''');
+
     print("Database was created!");
   }
 
@@ -404,6 +416,15 @@ class DatabaseHelper {
     Batch batch = client.batch();
     for (var i = 0; i < bank.length; i++) {
       batch.insert('tb_bank_list', bank[i]);
+    }
+    await batch.commit(noResult: true);
+  }
+
+  Future insertAccessList(access) async {
+    var client = await db;
+    Batch batch = client.batch();
+    for (var i = 0; i < access.length; i++) {
+      batch.insert('user_access', access[i]);
     }
     await batch.commit(noResult: true);
   }
@@ -758,6 +779,11 @@ class DatabaseHelper {
     return client.rawQuery('SELECT * FROM tb_bank_list', null);
   }
 
+  Future ofFetchUserAccess() async {
+    var client = await db;
+    return client.rawQuery('SELECT * FROM user_access', null);
+  }
+
   Future ofSalesTypeList() async {
     var client = await db;
     return client.rawQuery('SELECT * FROM tb_sales_type', null);
@@ -899,6 +925,13 @@ class DatabaseHelper {
         null);
   }
 
+  Future ofFetchForUploadCustomer(code) async {
+    var client = await db;
+    return client.rawQuery(
+        'SELECT tran_no FROM tb_tran_head WHERE account_code ="$code" AND tran_stat ="Pending" AND sm_upload !="TRUE" ORDER BY date_req ASC',
+        null);
+  }
+
   Future ofFetchUpdateLog(type) async {
     var client = await db;
     return client.rawQuery(
@@ -928,14 +961,14 @@ class DatabaseHelper {
   Future getOrderedItems(tranNo) async {
     var client = await db;
     return client.rawQuery(
-        'SELECT * FROM tb_tran_line WHERE tran_no ="$tranNo" ORDER BY doc_no ASC',
+        'SELECT * FROM tb_tran_line WHERE tran_no ="$tranNo" ORDER BY item_desc ASC',
         null);
   }
 
   Future getTransactionLine(tranNo) async {
     var client = await db;
     return client.rawQuery(
-        'SELECT * FROM tb_tran_line WHERE tran_no ="$tranNo" ORDER BY doc_no ASC',
+        'SELECT * FROM tb_tran_line WHERE tran_no ="$tranNo" ORDER BY item_desc ASC',
         null);
   }
 
@@ -1147,6 +1180,13 @@ class DatabaseHelper {
     var client = await db;
     return client.rawQuery(
         'SELECT * FROM customer_master_files WHERE salesman_code = "$code" ORDER BY doc_no ASC LIMIT 100',
+        null);
+  }
+
+  Future viewMultiCustomersList(String code) async {
+    var client = await db;
+    return client.rawQuery(
+        'SELECT * FROM customer_master_files WHERE account_code = "$code" ORDER BY doc_no ASC LIMIT 100',
         null);
   }
 
@@ -1575,6 +1615,111 @@ class DatabaseHelper {
   Future getBankListonLine(BuildContext context) async {
     try {
       var url = Uri.parse(UrlAddress.url + '/getbanklist');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
+  }
+
+  Future getUserAccessonLine(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getuseraccesslist');
       final response = await retry(() =>
           http.post(url, headers: {"Accept": "Application/json"}, body: {}));
       if (response.statusCode == 200) {
@@ -2887,7 +3032,7 @@ class DatabaseHelper {
   Future getOrders(tran) async {
     var client = await db;
     return client.rawQuery(
-        'SELECT *,(req_qty - del_qty) as outstock,(del_qty) as temp_qty FROM tb_tran_line WHERE tran_no ="$tran" ORDER BY doc_no ASC',
+        'SELECT *,(req_qty - del_qty) as outstock,(del_qty) as temp_qty FROM tb_tran_line WHERE tran_no ="$tran" ORDER BY item_desc ASC',
         null);
   }
 

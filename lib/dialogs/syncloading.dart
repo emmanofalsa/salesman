@@ -27,6 +27,7 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
   List customerList = [];
   List discountList = [];
   List bankList = [];
+  List accessList = [];
   List salesmanList = [];
   List tranHeadList = [];
   List returnList = [];
@@ -298,6 +299,27 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
           await db.insertTable(bankList, 'tb_bank_list');
           await db.updateTable('tb_bank_list', date.toString());
           print('Bank List Created');
+          // updateUserAccess();
+          updateCustomerList();
+        }
+      }
+    });
+  }
+
+  updateUserAccess() async {
+    Provider.of<SyncCaption>(context, listen: false)
+        .changeCap('Updating User Access...');
+    var rsp1 = await db.getUserAccessonLine(context);
+    accessList = rsp1;
+    int y = 1;
+    accessList.forEach((element) async {
+      if (y < accessList.length) {
+        y++;
+        if (y == accessList.length) {
+          await db.deleteTable('user_access');
+          await db.insertTable(accessList, 'user_access');
+          await db.updateTable('tb_bank_list', date.toString());
+          print('User Access Created');
           updateCustomerList();
         }
       }

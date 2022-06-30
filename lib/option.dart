@@ -43,6 +43,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
   List categList = [];
   List salestypeList = [];
   List bankList = [];
+  List accessList = [];
 
   String? imageData;
 
@@ -713,6 +714,40 @@ class _MyOptionPageState extends State<MyOptionPage> {
             GlobalVariables.tableProcessing = 'Bank List Created';
             setState(() {
               GlobalVariables.statusCaption = 'Bank List Created';
+            });
+            // loadUserAccess();
+            loadItemMasterfile();
+          }
+        }
+      });
+    } else {
+      loadItemMasterfile();
+      // loadUserAccess();
+    }
+  }
+
+  //BANK LIST
+  loadUserAccess() async {
+    // context.read().changeCap('Creating Bank List...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Creating User Access...');
+    var ulist = await db.ofFetchUserAccess();
+    accessList = ulist;
+    // print(bankList);
+    if (accessList.isEmpty) {
+      var resp = await db.getUserAccessonLine(context);
+      accessList = resp;
+      int x = 1;
+      accessList.forEach((element) async {
+        if (x < accessList.length) {
+          x++;
+          if (x == accessList.length) {
+            await db.insertAccessList(accessList);
+            await db.addUpdateTable('user_access', 'CUSTOMER', date.toString());
+            print('User Access Created');
+            GlobalVariables.tableProcessing = 'User Access Created';
+            setState(() {
+              GlobalVariables.statusCaption = 'User Access Created';
             });
             loadItemMasterfile();
           }

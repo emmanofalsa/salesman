@@ -101,10 +101,16 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
       _list.forEach((element) async {
         var getImg = await db.getItemImg(element['itm_code'], element['uom']);
         _imgpath = json.decode(json.encode(getImg));
+
         setState(() {
           itmCat = "";
           categ = false;
-          element['image'] = _imgpath[0]['image'];
+          if (_imgpath.isEmpty) {
+            element['image'] = '';
+          } else {
+            element['image'] = _imgpath[0]['image'];
+          }
+
           itemNo =
               (int.parse(itemNo) + int.parse(element['req_qty'])).toString();
         });
@@ -195,7 +201,11 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
             categ = false;
             itmCat = "";
             itmCat2 = "";
-            element['image'] = _imgpath[0]['image'];
+            if (_imgpath.isEmpty) {
+              element['image'] = '';
+            } else {
+              element['image'] = _imgpath[0]['image'];
+            }
             i = int.parse(element['qty']);
             lineTot = i * double.parse(element['amt']);
             orderTotal = (double.parse(orderTotal) + lineTot).toString();
@@ -236,7 +246,11 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
             categ = false;
             itmCat = "";
             itmCat2 = "";
-            element['image'] = _imgpath[0]['image'];
+            if (_imgpath.isEmpty) {
+              element['image'] = '';
+            } else {
+              element['image'] = _imgpath[0]['image'];
+            }
             i = int.parse(element['qty']);
             lineTot = i * double.parse(element['amt']);
             orderTotal = (double.parse(orderTotal) + lineTot).toString();
@@ -265,7 +279,11 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
             categ = false;
             itmCat = "";
             itmCat2 = "";
-            element['image'] = _imgpath[0]['image'];
+            if (_imgpath.isEmpty) {
+              element['image'] = '';
+            } else {
+              element['image'] = _imgpath[0]['image'];
+            }
             i = int.parse(element['qty']);
             lineTot = i * double.parse(element['amt']);
             orderTotal = (double.parse(orderTotal) + lineTot).toString();
@@ -282,7 +300,11 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
             categ = false;
             itmCat = "";
             itmCat2 = "";
-            element['image'] = _imgpath[0]['image'];
+            if (_imgpath.isEmpty) {
+              element['image'] = '';
+            } else {
+              element['image'] = _imgpath[0]['image'];
+            }
             x = int.parse(element['qty']);
             lineTot2 = x * double.parse(element['amt']);
             orderTotal2 = (double.parse(orderTotal2) + lineTot2).toString();
@@ -359,7 +381,11 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
         setState(() {
           itmCat = "";
           categ = false;
-          element['image'] = _imgpath[0]['image'];
+          if (_imgpath.isEmpty) {
+            element['image'] = '';
+          } else {
+            element['image'] = _imgpath[0]['image'];
+          }
         });
         if (int.parse(element['del_qty']) > 0) {
           _list.add(element);
@@ -1020,12 +1046,18 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                         itemQty =
                             (int.parse(_unservedList[index]['qty'])).toString();
                       }
-                      if (itmCat != _unservedList[index]['itm_cat']) {
-                        categ = false;
-                        itmCat = _unservedList[index]['itm_cat'];
-                      } else {
-                        categ = true;
+                      // if (itmCat != _unservedList[index]['itm_cat']) {
+                      //   categ = false;
+                      //   itmCat = _unservedList[index]['itm_cat'];
+                      // } else {
+                      //   categ = true;
+                      // }
+                      if (_unservedList[index]['itm_cat'] == null ||
+                          _unservedList[index]['itm_cat'] == 'null' ||
+                          _unservedList[index]['itm_cat'] == '') {
+                        _unservedList[index]['itm_cat'] = '';
                       }
+                      categ = true;
                       if (_unservedList[index]['image'] == '') {
                         noImage = true;
                       } else {
@@ -1436,12 +1468,18 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                         itemQty =
                             (int.parse(_returnedList[index]['qty'])).toString();
                       }
-                      if (itmCat != _returnedList[index]['itm_cat']) {
-                        categ = false;
-                        itmCat = _returnedList[index]['itm_cat'];
-                      } else {
-                        categ = true;
+                      // if (itmCat != _returnedList[index]['itm_cat']) {
+                      //   categ = false;
+                      //   itmCat = _returnedList[index]['itm_cat'];
+                      // } else {
+                      //   categ = true;
+                      // }
+                      if (_returnedList[index]['itm_cat'] == null ||
+                          _returnedList[index]['itm_cat'] == 'null' ||
+                          _returnedList[index]['itm_cat'] == '') {
+                        _returnedList[index]['itm_cat'] = '';
                       }
+                      categ = true;
                       if (_returnedList[index]['image'] == '') {
                         noImage = true;
                       } else {
@@ -1851,12 +1889,18 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                         itemQty =
                             (int.parse(_unservedList[index]['qty'])).toString();
                       }
-                      if (itmCat != _unservedList[index]['itm_cat']) {
-                        categ = false;
-                        itmCat = _unservedList[index]['itm_cat'];
-                      } else {
-                        categ = true;
+                      // if (itmCat != _unservedList[index]['itm_cat']) {
+                      //   categ = false;
+                      //   itmCat = _unservedList[index]['itm_cat'];
+                      // } else {
+                      //   categ = true;
+                      // }
+                      if (_unservedList[index]['itm_cat'] == null ||
+                          _unservedList[index]['itm_cat'] == 'null' ||
+                          _unservedList[index]['itm_cat'] == '') {
+                        _unservedList[index]['itm_cat'] = '';
                       }
+                      categ = true;
                       if (_unservedList[index]['image'] == '') {
                         noImage = true;
                       } else {
@@ -2252,12 +2296,18 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
                         itemQty =
                             (int.parse(_returnedList[index]['qty'])).toString();
                       }
-                      if (itmCat2 != _returnedList[index]['itm_cat']) {
-                        categ2 = false;
-                        itmCat = _returnedList[index]['itm_cat'];
-                      } else {
-                        categ2 = true;
+                      // if (itmCat2 != _returnedList[index]['itm_cat']) {
+                      //   categ2 = false;
+                      //   itmCat = _returnedList[index]['itm_cat'];
+                      // } else {
+                      //   categ2 = true;
+                      // }
+                      if (_returnedList[index]['itm_cat'] == null ||
+                          _returnedList[index]['itm_cat'] == 'null' ||
+                          _returnedList[index]['itm_cat'] == '') {
+                        _returnedList[index]['itm_cat'] = '';
                       }
+                      categ2 = true;
                       if (_returnedList[index]['image'] == '') {
                         noImage = true;
                       } else {
@@ -2731,12 +2781,18 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
             if (!reqPressed && !remPressed) {
               itemQty = _list[index]['del_qty'];
             }
-            if (itmCat != _list[index]['itm_cat']) {
-              categ = false;
-              itmCat = _list[index]['itm_cat'];
-            } else {
-              categ = true;
+            // if (itmCat != _list[index]['itm_cat']) {
+            //   categ = false;
+            //   itmCat = _list[index]['itm_cat'];
+            // } else {
+            //   categ = true;
+            // }
+            if (_list[index]['itm_cat'] == null ||
+                _list[index]['itm_cat'] == 'null' ||
+                _list[index]['itm_cat'] == '') {
+              _list[index]['itm_cat'] = '';
             }
+            categ = true;
             // print(_list[index]['image']);
             if (_list[index]['image'] == '') {
               noImage = true;

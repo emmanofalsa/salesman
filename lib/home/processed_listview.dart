@@ -102,6 +102,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
       setState(() {
         _list.clear();
         _remlist.forEach((element) async {
+          // print(element);
           var getImg = await db.getItemImg(element['itm_code'], element['uom']);
           _imgpath = json.decode(json.encode(getImg));
           // _imgpath = getImg;
@@ -156,6 +157,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
       });
     } else {
       var getO = await db.getOrders(UserData.trans);
+
       if (!mounted) return;
       setState(() {
         _list = getO;
@@ -740,13 +742,19 @@ class _ProcessedListViewState extends State<ProcessedListView> {
             appBool = false;
           }
           // itmQty = _list[index]['req_qty'];
-          if (itmCat != _list[index]['itm_cat']) {
-            categ = false;
-            itmCat = _list[index]['itm_cat'];
-            // print(itmCat);
-          } else {
-            categ = true;
+          // if (itmCat != _list[index]['itm_cat']) {
+          //   categ = false;
+          //   itmCat = _list[index]['itm_cat'];
+          //   // print(itmCat);
+          // } else {
+          //   categ = true;
+          // }
+          if (_list[index]['itm_cat'] == null ||
+              _list[index]['itm_cat'] == 'null' ||
+              _list[index]['itm_cat'] == '') {
+            _list[index]['itm_cat'] = '';
           }
+          categ = true;
 
           if (_list[index]['image'] == '' || _list[index]['image'] == null) {
             // print(_list[index]['image']);
