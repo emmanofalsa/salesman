@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:salesman/db/db_helper.dart';
-import 'package:salesman/home/recieve_dialog.dart';
+import 'package:salesman/home/receive_dialog.dart';
 import 'package:salesman/home/return_dialog.dart';
 // import 'package:salesman/menu.dart';
 import 'package:salesman/session/session_timer.dart';

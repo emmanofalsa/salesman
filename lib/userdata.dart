@@ -182,6 +182,8 @@ class SalesData {
   static String? overallSalesType;
   static String? smTotalCaption;
   static String? custTotalCaption;
+  static String? itmTotalCaption;
+  static String? itemSalesType;
 }
 
 class NetworkData {

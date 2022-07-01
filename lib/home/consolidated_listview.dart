@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:salesman/db/db_helper.dart';
 // import 'package:salesman/home.dart';
-import 'package:salesman/home/recievecons_dialog.dart';
+import 'package:salesman/home/receivecons_dialog.dart';
 // import 'package:salesman/menu.dart';
 import 'package:salesman/userdata.dart';
 import 'package:intl/intl.dart';
