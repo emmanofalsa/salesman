@@ -3857,6 +3857,9 @@ class DatabaseHelper {
   /// HEPE DE VIAJE SALES
   /////////
   ///
+
+  ///
+  ///SALES REPORT API
   Future getSalesType() async {
     var client = await db;
     return client.rawQuery(
@@ -3930,6 +3933,108 @@ class DatabaseHelper {
           null);
     }
   }
+
+  Future getCustomerDailySales(id, type) async {
+    String date = DateFormat("yyyy-MM-dd").format(new DateTime.now());
+    String stat = 'Delivered';
+    var client = await db;
+    if (type == "OVERALL") {
+      return client.rawQuery(
+          'SELECT tb_tran_head.store_name,SUM(tb_tran_head.tot_del_amt) as total FROM tb_tran_head WHERE hepe_code ="$id" AND tran_stat="$stat" AND strftime("%Y-%m-%d", date_del)="$date" GROUP BY account_code',
+          null);
+    } else {
+      return client.rawQuery(
+          'SELECT tb_tran_head.store_name,SUM(tb_tran_head.tot_del_amt) as total FROM tb_tran_head WHERE hepe_code ="$id" AND tran_stat="$stat" AND pmeth_type="$type" AND (strftime("%Y-%m-%d", date_del)="$date") GROUP BY account_code',
+          null);
+    }
+  }
+
+  Future getCustomerWeeklySales(id, type, d1, d2) async {
+    String weekstart = DateFormat("yyyy-MM-dd").format(d1);
+    String weekend = DateFormat("yyyy-MM-dd").format(d2);
+    String stat = 'Delivered';
+    var client = await db;
+
+    if (type == "OVERALL") {
+      return client.rawQuery(
+          'SELECT tb_tran_head.store_name,SUM(tb_tran_head.tot_del_amt) as total FROM tb_tran_head WHERE hepe_code ="$id" AND tran_stat="$stat" AND strftime("%Y-%m-%d", date_del)>="$weekstart" AND strftime("%Y-%m-%d", date_del)<="$weekend" GROUP BY account_code',
+          null);
+    } else {
+      return client.rawQuery(
+          'SELECT tb_tran_head.store_name,SUM(tb_tran_head.tot_del_amt) as total FROM tb_tran_head WHERE hepe_code ="$id" AND tran_stat="$stat" AND pmeth_type="$type" AND (strftime("%Y-%m-%d", date_del)>="$weekstart") AND (strftime("%Y-%m-%d", date_del)<="$weekend") GROUP BY account_code',
+          null);
+    }
+  }
+
+  Future getCustomerMonthlySales(id, type) async {
+    String date = DateFormat("yyyy-MM").format(new DateTime.now());
+    String stat = 'Delivered';
+    var client = await db;
+    if (type == "OVERALL") {
+      return client.rawQuery(
+          'SELECT tb_tran_head.store_name,SUM(tb_tran_head.tot_del_amt) as total FROM tb_tran_head WHERE hepe_code ="$id" AND tran_stat="$stat" AND strftime("%Y-%m", date_del)="$date" GROUP BY account_code',
+          null);
+    } else {
+      return client.rawQuery(
+          'SELECT tb_tran_head.store_name,SUM(tb_tran_head.tot_del_amt) as total FROM tb_tran_head WHERE hepe_code ="$id" AND tran_stat="$stat" AND pmeth_type="$type" AND (strftime("%Y-%m", date_del)="$date") GROUP BY account_code',
+          null);
+    }
+  }
+
+  Future getCustomerYearlySales(id, type) async {
+    String date = DateFormat("yyyy").format(new DateTime.now());
+    String stat = 'Delivered';
+    var client = await db;
+    if (type == "OVERALL") {
+      return client.rawQuery(
+          'SELECT tb_tran_head.store_name,SUM(tb_tran_head.tot_del_amt) as total FROM tb_tran_head WHERE hepe_code ="$id" AND tran_stat="$stat" AND strftime("%Y", date_del)="$date" GROUP BY account_code',
+          null);
+    } else {
+      return client.rawQuery(
+          'SELECT tb_tran_head.store_name,SUM(tb_tran_head.tot_del_amt) as total FROM tb_tran_head WHERE hepe_code ="$id" AND tran_stat="$stat" AND pmeth_type="$type" AND (strftime("%Y", date_del)="$date") GROUP BY account_code',
+          null);
+    }
+  }
+
+  Future getItemDailySales() async {
+    String date = DateFormat("yyyy-MM-dd").format(new DateTime.now());
+    String stat = 'Delivered';
+    var client = await db;
+    return client.rawQuery(
+        'SELECT *,item_masterfiles.image,SUM(tb_tran_line.del_qty) as total FROM tb_tran_line INNER JOIN item_masterfiles on item_masterfiles.itemcode = tb_tran_line.itm_code AND item_masterfiles.uom =  tb_tran_line.uom WHERE tb_tran_line.itm_stat="$stat" AND strftime("%Y-%m-%d", tb_tran_line.date_del)="$date" GROUP BY tb_tran_line.itm_code',
+        null);
+  }
+
+  Future getItemWeeklySales(d1, d2) async {
+    String weekstart = DateFormat("yyyy-MM-dd").format(d1);
+    String weekend = DateFormat("yyyy-MM-dd").format(d2);
+    String stat = 'Delivered';
+    var client = await db;
+
+    return client.rawQuery(
+        'SELECT *,item_masterfiles.image,SUM(tb_tran_line.del_qty) as total FROM tb_tran_line INNER JOIN item_masterfiles on item_masterfiles.itemcode = tb_tran_line.itm_code AND item_masterfiles.uom =  tb_tran_line.uom WHERE tb_tran_line.itm_stat="$stat" AND strftime("%Y-%m-%d", tb_tran_line.date_del)>="$weekstart" AND strftime("%Y-%m-%d", tb_tran_line.date_del)<="$weekend" GROUP BY tb_tran_line.itm_code',
+        null);
+  }
+
+  Future getItemMonthlySales() async {
+    String date = DateFormat("yyyy-MM").format(new DateTime.now());
+    String stat = 'Delivered';
+    var client = await db;
+    return client.rawQuery(
+        'SELECT *,item_masterfiles.image,SUM(tb_tran_line.del_qty) as total FROM tb_tran_line INNER JOIN item_masterfiles on item_masterfiles.itemcode = tb_tran_line.itm_code AND item_masterfiles.uom =  tb_tran_line.uom WHERE tb_tran_line.itm_stat="$stat" AND strftime("%Y-%m", tb_tran_line.date_del)="$date" GROUP BY tb_tran_line.itm_code',
+        null);
+  }
+
+  Future getItemYearlySales() async {
+    String date = DateFormat("yyyy").format(new DateTime.now());
+    String stat = 'Delivered';
+    var client = await db;
+    return client.rawQuery(
+        'SELECT *,item_masterfiles.image,SUM(tb_tran_line.del_qty) as total FROM tb_tran_line INNER JOIN item_masterfiles on item_masterfiles.itemcode = tb_tran_line.itm_code AND item_masterfiles.uom =  tb_tran_line.uom WHERE tb_tran_line.itm_stat="$stat" AND strftime("%Y", tb_tran_line.date_del)="$date" GROUP BY tb_tran_line.itm_code',
+        null);
+  }
+
+  //////////////////////////////////////////////
 
   Future getConsolidatedApprovedRequestHead() async {
     String stat = 'Approved';

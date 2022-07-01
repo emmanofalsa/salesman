@@ -3,7 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:salesman/providers/sync_cap.dart';
 import 'package:salesman/providers/upload_count.dart';
-import 'package:salesman/providers/upload_length.dart';
+// import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/userdata.dart';
 
 class UploadingSpinkit extends StatefulWidget {

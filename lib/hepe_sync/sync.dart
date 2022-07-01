@@ -213,8 +213,17 @@ class _SyncHepeState extends State<SyncHepe> {
           //       tmpretLine);
           //   print('SECOND ATTEMPT PRINT UPDATE TRAN SA SERVER RSP: ' + rsp.toString());
           // }
+          print(rsp);
+          if (rsp == null) {
+            setState(() {
+              print('NISUD SA NULL');
+              uploadError = true;
+              z++;
+            });
+          }
 
           if (rsp != 0 || rsp != null) {
+            // if (rsp != null) {
             var changestatrsp = await db.updateTranUploadStatHEPE(rsp);
             print('CHANGESTAT RETURN: ' + changestatrsp.toString());
             setState(() {
@@ -236,24 +245,29 @@ class _SyncHepeState extends State<SyncHepe> {
             });
             Provider.of<UploadCount>(context, listen: false).setTotal(z);
             Provider.of<UploadLength>(context, listen: false).minusTotal(1);
-          } else {
-            uploadError = true;
-            // print('RSP NA NULL :' + element['tran_no'].toString());
-            // var rsp = await db.updateDeliveredTranStat(
-            //     context,
-            //     element['tran_no'],
-            //     element['tran_stat'],
-            //     element['itm_del_count'],
-            //     element['tot_del_amt'],
-            //     element['date_del'],
-            //     element['hepe_code'],
-            //     element['pmeth_type'],
-            //     element['signature'],
-            //     tmpTranLine,
-            //     tmpretLine);
-            // print('SECOND ATTEMPT PRINT UPDATE TRAN SA SERVER RSP: ' +
-            //     rsp.toString());
           }
+          // else {
+          //   setState(() {
+          //     print('NISUD SA NULL');
+          //     uploadError = true;
+          //     z++;
+          //   });
+          // print('RSP NA NULL :' + element['tran_no'].toString());
+          // var rsp = await db.updateDeliveredTranStat(
+          //     context,
+          //     element['tran_no'],
+          //     element['tran_stat'],
+          //     element['itm_del_count'],
+          //     element['tot_del_amt'],
+          //     element['date_del'],
+          //     element['hepe_code'],
+          //     element['pmeth_type'],
+          //     element['signature'],
+          //     tmpTranLine,
+          //     tmpretLine);
+          // print('SECOND ATTEMPT PRINT UPDATE TRAN SA SERVER RSP: ' +
+          //     rsp.toString());
+          // }
         }
         //KUNG NA RETURN TBOOK TRANSACTION
         if (element['tran_stat'] == 'Returned' &&

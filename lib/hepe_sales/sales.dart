@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:salesman/db/db_helper.dart';
+// import 'package:salesman/url/url.dart';
 import 'package:salesman/userdata.dart';
+import 'package:salesman/variables/assets.dart';
 import 'package:salesman/variables/colors.dart';
 
 class HepeSalesPage extends StatefulWidget {
@@ -19,18 +24,23 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
   String enddate = "";
   String weekstart = "";
   String weekend = "";
+  String imgPath = "";
   double categHeight = 0.00;
 
   final db = DatabaseHelper();
 
-  bool _expandedSalesman = false;
+  bool noImage = false;
+  bool viewSpinkit = false;
   bool _expandedCustomer = false;
   bool _expandedItems = false;
+  bool _expandedUnsItems = false;
+  bool _expandedRetItems = false;
   List _sList = [];
   List _salesList = [];
   List _wsalesList = [];
   List _msalesList = [];
   List _ysalesList = [];
+  List _imgpath = [];
   // List _smList = [];
   List _smsalelist = [];
   List _totlist = [];
@@ -65,7 +75,14 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
 
   void initState() {
     super.initState();
+    loadImagePath();
     loadSales();
+  }
+
+  loadImagePath() async {
+    var documentDirectory = await getApplicationDocumentsDirectory();
+    var firstPath = documentDirectory.path + '/';
+    imgPath = firstPath;
   }
 
   loadSales() async {
@@ -76,15 +93,160 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
     loadJefeMonthlySales();
     loadJefeYearlySales();
     //CUSTOMER
-    // loadCustomerDailySales();
-    // loadCustomerWeeklySales();
-    // loadCustomerMonthlySales();
-    // loadCustomerYearlysales();
+    loadCustomerDailySales();
+    loadCustomerWeeklySales();
+    loadCustomerMonthlySales();
+    loadCustomerYearlysales();
     //ITEMS
-    // loadItemDailySales();
-    // loadItemWeeklySales();
-    // loadItemMonthlySales();
-    // loadItemYearlySales();
+    loadItemDailySales();
+    loadItemWeeklySales();
+    loadItemMonthlySales();
+    loadItemYearlySales();
+  }
+
+  loadItemYearlySales() async {
+    _itmYsalesList.clear();
+    _sList.clear();
+    var getYsales = await db.getItemYearlySales();
+    _sList = getYsales;
+    _sList.forEach((element) {
+      if (!mounted) return;
+      setState(() {
+        _itmYsalesList.add(element);
+      });
+    });
+    // print(_itmYsalesList);
+    itemSalesTypeChanged();
+    viewSpinkit = false;
+  }
+
+  loadItemMonthlySales() async {
+    _itmMsalesList.clear();
+    _sList.clear();
+    var getMsales = await db.getItemMonthlySales();
+    _sList = getMsales;
+    _sList.forEach((element) {
+      if (!mounted) return;
+      setState(() {
+        _itmMsalesList.add(element);
+      });
+    });
+    // print(_itmMsalesList);
+    itemSalesTypeChanged();
+    viewSpinkit = false;
+  }
+
+  loadItemWeeklySales() async {
+    DateTime dateTime = DateTime.now();
+    DateTime d1 = dateTime.subtract(Duration(days: dateTime.weekday - 1));
+    DateTime d2 =
+        dateTime.add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+    _itmWsalesList.clear();
+    _sList.clear();
+    var getWsales = await db.getItemWeeklySales(d1, d2);
+    _sList = getWsales;
+    _sList.forEach((element) {
+      if (!mounted) return;
+      setState(() {
+        _itmWsalesList.add(element);
+      });
+    });
+    // print(_itmWsalesList);
+    itemSalesTypeChanged();
+    viewSpinkit = false;
+  }
+
+  loadItemDailySales() async {
+    _itmDsalesList.clear();
+    _sList.clear();
+    var getDsales = await db.getItemDailySales();
+    _sList = json.decode(json.encode(getDsales));
+    // print(_sList);
+    _sList.forEach((element) async {
+      if (!mounted) return;
+      setState(() {
+        _itmDsalesList.add(element);
+      });
+    });
+    itemSalesTypeChanged();
+    viewSpinkit = false;
+  }
+
+  loadCustomerYearlysales() async {
+    _custYsalesList.clear();
+    _sList.clear();
+    var getDsales = await db.getCustomerYearlySales(
+        UserData.id, SalesData.overallSalesType.toString().toUpperCase());
+    _sList = json.decode(json.encode(getDsales));
+    _sList.forEach((element) {
+      if (!mounted) return;
+      setState(() {
+        _custYsalesList.add(element);
+      });
+    });
+    // viewSpinkit = false;
+  }
+
+  loadCustomerMonthlySales() async {
+    _custMsalesList.clear();
+    _sList.clear();
+    var getDsales = await db.getCustomerMonthlySales(
+        UserData.id, SalesData.overallSalesType.toString().toUpperCase());
+    _sList = json.decode(json.encode(getDsales));
+    // print(_sList);
+    _sList.forEach((element) {
+      if (!mounted) return;
+      setState(() {
+        _custMsalesList.add(element);
+      });
+    });
+    // viewSpinkit = false;
+  }
+
+  loadCustomerWeeklySales() async {
+    DateTime dateTime = DateTime.now();
+    DateTime d1 = dateTime.subtract(Duration(days: dateTime.weekday - 1));
+    DateTime d2 =
+        dateTime.add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+    _custWsalesList.clear();
+    _sList.clear();
+    var getDsales = await db.getCustomerWeeklySales(UserData.id,
+        SalesData.overallSalesType.toString().toUpperCase(), d1, d2);
+    // _sList = getDsales;
+    _sList = json.decode(json.encode(getDsales));
+
+    _sList.forEach((element) {
+      if (!mounted) return;
+      setState(() {
+        _custWsalesList.add(element);
+      });
+
+      // startdate = element['week_start'];
+      // enddate = element['week_end'];
+      // DateTime s = DateTime.parse(startdate);
+      // DateTime e = DateTime.parse(enddate);
+      // weekstart = DateFormat("MMM dd ").format(s);
+      // weekend = DateFormat("MMM dd yyyy ").format(e);
+    });
+
+    // viewSpinkit = false;
+  }
+
+  loadCustomerDailySales() async {
+    _custDsalesList.clear();
+    _sList.clear();
+    var getDsales = await db.getCustomerDailySales(
+        UserData.id, SalesData.overallSalesType.toString().toUpperCase());
+    // _sList = getDsales;
+    _sList = json.decode(json.encode(getDsales));
+    _sList.forEach((element) {
+      if (!mounted) return;
+      setState(() {
+        _custDsalesList.add(element);
+      });
+    });
+    customerSalesTypeChanged();
+    // viewSpinkit = false;
   }
 
   loadJefeYearlySales() async {
@@ -122,7 +284,7 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
       if (element['total'] == null) {
         element['total'] = "0.00";
       }
-      print(element);
+      // print(element);
       setState(() {
         totalSales = totalSales + double.parse(element['total'].toString());
         _msalesList.add(element);
@@ -150,7 +312,7 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
     // _sList = getDsales;
     _sList = json.decode(json.encode(getDsales));
 
-    print(_sList);
+    // print(_sList);
     _sList.forEach((element) {
       if (element['total'] == null) {
         element['total'] = "0.00";
@@ -175,7 +337,7 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
     // _sList = getDsales;
     _sList = json.decode(json.encode(getDsales));
     _sList.forEach((element) {
-      print(element);
+      // print(element);
       if (element['total'] == null) {
         element['total'] = "0.00";
       }
@@ -188,6 +350,201 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
     SalesData.salesToday = totalSales.toStringAsFixed(2);
     // viewSpinkit = false;
     jefeSalesTypeChanged();
+  }
+
+  itemSalesTypeChanged() {
+    if (SalesData.itemSalesType == 'Today') {
+      _itemsalelist.clear();
+      List nums = [];
+      _itmDsalesList.forEach((element) {
+        setState(() {
+          nums.add(element);
+        });
+      });
+
+      nums.sort((b, a) => int.parse(a['total'].toString())
+          .compareTo(int.parse(b['total'].toString())));
+      nums.forEach((element) {
+        setState(() {
+          String desc = element['item_desc'];
+          _itmDsalesList.forEach((element) {
+            setState(() {
+              if (desc == (element['item_desc'])) {
+                _itemsalelist.add(element);
+              }
+            });
+          });
+        });
+      });
+    }
+    if (SalesData.itemSalesType == 'Week') {
+      _itemsalelist.clear();
+      List nums = [];
+      _itmWsalesList.forEach((element) {
+        setState(() {
+          nums.add(element);
+        });
+      });
+      // nums.sort((b, a) => a['total'].compareTo(b['total']));
+      nums.sort((b, a) => int.parse(a['total'].toString())
+          .compareTo(int.parse(b['total'].toString())));
+      nums.forEach((element) {
+        setState(() {
+          String desc = element['item_desc'];
+          _itmWsalesList.forEach((element) {
+            setState(() {
+              if (desc == (element['item_desc'])) {
+                _itemsalelist.add(element);
+              }
+            });
+          });
+        });
+      });
+    }
+    if (SalesData.itemSalesType == 'Month') {
+      _itemsalelist.clear();
+      List nums = [];
+      _itmMsalesList.forEach((element) {
+        setState(() {
+          nums.add(element);
+        });
+      });
+      // nums.sort((b, a) => a['total'].compareTo(b['total']));
+      nums.sort((b, a) => int.parse(a['total'].toString())
+          .compareTo(int.parse(b['total'].toString())));
+      nums.forEach((element) {
+        setState(() {
+          String desc = element['item_desc'];
+          _itmMsalesList.forEach((element) {
+            setState(() {
+              if (desc == (element['item_desc'])) {
+                _itemsalelist.add(element);
+              }
+            });
+          });
+        });
+      });
+    }
+    if (SalesData.itemSalesType == 'Year') {
+      _itemsalelist.clear();
+      List nums = [];
+      _itmYsalesList.forEach((element) {
+        setState(() {
+          nums.add(element);
+        });
+      });
+      // nums.sort((b, a) => a['total'].compareTo(b['total']));
+      nums.sort((b, a) => int.parse(a['total'].toString())
+          .compareTo(int.parse(b['total'].toString())));
+      nums.forEach((element) {
+        setState(() {
+          String desc = element['item_desc'];
+          _itmYsalesList.forEach((element) {
+            setState(() {
+              if (desc == (element['item_desc'])) {
+                _itemsalelist.add(element);
+              }
+            });
+          });
+        });
+      });
+    }
+  }
+
+  customerSalesTypeChanged() {
+    if (SalesData.customerSalesType == 'Today') {
+      _custsalelist.clear();
+      List<double> nums = [];
+      _custDsalesList.forEach((element) {
+        setState(() {
+          nums.add(double.parse(element['total'].toString()));
+        });
+      });
+
+      nums.sort((b, a) => a.compareTo(b));
+      nums.forEach((element) {
+        setState(() {
+          double amt = element;
+          _custDsalesList.forEach((element) {
+            setState(() {
+              if (amt == double.parse(element['total'].toString())) {
+                _custsalelist.add(element);
+              }
+            });
+          });
+        });
+      });
+    }
+    if (SalesData.customerSalesType == 'Week') {
+      _custsalelist.clear();
+      List<double> nums = [];
+      _custWsalesList.forEach((element) {
+        setState(() {
+          nums.add(double.parse(element['total'].toString()));
+        });
+      });
+      nums.sort((b, a) => a.compareTo(b));
+      nums.forEach((element) {
+        setState(() {
+          double amt = element;
+          _custWsalesList.forEach((element) {
+            setState(() {
+              if (amt == double.parse(element['total'].toString())) {
+                _custsalelist.add(element);
+              }
+            });
+          });
+        });
+      });
+    }
+    if (SalesData.customerSalesType == 'Month') {
+      _custsalelist.clear();
+      List<double> nums = [];
+      _custMsalesList.forEach((element) {
+        setState(() {
+          nums.add(double.parse(element['total'].toString()));
+        });
+      });
+      nums.sort((b, a) => a.compareTo(b));
+      // print(nums);
+      nums.forEach((element) {
+        setState(() {
+          double amt = element;
+          // print(amt);
+          _custMsalesList.forEach((element) {
+            setState(() {
+              if (amt == double.parse(element['total'].toString())) {
+                _custsalelist.add(element);
+              }
+            });
+          });
+        });
+      });
+    }
+    if (SalesData.customerSalesType == 'Year') {
+      _custsalelist.clear();
+      List<double> nums = [];
+      _custYsalesList.forEach((element) {
+        setState(() {
+          nums.add(double.parse(element['total'].toString()));
+        });
+      });
+      nums.sort((b, a) => a.compareTo(b));
+      // print(nums);
+      nums.forEach((element) {
+        setState(() {
+          double amt = element;
+          // print(amt);
+          _custYsalesList.forEach((element) {
+            setState(() {
+              if (amt == double.parse(element['total'].toString())) {
+                _custsalelist.add(element);
+              }
+            });
+          });
+        });
+      });
+    }
   }
 
   jefeSalesTypeChanged() {
@@ -312,13 +669,13 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
     if (!mounted) return;
     setState(() {
       _totlist = getT;
-      print(_totlist);
+      // print(_totlist);
       SalesData.overallSalesType = 'Overall';
     });
   }
 
   overAllSalesTypeChanged() {
-    print(SalesData.overallSalesType);
+    // print(SalesData.overallSalesType);
     if (SalesData.overallSalesType == 'Overall') {
       setState(() {
         _smsalelist.clear();
@@ -334,15 +691,15 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
         loadJefeMonthlySales();
         loadJefeYearlySales();
         //     //CUSTOMER
-        //     loadCustomerDailySales();
-        //     loadCustomerWeeklySales();
-        //     loadCustomerMonthlySales();
-        //     loadCustomerYearlysales();
+        loadCustomerDailySales();
+        loadCustomerWeeklySales();
+        loadCustomerMonthlySales();
+        loadCustomerYearlysales();
         //     //ITEM
-        //     loadItemDailySales();
-        //     loadItemWeeklySales();
-        //     loadItemMonthlySales();
-        //     loadItemYearlySales();
+        loadItemDailySales();
+        loadItemWeeklySales();
+        loadItemMonthlySales();
+        loadItemYearlySales();
       });
     }
     if (SalesData.overallSalesType == 'Cash') {
@@ -360,15 +717,15 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
       loadJefeMonthlySales();
       loadJefeYearlySales();
       // //FOR CUSTOMER
-      // loadCustomerDailySales();
-      // loadCustomerWeeklySales();
-      // loadCustomerMonthlySales();
-      // loadCustomerYearlysales();
+      loadCustomerDailySales();
+      loadCustomerWeeklySales();
+      loadCustomerMonthlySales();
+      loadCustomerYearlysales();
       // //ITEM
-      // loadItemDailySales();
-      // loadItemWeeklySales();
-      // loadItemMonthlySales();
-      // loadItemYearlySales();
+      loadItemDailySales();
+      loadItemWeeklySales();
+      loadItemMonthlySales();
+      loadItemYearlySales();
       // });
     }
     if (SalesData.overallSalesType == 'Cheque') {
@@ -386,15 +743,15 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
         loadJefeMonthlySales();
         loadJefeYearlySales();
         //FOR CUSTOMER
-        // loadCustomerDailySales();
-        // loadCustomerWeeklySales();
-        // loadCustomerMonthlySales();
-        // loadCustomerYearlysales();
+        loadCustomerDailySales();
+        loadCustomerWeeklySales();
+        loadCustomerMonthlySales();
+        loadCustomerYearlysales();
         //ITEM
-        // loadItemDailySales();
-        // loadItemWeeklySales();
-        // loadItemMonthlySales();
-        // loadItemYearlySales();
+        loadItemDailySales();
+        loadItemWeeklySales();
+        loadItemMonthlySales();
+        loadItemYearlySales();
       });
     }
   }
@@ -426,7 +783,627 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           buildSalesCont(),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ExpansionPanelList(
+                    expandedHeaderPadding: EdgeInsets.all(1),
+                    animationDuration: Duration(milliseconds: 300),
+                    expansionCallback: (int i, bool isExpanded) {
+                      _expandedCustomer = !_expandedCustomer;
+                      setState(() {});
+                    },
+                    children: [
+                      ExpansionPanel(
+                        canTapOnHeader: true,
+                        backgroundColor: Colors.deepOrange[100],
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Row(
+                              children: [
+                                Icon(Icons.groups),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Customer',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        body: Column(
+                          children: [
+                            buildCustomerCont(),
+                          ],
+                        ),
+                        isExpanded: _expandedCustomer,
+                      ),
+                    ],
+                  ),
+                  ExpansionPanelList(
+                    expandedHeaderPadding: EdgeInsets.all(1),
+                    animationDuration: Duration(milliseconds: 300),
+                    expansionCallback: (int i, bool isExpanded) {
+                      _expandedItems = !_expandedItems;
+                      setState(() {});
+                    },
+                    children: [
+                      ExpansionPanel(
+                        canTapOnHeader: true,
+                        backgroundColor: Colors.blue[100],
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Row(
+                              children: [
+                                Icon(Icons.shopping_basket),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Items',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        body: Column(
+                          children: [
+                            buildItemCont(),
+                          ],
+                        ),
+                        isExpanded: _expandedItems,
+                      ),
+                    ],
+                  ),
+                  ExpansionPanelList(
+                    expandedHeaderPadding: EdgeInsets.all(1),
+                    animationDuration: Duration(milliseconds: 300),
+                    expansionCallback: (int i, bool isExpanded) {
+                      _expandedUnsItems = !_expandedUnsItems;
+                      setState(() {});
+                    },
+                    children: [
+                      ExpansionPanel(
+                        canTapOnHeader: true,
+                        backgroundColor: Colors.yellowAccent[100],
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Row(
+                              children: [
+                                Icon(Icons.shopping_basket),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Unserved Items',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        body: Column(
+                          children: [
+                            // buildItemCont(),
+                          ],
+                        ),
+                        isExpanded: _expandedUnsItems,
+                      ),
+                    ],
+                  ),
+                  ExpansionPanelList(
+                    expandedHeaderPadding: EdgeInsets.all(1),
+                    animationDuration: Duration(milliseconds: 300),
+                    expansionCallback: (int i, bool isExpanded) {
+                      _expandedRetItems = !_expandedRetItems;
+                      setState(() {});
+                    },
+                    children: [
+                      ExpansionPanel(
+                        canTapOnHeader: true,
+                        backgroundColor: Colors.black12,
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return ListTile(
+                            title: Row(
+                              children: [
+                                Icon(Icons.shopping_basket),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Returned Items',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        body: Column(
+                          children: [
+                            // buildItemCont(),
+                          ],
+                        ),
+                        isExpanded: _expandedRetItems,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
+      ),
+    );
+  }
+
+  Container buildItemCont() {
+    if (viewSpinkit == true) {
+      return Container(
+        height: MediaQuery.of(context).size.height / 2,
+        width: MediaQuery.of(context).size.width,
+        child: Center(
+          child: SpinKitFadingCircle(
+            color: ColorsTheme.mainColor,
+            size: 50,
+          ),
+        ),
+      );
+    }
+    return Container(
+      height: MediaQuery.of(context).size.height / 2,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          color: Colors.blue[50],
+          border: Border.all(color: Colors.blue.shade50),
+          borderRadius: BorderRadius.circular(0)),
+      child: SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width - 2,
+                      // color: Colors.grey,
+                      child: Stack(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, top: 15),
+                                child: Container(
+                                  child: Text(
+                                    'Top Items',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(left: 20, right: 0),
+                                // width: MediaQuery.of(context).size.width / 2,
+                                // color: Colors.grey,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    DropdownButtonHideUnderline(
+                                      child: ButtonTheme(
+                                        alignedDropdown: true,
+                                        child: DropdownButton<String>(
+                                          value: SalesData.itemSalesType,
+                                          items: _itmtypelist.map((item) {
+                                            return new DropdownMenuItem(
+                                              child: new Text(
+                                                item['type'],
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              value: item['type'].toString(),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              SalesData.itemSalesType =
+                                                  newValue;
+                                              itemSalesTypeChanged();
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      width: MediaQuery.of(context).size.width - 2,
+                      height: 30,
+                      color: Colors.blue[200],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              'Item Description',
+                              style: TextStyle(),
+                            ),
+                          ),
+                          Text(
+                            SalesData.itmTotalCaption.toString(),
+                            style: TextStyle(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width - 2,
+                      height: MediaQuery.of(context).size.height / 2 - 80,
+                      padding: EdgeInsets.only(bottom: 5),
+                      // color: Colors.transparent,
+                      color: Colors.blue[50],
+                      child: ListView.builder(
+                          padding: const EdgeInsets.only(top: 1),
+                          itemCount: _itemsalelist.length,
+                          itemBuilder: (context, index) {
+                            if (_itemsalelist[index]['image'] == '' ||
+                                _itemsalelist[index]['image'] == null) {
+                              noImage = true;
+                            } else {
+                              noImage = false;
+                            }
+                            return Container(
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    width:
+                                        MediaQuery.of(context).size.width - 35,
+                                    height: 80,
+                                    color: Colors.transparent,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            Container(
+                                              width: 5,
+                                              height: 80,
+                                              color: ColorsTheme.mainColor,
+                                            ),
+                                            if (GlobalVariables.viewImg)
+                                              Container(
+                                                height: 80,
+                                                margin: EdgeInsets.only(
+                                                    left: 3, top: 0),
+                                                width: 75,
+                                                color: Colors.white,
+                                                child: noImage
+                                                    ? Image(
+                                                        image: AssetsValues
+                                                            .noImageImg)
+                                                    : Image.file(File(imgPath +
+                                                        _itemsalelist[index]
+                                                            ['image'])),
+                                              ),
+                                            if (!GlobalVariables.viewImg)
+                                              Container(
+                                                  margin: EdgeInsets.only(
+                                                      left: 3, top: 3),
+                                                  width: 75,
+                                                  color: Colors.white,
+                                                  child: Image(
+                                                      image: AssetsValues
+                                                          .noImageImg)),
+                                            Container(
+                                              color: Colors.white,
+                                              height: 80,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  150,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    _itemsalelist[index]
+                                                        ['item_desc'],
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                    // overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: <Widget>[
+                                            Container(
+                                              height: 80,
+                                              width: 40,
+                                              color: Colors.white,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    _itemsalelist[index]
+                                                            ['total']
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container buildCustomerCont() {
+    return Container(
+      height: MediaQuery.of(context).size.height / 3,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          color: Colors.deepOrange[50],
+          border: Border.all(color: Colors.deepOrange.shade50),
+          borderRadius: BorderRadius.circular(0)),
+      child: SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width - 2,
+                      // color: Colors.grey,
+                      child: Stack(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, top: 15),
+                                child: Container(
+                                  child: Text(
+                                    'Top Customer',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(left: 20, right: 0),
+                                // width: MediaQuery.of(context).size.width / 2,
+                                // color: Colors.grey,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    DropdownButtonHideUnderline(
+                                      child: ButtonTheme(
+                                        alignedDropdown: true,
+                                        child: DropdownButton<String>(
+                                          value: SalesData.customerSalesType,
+                                          items: _custtypelist.map((item) {
+                                            return new DropdownMenuItem(
+                                              child: new Text(
+                                                item['type'],
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              value: item['type'].toString(),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              SalesData.customerSalesType =
+                                                  newValue;
+                                              customerSalesTypeChanged();
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      width: MediaQuery.of(context).size.width - 2,
+                      height: 30,
+                      color: Colors.deepOrange[200],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              'Name',
+                              style: TextStyle(),
+                            ),
+                          ),
+                          Container(
+                            // width: 110,
+                            child: Text(
+                              SalesData.custTotalCaption.toString(),
+                              style: TextStyle(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width - 2,
+                      height: MediaQuery.of(context).size.height / 3 - 80,
+                      color: Colors.transparent,
+                      child: ListView.builder(
+                          padding: const EdgeInsets.only(top: 1),
+                          itemCount: _custsalelist.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    width:
+                                        MediaQuery.of(context).size.width - 35,
+                                    height: 50,
+                                    color: Colors.transparent,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            Container(
+                                              // color: Colors.grey,
+                                              // height: ,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  150,
+                                              child: Text(
+                                                _custsalelist[index]
+                                                    ['store_name'],
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                // overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: <Widget>[
+                                            Text(
+                                              formatCurrencyAmt.format(
+                                                  double.parse(
+                                                      _custsalelist[index]
+                                                              ['total']
+                                                          .toString())),
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
