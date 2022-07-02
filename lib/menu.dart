@@ -10,6 +10,7 @@ import 'package:salesman/hepe_sync/sync.dart';
 import 'package:salesman/providers/delivery_items.dart';
 import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/session/session_timer.dart';
+import 'package:salesman/url/url.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/colors.dart';
 import 'home.dart';
@@ -46,6 +47,7 @@ class _MenuState extends State<Menu> {
   );
 
   bool viewPol = true;
+  bool testEnv = false;
 
   Timer? timer;
 
@@ -64,6 +66,7 @@ class _MenuState extends State<Menu> {
       timer = Timer.periodic(Duration(seconds: 1), (Timer t) => checkStatus());
     }
     super.initState();
+    checkAppEnvironment();
     OrderData.visible = true;
     _currentIndex = GlobalVariables.menuKey;
     GlobalVariables.dataPrivacyNoticeScrollBottom = false;
@@ -71,6 +74,19 @@ class _MenuState extends State<Menu> {
     _initializeTimer();
     // viewPolicy();
     getAppVersion();
+    checkAppEnvironment();
+  }
+
+  checkAppEnvironment() {
+    if (UrlAddress.url == 'https://distapp1.alturush.com/') {
+      setState(() {
+        testEnv = true;
+      });
+    } else {
+      setState(() {
+        testEnv = false;
+      });
+    }
   }
 
   getAppVersion() async {
@@ -253,7 +269,7 @@ class _MenuState extends State<Menu> {
         child: Scaffold(
           body: _children[_currentIndex],
           bottomNavigationBar: BottomNavigationBar(
-            fixedColor: ColorsTheme.mainColor,
+            fixedColor: testEnv ? Colors.blue : ColorsTheme.mainColor,
             onTap: onTappedBar,
             type: BottomNavigationBarType.fixed,
             currentIndex:

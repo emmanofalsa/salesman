@@ -40,7 +40,7 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
   List _wsalesList = [];
   List _msalesList = [];
   List _ysalesList = [];
-  List _imgpath = [];
+  // List _imgpath = [];
   // List _smList = [];
   List _smsalelist = [];
   List _totlist = [];

@@ -5,6 +5,7 @@ import 'package:salesman/data_privacy_notice/privacy_notice.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/salesman_sync/sync.dart';
 import 'package:salesman/session/session_timer.dart';
+import 'package:salesman/url/url.dart';
 import 'package:salesman/userdata.dart';
 import 'package:salesman/customer/customer.dart';
 import 'package:salesman/history/history.dart';
@@ -37,6 +38,7 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
 
   bool viewPol = true;
   bool stopTimer = false;
+  bool testEnv = false;
 
   final orangeColor = ColorsTheme.mainColor;
   final yellowColor = Colors.amber;
@@ -62,6 +64,7 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
       timer2 = Timer.periodic(Duration(seconds: 1), (Timer t) => checkStatus());
     }
     super.initState();
+    checkAppEnvironment();
     _currentIndex = GlobalVariables.menuKey;
     GlobalVariables.dataPrivacyNoticeScrollBottom = false;
     checkStatus();
@@ -69,6 +72,18 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
     _initializeTimer();
     // initPlatformState();
     getAppVersion();
+  }
+
+  checkAppEnvironment() {
+    if (UrlAddress.url == 'https://distapp1.alturush.com/') {
+      setState(() {
+        testEnv = true;
+      });
+    } else {
+      setState(() {
+        testEnv = false;
+      });
+    }
   }
 
   getAppVersion() async {

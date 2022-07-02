@@ -12,7 +12,7 @@ import 'package:salesman/dialogs/syncsuccess.dart';
 import 'package:salesman/dialogs/uploadloading.dart';
 import 'package:salesman/providers/sync_cap.dart';
 import 'package:salesman/providers/upload_count.dart';
-import 'package:salesman/providers/upload_length.dart';
+// import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/session/session_timer.dart';
 // import 'package:salesman/url/url.dart';
 // import 'package:http/http.dart' as http;
