@@ -981,7 +981,8 @@ class DatabaseHelper {
   Future getReturnedLine(tranNo) async {
     var client = await db;
     return client.rawQuery(
-        'SELECT * FROM tb_unserved_items WHERE tran_no ="$tranNo"', null);
+        'SELECT * FROM tb_unserved_items WHERE tran_no ="$tranNo" AND itm_stat="Returned" ',
+        null);
   }
 
   Future getItemImg(itmcode, uom) async {

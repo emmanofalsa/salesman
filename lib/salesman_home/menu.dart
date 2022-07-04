@@ -329,7 +329,7 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
         child: Scaffold(
           body: _children[_currentIndex],
           bottomNavigationBar: BottomNavigationBar(
-            fixedColor: ColorsTheme.mainColor,
+            fixedColor: testEnv ? Colors.blue : ColorsTheme.mainColor,
             onTap: onTappedBar,
             type: BottomNavigationBarType.fixed,
             currentIndex:
