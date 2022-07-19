@@ -35,7 +35,7 @@ class _CustomerState extends State<Customer> {
     print(UserAccess.multiSalesman);
     if (UserAccess.multiSalesman == false) {
       if (_custList.isEmpty) {
-        var getC = await db.viewCustomersList(UserData.id!);
+        var getC = await db.viewAllCustomers();
         _custList = getC;
 
         setState(() {
@@ -146,7 +146,7 @@ class _CustomerState extends State<Customer> {
   }
 
   searchCustomers() async {
-    var getC = await db.customerSearch(UserData.id, _searchController);
+    var getC = await db.customerSearch(_searchController);
     setState(() {
       _custList = getC;
     });

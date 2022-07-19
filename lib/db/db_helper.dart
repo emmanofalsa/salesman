@@ -18,9 +18,9 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._();
   static Database? _database;
   //TEST VERSION
-  static final _dbName = 'DISTAPPDBB81.db';
+  // static final _dbName = 'DISTAPPDBB81.db';
   //LIVE VERSION
-  // static final _dbName = 'DISTRIBUTION2.db';
+  static final _dbName = 'DISTRIBUTION2.db';
   static final _dbVersion = 1;
 
   String globaldate =
@@ -1056,10 +1056,10 @@ class DatabaseHelper {
         null);
   }
 
-  Future customerSearch(code, text) async {
+  Future customerSearch(text) async {
     var client = await db;
     return client.rawQuery(
-        "SELECT * FROM customer_master_files WHERE location_name LIKE '%$text%' AND salesman_code ='$code'",
+        "SELECT * FROM customer_master_files WHERE location_name LIKE '%$text%'",
         null);
   }
 
@@ -1181,6 +1181,13 @@ class DatabaseHelper {
     var client = await db;
     return client.rawQuery(
         'SELECT * FROM customer_master_files WHERE salesman_code = "$code" ORDER BY doc_no ASC LIMIT 100',
+        null);
+  }
+
+  Future viewAllCustomers() async {
+    var client = await db;
+    return client.rawQuery(
+        'SELECT * FROM customer_master_files ORDER BY doc_no ASC LIMIT 100',
         null);
   }
 

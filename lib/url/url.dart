@@ -17,8 +17,8 @@
 //LOCAL FOR TESTING
 // LIVE URL static String url = 'https://distApp2.alturush.com/';
 class UrlAddress {
-  // static String url = 'https://distApp2.alturush.com/';
-  static String url = 'https://distapp1.alturush.com/';
+  static String url = 'https://distApp2.alturush.com/';
+  // static String url = 'https://distapp1.alturush.com/';
   static String userImg = url + 'img/user/';
   static String itemImg = url + 'img/';
   static String chequeImg = url + 'img/cheque/';
