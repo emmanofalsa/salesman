@@ -166,7 +166,7 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
     //TRAN UPDATE
     Provider.of<SyncCaption>(context, listen: false)
         .changeCap('Updating Transactions...');
-    var thead = await db.getTranHead(context);
+    var thead = await db.getTranHead(context, UserData.id.toString());
     tranHeadList = thead;
     if (tranHeadList.isNotEmpty) {
       int z = 0;

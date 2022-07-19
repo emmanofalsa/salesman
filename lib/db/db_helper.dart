@@ -848,8 +848,11 @@ class DatabaseHelper {
     // String status = 'Delivered';
     var client = await db;
     return client.rawQuery(
-        "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat ='Pending' OR tran_stat ='On-Process' OR tran_stat ='Approved' ORDER BY date_app DESC",
+        "SELECT *,''as newdate FROM tb_tran_head WHERE tran_stat='Approved' ORDER BY date_req ASC",
         null);
+    // return client.rawQuery(
+    //     "SELECT *,''as newdate FROM tb_tran_head WHERE (sm_code ='$code' AND tran_stat ='Pending') OR (sm_code ='$code' AND tran_stat ='On-Process') OR (sm_code ='$code' AND tran_stat ='Approved') ORDER BY date_app DESC",
+    //     null);
   }
 
   Future ofFetchSalesmanCompletedHistory(code) async {
@@ -2364,11 +2367,12 @@ class DatabaseHelper {
     }
   }
 
-  Future getTranHead(BuildContext context) async {
+  Future getTranHead(BuildContext context, String code) async {
     try {
       var url = Uri.parse(UrlAddress.url + '/getalltranhead');
-      final response = await retry(() =>
-          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      final response = await retry(() => http.post(url,
+          headers: {"Accept": "Application/json"},
+          body: {'sm_code': encrypt(code)}));
       if (response.statusCode == 200) {
         var convertedDatatoJson = jsonDecode(decrypt(response.body));
         return convertedDatatoJson;

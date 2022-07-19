@@ -140,10 +140,12 @@ class _HistoryState extends State<History> {
   // }
 
   loadSalesmanOngoingHistory() async {
+    print(UserData.id);
     var getP = await db.ofFetchSalesmanOngoingHistory(UserData.id);
     if (!mounted) return;
     setState(() {
       _toList = json.decode(json.encode(getP));
+      print(_toList);
       viewSpinkit = false;
       if (_toList.isNotEmpty) {
         emptyTranHistory = false;
