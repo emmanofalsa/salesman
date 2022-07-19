@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:salesman/data_privacy_notice/privacy_notice.dart';
 import 'package:salesman/db/db_helper.dart';
+import 'package:salesman/salesman_booked/booked.dart';
 import 'package:salesman/salesman_sync/sync.dart';
 import 'package:salesman/session/session_timer.dart';
 import 'package:salesman/url/url.dart';
@@ -52,7 +53,7 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
   final List<Widget> _children = [
     // Home(),
     Customer(),
-    // SalesmanSales(),
+    SalesmanBooked(),
     History(),
     SyncSalesman(),
     Profile(),
@@ -338,8 +339,9 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
               BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
               // BottomNavigationBarItem(
               //     icon: Icon(Icons.group), label: 'Customer'),
-              // BottomNavigationBarItem(
-              //     icon: Icon(Icons.equalizer), title: Text('Sales')),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.local_grocery_store_rounded),
+                  label: 'Booked'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.history), label: 'History'),
               BottomNavigationBarItem(icon: Icon(Icons.sync), label: 'Sync'),

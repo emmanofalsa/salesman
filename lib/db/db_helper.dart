@@ -847,12 +847,12 @@ class DatabaseHelper {
   Future ofFetchSalesmanOngoingHistory(code) async {
     // String status = 'Delivered';
     var client = await db;
-    return client.rawQuery(
-        "SELECT *,''as newdate FROM tb_tran_head WHERE tran_stat='Approved' ORDER BY date_req ASC",
-        null);
     // return client.rawQuery(
-    //     "SELECT *,''as newdate FROM tb_tran_head WHERE (sm_code ='$code' AND tran_stat ='Pending') OR (sm_code ='$code' AND tran_stat ='On-Process') OR (sm_code ='$code' AND tran_stat ='Approved') ORDER BY date_app DESC",
+    //     "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat='On-Process' OR sm_code ='$code' AND tran_stat='Approved'  ORDER BY date_req ASC",
     //     null);
+    return client.rawQuery(
+        "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat ='Pending' OR sm_code ='$code' AND tran_stat ='On-Process' OR sm_code ='$code' AND tran_stat ='Approved' ORDER BY date_app DESC",
+        null);
   }
 
   Future ofFetchSalesmanCompletedHistory(code) async {
@@ -867,7 +867,7 @@ class DatabaseHelper {
     // String status = 'Delivered';
     var client = await db;
     return client.rawQuery(
-        "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat ='Cancelled' OR tran_stat ='Returned' ORDER BY date_del DESC",
+        "SELECT *,''as newdate FROM tb_tran_head WHERE sm_code ='$code' AND tran_stat ='Cancelled' OR sm_code ='$code' AND tran_stat ='Returned' ORDER BY date_del DESC",
         null);
   }
 
@@ -881,7 +881,7 @@ class DatabaseHelper {
   Future ofFetchHepeOngoingHistory(code) async {
     var client = await db;
     return client.rawQuery(
-        "SELECT *,'' as newdate FROM tb_tran_head WHERE hepe_code ='$code' AND tran_stat ='Pending' OR tran_stat ='On-Process' OR tran_stat ='Approved' ORDER BY date_app DESC",
+        "SELECT *,'' as newdate FROM tb_tran_head WHERE hepe_code ='$code' AND tran_stat ='Pending' OR hepe_code ='$code' AND tran_stat ='On-Process' OR tran_stat ='Approved' ORDER BY date_app DESC",
         null);
   }
 
@@ -896,7 +896,7 @@ class DatabaseHelper {
   Future ofFetchHepeCancelHistory(code) async {
     var client = await db;
     return client.rawQuery(
-        "SELECT *,'' as newdate FROM tb_tran_head WHERE hepe_code ='$code' AND tran_stat ='Cancelled' OR tran_stat ='Returned' ORDER BY date_del DESC",
+        "SELECT *,'' as newdate FROM tb_tran_head WHERE hepe_code ='$code' AND tran_stat ='Cancelled' OR hepe_code ='$code' AND tran_stat ='Returned' ORDER BY date_del DESC",
         null);
   }
 
@@ -1147,14 +1147,41 @@ class DatabaseHelper {
     }
   }
 
-  Future checkSMusername(String username) async {
-    var url = Uri.parse(UrlAddress.url + '/checksm');
+  Future getTodayBooked(id) async {
+    String orderby = "Salesman";
+    String date = DateFormat("yyyy-MM-dd").format(new DateTime.now());
+    var client = await db;
+    return client.rawQuery(
+        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby" AND (strftime("%Y-%m-%d", date_req)="$date") ORDER BY tran_no ASC',
+        null);
+  }
 
-    final response = await http.post(url,
-        headers: {"Accept": "Application/json"},
-        body: {'username': encrypt(username)});
-    var convertedDatatoJson = jsonDecode(decrypt(response.body));
-    return convertedDatatoJson;
+  Future getWeeklyBooked(id, d1, d2) async {
+    String weekstart = DateFormat("yyyy-MM-dd").format(d1);
+    String weekend = DateFormat("yyyy-MM-dd").format(d2);
+    String orderby = 'Salesman';
+    var client = await db;
+    return client.rawQuery(
+        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby" AND (strftime("%Y-%m-%d", date_req)>="$weekstart") AND (strftime("%Y-%m-%d", date_req)<="$weekend")',
+        null);
+  }
+
+  Future getMonthlyBooked(id) async {
+    String date = DateFormat("yyyy-MM").format(new DateTime.now());
+    String orderby = 'Salesman';
+    var client = await db;
+    return client.rawQuery(
+        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby"  AND (strftime("%Y-%m", date_req)="$date")',
+        null);
+  }
+
+  Future getYearlyBooked(id) async {
+    String date = DateFormat("yyyy").format(new DateTime.now());
+    String orderby = 'Salesman';
+    var client = await db;
+    return client.rawQuery(
+        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby"  AND (strftime("%Y", date_req)="$date")',
+        null);
   }
 
   ///
@@ -1170,6 +1197,17 @@ class DatabaseHelper {
   ///
   ///
   ///
+  ///
+  ///
+  Future checkSMusername(String username) async {
+    var url = Uri.parse(UrlAddress.url + '/checksm');
+
+    final response = await http.post(url,
+        headers: {"Accept": "Application/json"},
+        body: {'username': encrypt(username)});
+    var convertedDatatoJson = jsonDecode(decrypt(response.body));
+    return convertedDatatoJson;
+  }
 
   Future checkHEPEusername(String username) async {
     var url = Uri.parse(UrlAddress.url + '/checkhepe');
