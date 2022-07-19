@@ -545,11 +545,17 @@ class _CustomerState extends State<Customer> {
                                           {
                                             CustomerData.creditLimit = "0.00",
                                           },
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return CustomerCart();
-                                        })),
+                                        // Navigator.push(context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) {
+                                        //   return CustomerCart();
+                                        // })),
+                                        Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                type: PageTransitionType
+                                                    .rightToLeft,
+                                                child: CustomerCart())),
                                       },
                                       child: Row(
                                         mainAxisAlignment:

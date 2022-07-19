@@ -18,9 +18,9 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._();
   static Database? _database;
   //TEST VERSION
-  // static final _dbName = 'DISTAPPDBB81.db';
+  static final _dbName = 'DISTAPPDBB82.db';
   //LIVE VERSION
-  static final _dbName = 'DISTRIBUTION2.db';
+  // static final _dbName = 'DISTRIBUTION2.db';
   static final _dbVersion = 1;
 
   String globaldate =
