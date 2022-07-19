@@ -29,6 +29,7 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
   List bankList = [];
   List accessList = [];
   List salesmanList = [];
+  List orderLimitList = [];
   List tranHeadList = [];
   List returnList = [];
   List unsrvlist = [];
@@ -371,6 +372,31 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
               'Completed',
               GlobalVariables.updateBy);
           print('Salesman List Created');
+          updateOrderLimit();
+        }
+      }
+    });
+  }
+
+  updateOrderLimit() async {
+    Provider.of<SyncCaption>(context, listen: false)
+        .changeCap('Updating Order Limit List...');
+    var resp = await db.getOrderLimitonLine(context);
+    orderLimitList = resp;
+    int y = 1;
+    orderLimitList.forEach((element) async {
+      if (y < orderLimitList.length) {
+        y++;
+        if (y == orderLimitList.length) {
+          await db.deleteTable('tbl_order_limit');
+          await db.insertTable(orderLimitList, 'tbl_order_limit');
+          await db.updateTable('tbl_order_limit ', date.toString());
+          await db.addUpdateTableLog(
+              date.toString(),
+              GlobalVariables.updateType,
+              'Completed',
+              GlobalVariables.updateBy);
+          print('Order Limit Created');
           updateJefe();
         }
       }

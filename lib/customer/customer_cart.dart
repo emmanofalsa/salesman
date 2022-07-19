@@ -36,7 +36,7 @@ class _CustomerCartState extends State<CustomerCart> {
   bool noImage = true;
   // List _temp = [];
   List templist = [];
-  // List _limit = [];
+  List _limit = [];
   List tmp = [];
   List rows = [];
 
@@ -96,7 +96,7 @@ class _CustomerCartState extends State<CustomerCart> {
       }
       computeTotal();
       _getColor();
-      loadMinOrder();
+      // loadMinOrder();
     });
     OrderData.setSign = false;
     OrderData.signature = '';
@@ -109,18 +109,25 @@ class _CustomerCartState extends State<CustomerCart> {
       categ = false;
       CartData.itmNo = '0';
       double sum = 0;
-      templist.forEach((element) {
-        setState(() {
-          sum = sum + double.parse(element['item_total']);
-          // print(element['item_total']);
-          CartData.totalAmount = sum.toStringAsFixed(2);
-          // print(CartData.totalAmount);
-          // CartData.itmNo = templist.length.toString();
-          CartData.itmNo =
-              (int.parse(CartData.itmNo) + int.parse(element['item_qty']))
-                  .toString();
+      if (templist.isNotEmpty) {
+        templist.forEach((element) {
+          setState(() {
+            sum = sum + double.parse(element['item_total']);
+            // print(element['item_total']);
+            CartData.totalAmount = sum.toStringAsFixed(2);
+            // print(CartData.totalAmount);
+            // CartData.itmNo = templist.length.toString();
+            CartData.itmNo =
+                (int.parse(CartData.itmNo) + int.parse(element['item_qty']))
+                    .toString();
+          });
         });
-      });
+      } else {
+        setState(() {
+          CartData.totalAmount = '0.00';
+          CartData.itmNo = '0';
+        });
+      }
 
       print('TOTAL AMOUNT:' + CartData.totalAmount);
       // print(CartData.itmNo);
@@ -132,18 +139,20 @@ class _CustomerCartState extends State<CustomerCart> {
         .setTotal(double.parse(CartData.totalAmount));
   }
 
-  loadMinOrder() async {
-    // var gOrderLimit = await db.getOrderLimit();
-    // _limit = gOrderLimit;
-    // if (!mounted) return;
-    // _limit.forEach((element) {
-    //   setState(() {
-    //     GlobalVariables.minOrder = element['min_order_amt'];
-    //   });
-    // });
-    GlobalVariables.minOrder = '1500.00';
-    viewSpinkit = false;
-  }
+  // loadMinOrder() async {
+  //   var gOrderLimit = await db.getOrderLimit();
+  //   _limit = gOrderLimit;
+  //   if (!mounted) return;
+  //   _limit.forEach((element) {
+  //     setState(() {
+  //       GlobalVariables.minOrder = element['min_order_amt'];
+  //       print('MINIMUM ORDER');
+  //       print(GlobalVariables.minOrder);
+  //     });
+  //   });
+  //   // GlobalVariables.minOrder = '1500.00';
+  //   viewSpinkit = false;
+  // }
 
   showSnackBar(context, itmCode, itmDesc, itmUom, itmAmt, itmQty, itmTotal,
       setCateg, itmImg) {

@@ -389,7 +389,7 @@ class _SalesmanLoginPageState extends State<SalesmanLoginPage> {
                     UserData.img = _userdata[0]['img'];
                     UserData.imgPath = imgPath.toString() + _userdata[0]['img'];
                     UserData.username = username;
-
+                    print(_userdata[0]['user_code']);
                     //CHECK FOR DEVICE LOGIN
                     GlobalVariables.deviceData =
                         _deviceData['brand'].toString() +

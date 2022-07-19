@@ -43,6 +43,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
   List categList = [];
   List salestypeList = [];
   List bankList = [];
+  List orderLimitList = [];
   List accessList = [];
 
   String? imageData;
@@ -516,29 +517,29 @@ class _MyOptionPageState extends State<MyOptionPage> {
       if (action == DialogAction.yes) {
         // context.read().changeCap('Updating Salesman List...');
         Provider.of<Caption>(context, listen: false)
-            .changeCap('Updating Salesman List...');
+            .changeCap('Updating Order Limit...');
         String updateType = 'Salesman';
         if (NetworkData.connected == true) {
           // print('NISUD SA CONNECTED!!');
-          var resp = await db.getSalesmanList(context);
+          var resp = await db.getOrderLimitonLine(context);
           if (!mounted) return;
           setState(() {
-            salesmanList = resp;
+            orderLimitList = resp;
             // print(salesmanList);
             int y = 1;
-            salesmanList.forEach((element) async {
-              if (y < salesmanList.length) {
+            orderLimitList.forEach((element) async {
+              if (y < orderLimitList.length) {
                 // print(salesmanList.length);
                 y++;
-                if (y == salesmanList.length) {
-                  await db.deleteTable('salesman_lists');
-                  await db.insertTable(salesmanList, 'salesman_lists');
-                  await db.updateTable('salesman_lists ', date.toString());
+                if (y == orderLimitList.length) {
+                  await db.deleteTable('tbl_order_limit');
+                  await db.insertTable(orderLimitList, 'tbl_order_limit');
+                  await db.updateTable('tbl_order_limit ', date.toString());
                   await db.addUpdateTableLog(date.toString(),
                       'Salesman Masterfile', 'Completed', updateType);
-                  print('Salesman List Updated');
+                  print('Oder Limit Updated');
                   GlobalVariables.updateSpinkit = true;
-                  downloadSalesmanImage();
+                  loadSalesman();
                   // loadHepe();
                 }
               }
@@ -554,6 +555,36 @@ class _MyOptionPageState extends State<MyOptionPage> {
         unloadSpinkit();
       }
     }
+  }
+
+  loadSalesman() async {
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Updating Salesman List...');
+    String updateType = 'Salesman';
+    var resp = await db.getSalesmanList(context);
+    if (!mounted) return;
+    setState(() {
+      salesmanList = resp;
+      // print(salesmanList);
+      int y = 1;
+      salesmanList.forEach((element) async {
+        if (y < salesmanList.length) {
+          // print(salesmanList.length);
+          y++;
+          if (y == salesmanList.length) {
+            await db.deleteTable('salesman_lists');
+            await db.insertTable(salesmanList, 'salesman_lists');
+            await db.updateTable('salesman_lists ', date.toString());
+            await db.addUpdateTableLog(date.toString(), 'Salesman Masterfile',
+                'Completed', updateType);
+            print('Salesman List Updated');
+            GlobalVariables.updateSpinkit = true;
+            downloadSalesmanImage();
+            // loadHepe();
+          }
+        }
+      });
+    });
   }
 
 // //CATEGORY
@@ -715,6 +746,42 @@ class _MyOptionPageState extends State<MyOptionPage> {
             setState(() {
               GlobalVariables.statusCaption = 'Bank List Created';
             });
+            loadOrderLimit();
+            // loadItemMasterfile();
+          }
+        }
+      });
+    } else {
+      loadOrderLimit();
+      // loadItemMasterfile();
+
+    }
+  }
+
+  //BANK LIST
+  loadOrderLimit() async {
+    // context.read().changeCap('Creating Bank List...');
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Creating Oder Limit...');
+    var ollist = await db.ofFetchOrderLimit();
+    orderLimitList = ollist;
+    // print(bankList);
+    if (orderLimitList.isEmpty) {
+      var resp = await db.getOrderLimitonLine(context);
+      orderLimitList = resp;
+      int x = 1;
+      orderLimitList.forEach((element) async {
+        if (x < orderLimitList.length) {
+          x++;
+          if (x == orderLimitList.length) {
+            await db.insertOrderLimitList(orderLimitList);
+            await db.addUpdateTable(
+                'tbl_order_limit', 'SALESMAN', date.toString());
+            print('Order Limit Created');
+            GlobalVariables.tableProcessing = 'Order Limit Created';
+            setState(() {
+              GlobalVariables.statusCaption = 'Order Limit Created';
+            });
             // loadUserAccess();
             loadItemMasterfile();
           }
@@ -726,7 +793,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
     }
   }
 
-  //BANK LIST
   loadUserAccess() async {
     // context.read().changeCap('Creating Bank List...');
     Provider.of<Caption>(context, listen: false)

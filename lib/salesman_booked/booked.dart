@@ -44,6 +44,7 @@ class _SalesmanBookedState extends State<SalesmanBooked> {
     super.initState();
     viewBooked();
     // getWeek();
+    print(UserData.id);
   }
 
   viewBooked() async {
@@ -76,14 +77,14 @@ class _SalesmanBookedState extends State<SalesmanBooked> {
     weekStart = DateFormat("MMM dd ").format(d1);
     weekEnd = DateFormat("MMM dd yyyy ").format(d2);
 
-    todayBooked = '0.00';
+    weeklyBooked = '0.00';
     List _wlist = [];
     var rsp = await db.getWeeklyBooked(UserData.id.toString(), d1, d2);
     _wlist = rsp;
     _wlist.forEach((element) {
       setState(() {
         weeklyBooked =
-            (double.parse(todayBooked) + double.parse(element['tot_amt']))
+            (double.parse(weeklyBooked) + double.parse(element['tot_amt']))
                 .toString();
         wbNo = _wlist.length.toString();
       });

@@ -18,9 +18,9 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._();
   static Database? _database;
   //TEST VERSION
-  static final _dbName = 'DISTAPPDBB82.db';
+  static final _dbName = 'TEST01.db';
   //LIVE VERSION
-  // static final _dbName = 'DISTRIBUTION2.db';
+  // static final _dbName = 'DISTRIBUTION3.db';
   static final _dbVersion = 1;
 
   String globaldate =
@@ -361,6 +361,14 @@ class DatabaseHelper {
         banner_img TEXT,
         img_path TEXT)''');
 
+    ///ORDER LIMIT
+    db.execute('''
+      CREATE TABLE tbl_order_limit (
+        doc_no INTEGER PRIMARY KEY,
+        id TEXT,
+        code TEXT,
+        min_order_amt TEXT)''');
+
     ///BANNER USER ACCESS
     db.execute('''
       CREATE TABLE user_access (
@@ -416,6 +424,15 @@ class DatabaseHelper {
     Batch batch = client.batch();
     for (var i = 0; i < bank.length; i++) {
       batch.insert('tb_bank_list', bank[i]);
+    }
+    await batch.commit(noResult: true);
+  }
+
+  Future insertOrderLimitList(orderLimit) async {
+    var client = await db;
+    Batch batch = client.batch();
+    for (var i = 0; i < orderLimit.length; i++) {
+      batch.insert('tbl_order_limit', orderLimit[i]);
     }
     await batch.commit(noResult: true);
   }
@@ -777,6 +794,11 @@ class DatabaseHelper {
   Future ofFetchBankList() async {
     var client = await db;
     return client.rawQuery('SELECT * FROM tb_bank_list', null);
+  }
+
+  Future ofFetchOrderLimit() async {
+    var client = await db;
+    return client.rawQuery('SELECT * FROM tbl_order_limit', null);
   }
 
   Future ofFetchUserAccess() async {
@@ -1159,6 +1181,7 @@ class DatabaseHelper {
   Future getWeeklyBooked(id, d1, d2) async {
     String weekstart = DateFormat("yyyy-MM-dd").format(d1);
     String weekend = DateFormat("yyyy-MM-dd").format(d2);
+
     String orderby = 'Salesman';
     var client = await db;
     return client.rawQuery(
@@ -1664,6 +1687,111 @@ class DatabaseHelper {
   Future getBankListonLine(BuildContext context) async {
     try {
       var url = Uri.parse(UrlAddress.url + '/getbanklist');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(response.body);
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
+  }
+
+  Future getOrderLimitonLine(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getsmorderlimit');
       final response = await retry(() =>
           http.post(url, headers: {"Accept": "Application/json"}, body: {}));
       if (response.statusCode == 200) {
@@ -4122,14 +4250,14 @@ class DatabaseHelper {
         null);
   }
 
-  Future getOrderLimit() async {
-    // String url = UrlAddress.url + '/gorderlimit';
-    var url = Uri.parse(UrlAddress.url + '/gorderlimit');
-    final response =
-        await http.post(url, headers: {"Accept": "Application/json"}, body: {});
-    var convertedDatatoJson = jsonDecode(response.body);
-    return convertedDatatoJson;
-  }
+  // Future getOrderLimit() async {
+  //   // String url = UrlAddress.url + '/gorderlimit';
+  //   var url = Uri.parse(UrlAddress.url + '/gorderlimit');
+  //   final response =
+  //       await http.post(url, headers: {"Accept": "Application/json"}, body: {});
+  //   var convertedDatatoJson = jsonDecode(response.body);
+  //   return convertedDatatoJson;
+  // }
 
   Future loginUser(String username, String password) async {
     // String url = UrlAddress.url + '/signin';
@@ -4419,5 +4547,11 @@ class DatabaseHelper {
         }));
     var convertedDatatoJson = jsonDecode(decrypt(response.body));
     return convertedDatatoJson;
+  }
+
+  Future getOrderLimit(code) async {
+    var client = await db;
+    return client.rawQuery(
+        'SELECT * FROM tbl_order_limit WHERE code ="$code"', null);
   }
 }

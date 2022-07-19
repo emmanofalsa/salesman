@@ -69,10 +69,17 @@ class _SalesmanMenuState extends State<SalesmanMenu> {
     _currentIndex = GlobalVariables.menuKey;
     GlobalVariables.dataPrivacyNoticeScrollBottom = false;
     checkStatus();
+    loadOrderLimit();
     // viewPolicy();
     _initializeTimer();
     // initPlatformState();
     getAppVersion();
+  }
+
+  loadOrderLimit() async {
+    var rsp = await db.getOrderLimit(UserData.division);
+    GlobalVariables.minOrder = rsp[0]['min_order_amt'];
+    print('MINIMUM ORDER LIMIT: ' + GlobalVariables.minOrder);
   }
 
   checkAppEnvironment() {

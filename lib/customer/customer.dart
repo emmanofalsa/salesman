@@ -545,6 +545,11 @@ class _CustomerState extends State<Customer> {
                                           {
                                             CustomerData.creditLimit = "0.00",
                                           },
+                                        if (CustomerData.paymentType == '')
+                                          {
+                                            CustomerData.paymentType =
+                                                'Cash on Delivery',
+                                          },
                                         // Navigator.push(context,
                                         //     MaterialPageRoute(
                                         //         builder: (context) {
