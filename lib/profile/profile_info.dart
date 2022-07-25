@@ -21,7 +21,7 @@ class ProfileInfo extends StatefulWidget {
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
-  static final String uploadEndpoint = UrlAddress.url + '/uploaduserimg';
+  static final String uploadEndpoint = UrlAddress.url + 'uploaduserimg';
   Future<File>? file;
   String status = "";
   String? base64Image;
@@ -74,6 +74,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
   }
 
   uploadImage() async {
+    print(uploadEndpoint);
     final uri = Uri.parse(uploadEndpoint);
     var request = http.MultipartRequest('POST', uri);
     request.fields['name'] = fileName.toString();
@@ -110,7 +111,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
               'Changes Successfully Saved!', false, 'OK');
           if (action == DialogAction.yes) {
             GlobalVariables.processedPressed = true;
-            GlobalVariables.menuKey = 3;
+            GlobalVariables.menuKey = 4;
             // Navigator.pushReplacement(context,
             //     MaterialPageRoute(builder: (context) {
             //   return SalesmanMenu();

@@ -18,9 +18,9 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._();
   static Database? _database;
   //TEST VERSION
-  static final _dbName = 'TEST01.db';
+  // static final _dbName = 'TEST01.db';
   //LIVE VERSION
-  // static final _dbName = 'DISTRIBUTION3.db';
+  static final _dbName = 'DISTRIBUTION3.db';
   static final _dbVersion = 1;
 
   String globaldate =
@@ -1174,7 +1174,7 @@ class DatabaseHelper {
     String date = DateFormat("yyyy-MM-dd").format(new DateTime.now());
     var client = await db;
     return client.rawQuery(
-        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby" AND (strftime("%Y-%m-%d", date_req)="$date") ORDER BY tran_no ASC',
+        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby" AND (strftime("%Y-%m-%d", date_req)="$date") AND sm_upload ="TRUE" ORDER BY tran_no ASC',
         null);
   }
 
@@ -1185,7 +1185,7 @@ class DatabaseHelper {
     String orderby = 'Salesman';
     var client = await db;
     return client.rawQuery(
-        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby" AND (strftime("%Y-%m-%d", date_req)>="$weekstart") AND (strftime("%Y-%m-%d", date_req)<="$weekend")',
+        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby" AND (strftime("%Y-%m-%d", date_req)>="$weekstart") AND (strftime("%Y-%m-%d", date_req)<="$weekend") AND sm_upload ="TRUE"',
         null);
   }
 
@@ -1194,7 +1194,7 @@ class DatabaseHelper {
     String orderby = 'Salesman';
     var client = await db;
     return client.rawQuery(
-        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby"  AND (strftime("%Y-%m", date_req)="$date")',
+        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby"  AND (strftime("%Y-%m", date_req)="$date") AND sm_upload ="TRUE"',
         null);
   }
 
@@ -1203,7 +1203,7 @@ class DatabaseHelper {
     String orderby = 'Salesman';
     var client = await db;
     return client.rawQuery(
-        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby"  AND (strftime("%Y", date_req)="$date")',
+        'SELECT tran_no,tot_amt FROM tb_tran_head WHERE sm_code ="$id" AND order_by="$orderby"  AND (strftime("%Y", date_req)="$date") AND sm_upload ="TRUE"',
         null);
   }
 

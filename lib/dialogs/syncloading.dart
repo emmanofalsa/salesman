@@ -225,10 +225,10 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
     categList.forEach((element) async {
       if (y < categList.length) {
         // print(element);
-        final imgBase64Str = await networkImageToBase64(
-            UrlAddress.categImg + element['category_image']);
+        // final imgBase64Str = await networkImageToBase64(
+        //     UrlAddress.categImg + element['category_image']);
         // setState(() {
-        element['category_image'] = imgBase64Str;
+        // element['category_image'] = imgBase64Str;
         // });
         y++;
         if (y == categList.length) {

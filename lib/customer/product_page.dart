@@ -37,13 +37,14 @@ class _ProductPageState extends State<ProductPage> {
   loadCateg() async {
     var documentDirectory = await getApplicationDocumentsDirectory();
     var firstPath = documentDirectory.path + '/category/';
+    // print(firstPath);
     // var filePathAndName = documentDirectory.path + '/images/pic.jpg';
     categPath = firstPath;
     var ctg = await db.ofFetchCategList();
     if (!mounted) return;
     setState(() {
       _categlist = ctg;
-      // print()
+      // print(_categlist);
       viewSpinkit = false;
     });
     loadFavorites();
@@ -225,6 +226,7 @@ class _ProductPageState extends State<ProductPage> {
             padding: const EdgeInsets.only(top: 1),
             itemCount: _categlist.length,
             itemBuilder: (BuildContext context, index) {
+              // print(categPath + _categlist[index]['category_image']);
               return GestureDetector(
                 onTap: () => {
                   CartData.setCateg = _categlist[index]['category_name'],

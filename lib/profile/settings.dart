@@ -41,7 +41,7 @@ class _ViewSettingsState extends State<ViewSettings> {
   _initDir() async {
     if (null == _dir) {
       _dir = (await getApplicationDocumentsDirectory()).path;
-      print(_dir);
+      print('DIRECTORY: ' + _dir.toString());
     }
     _images = [];
     // _tempImages = List();

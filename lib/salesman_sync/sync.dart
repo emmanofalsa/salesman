@@ -367,17 +367,26 @@ class _SyncSalesmanState extends State<SyncSalesman> {
                                   InkWell(
                                     onTap: () {
                                       if (!NetworkData.errorMsgShow) {
-                                        print('TRANSACTIONS CLICKED!');
-                                        GlobalVariables.updateType =
-                                            'Transactions';
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) => ConfirmDialog(
-                                                  title: 'Confirmation',
-                                                  description:
-                                                      'Are you sure you want to update transactions?',
-                                                  buttonText: 'Confirm',
-                                                ));
+                                        if (_toList.isNotEmpty) {
+                                          showGlobalSnackbar(
+                                              'Download Error',
+                                              'Please upload your orders before downloading.',
+                                              Colors.grey.shade900,
+                                              Colors.white);
+                                        } else {
+                                          print('TRANSACTIONS CLICKED!');
+                                          GlobalVariables.updateType =
+                                              'Transactions';
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  ConfirmDialog(
+                                                    title: 'Confirmation',
+                                                    description:
+                                                        'Are you sure you want to update transactions?',
+                                                    buttonText: 'Confirm',
+                                                  ));
+                                        }
                                       } else {
                                         showGlobalSnackbar(
                                             'Connectivity',

@@ -205,19 +205,24 @@ class _SalesmanBookedState extends State<SalesmanBooked> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  'Booked Summary for ' +
-                      UserData.id.toString() +
-                      '(' +
-                      UserData.lastname.toString() +
-                      ', ' +
-                      UserData.firstname.toString() +
-                      ')',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
-                  ),
+                Row(
+                  children: [
+                    SizedBox(width: 10),
+                    Text(
+                      'Booked Summary for ' +
+                          UserData.id.toString() +
+                          '(' +
+                          UserData.lastname.toString() +
+                          ', ' +
+                          UserData.firstname.toString() +
+                          ')',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
