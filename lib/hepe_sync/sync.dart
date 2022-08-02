@@ -9,6 +9,7 @@ import 'package:salesman/dialogs/confirm_sync.dart';
 import 'package:salesman/dialogs/confirmupload.dart';
 import 'package:salesman/dialogs/syncsuccess.dart';
 import 'package:salesman/dialogs/uploadloading.dart';
+import 'package:salesman/hepe_sync/sync_option.dart';
 import 'package:salesman/providers/sync_cap.dart';
 import 'package:salesman/providers/upload_count.dart';
 import 'package:salesman/providers/upload_length.dart';
@@ -625,25 +626,16 @@ class _SyncHepeState extends State<SyncHepe> {
                                             'Transactions';
                                         showDialog(
                                             context: context,
-                                            builder: (context) => ConfirmDialog(
-                                                  title: 'Confirmation',
-                                                  description:
-                                                      'Are you sure you want to update transactions?',
-                                                  buttonText: 'Confirm',
-                                                ));
-                                      } else {
+                                            builder: (context) => SyncOption());
                                         // showDialog(
                                         //     context: context,
-                                        //     builder: (context) =>
-                                        //         ErrorDialog(
-                                        //           // iconn: 59137,
-                                        //           title:
-                                        //               'Connection Problem!',
+                                        //     builder: (context) => ConfirmDialog(
+                                        //           title: 'Confirmation',
                                         //           description:
-                                        //               'Connection Problem.' +
-                                        //                   ' Try Again.',
-                                        //           buttonText: 'Okay',
+                                        //               'Are you sure you want to update transactions?',
+                                        //           buttonText: 'Confirm',
                                         //         ));
+                                      } else {
                                         showGlobalSnackbar(
                                             'Connectivity',
                                             'Please connect to internet.',

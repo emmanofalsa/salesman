@@ -71,3 +71,24 @@ final ButtonStyle raisedButtonStyleBlackOut = ElevatedButton.styleFrom(
     side: BorderSide(color: Colors.black, width: 1),
   ),
 );
+
+final ButtonStyle syncButtonDialogStyle = ElevatedButton.styleFrom(
+  onPrimary: Colors.black87,
+  primary: ColorsTheme.mainColor,
+  minimumSize: Size(98, 46),
+  padding: EdgeInsets.symmetric(horizontal: 24),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(5)),
+  ),
+);
+
+final ButtonStyle syncButtonStyleWhite = ElevatedButton.styleFrom(
+  onPrimary: ColorsTheme.mainColor,
+  primary: Colors.white,
+  minimumSize: Size(98, 46),
+  padding: EdgeInsets.symmetric(horizontal: 24),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(5)),
+    side: BorderSide(color: Colors.white, width: 1),
+  ),
+);

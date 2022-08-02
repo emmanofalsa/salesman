@@ -151,6 +151,9 @@ class GlobalVariables {
   static double? spinProgress;
   static bool passExp = false;
   static String? deviceData;
+  static bool fullSync = false;
+  static String? syncStartDate;
+  static String? syncEndDate;
 }
 
 class GlobalTimer {

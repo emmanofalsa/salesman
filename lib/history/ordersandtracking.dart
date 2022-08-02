@@ -96,7 +96,11 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
     var getO = await db.getOrderedItems(UserData.trans);
     itemNo = '0';
     _list = json.decode(json.encode(getO));
+    print(_list);
     if (!mounted) return;
+    if (_list.isEmpty) {
+      viewSpinkit = false;
+    }
     setState(() {
       _list.forEach((element) async {
         var getImg = await db.getItemImg(element['itm_code'], element['uom']);
@@ -114,6 +118,7 @@ class _OrdersAndTrackingState extends State<OrdersAndTracking> {
           itemNo =
               (int.parse(itemNo) + int.parse(element['req_qty'])).toString();
         });
+        print(x);
         if (x == _list.length) {
           viewSpinkit = false;
         } else {

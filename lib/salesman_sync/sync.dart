@@ -374,7 +374,9 @@ class _SyncSalesmanState extends State<SyncSalesman> {
                                               Colors.grey.shade900,
                                               Colors.white);
                                         } else {
+                                          print(UserData.id);
                                           print('TRANSACTIONS CLICKED!');
+
                                           GlobalVariables.updateType =
                                               'Transactions';
                                           showDialog(

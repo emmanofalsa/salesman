@@ -133,10 +133,6 @@ class _ProfileInfoState extends State<ProfileInfo> {
           if (action == DialogAction.yes) {
             GlobalVariables.processedPressed = true;
             GlobalVariables.menuKey = 4;
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) {
-            //   return Menu();
-            // }));
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/hepemenu', (Route<dynamic> route) => false);
           }

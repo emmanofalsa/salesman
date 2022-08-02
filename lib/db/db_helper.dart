@@ -18,7 +18,7 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._();
   static Database? _database;
   //TEST VERSION
-  // static final _dbName = 'TEST01.db';
+  // static final _dbName = 'TEST04.db';
   //LIVE VERSION
   static final _dbName = 'DISTRIBUTION3.db';
   static final _dbVersion = 1;
@@ -988,6 +988,12 @@ class DatabaseHelper {
     return client.rawQuery(
         'SELECT * FROM tb_tran_line WHERE tran_no ="$tranNo" ORDER BY item_desc ASC',
         null);
+  }
+
+  Future getAllLine() async {
+    var client = await db;
+    return client.rawQuery(
+        'SELECT doc_no,tran_no FROM tb_tran_line ORDER BY doc_no DESC', null);
   }
 
   Future getTransactionLine(tranNo) async {
@@ -2539,6 +2545,111 @@ class DatabaseHelper {
       final response = await retry(() => http.post(url,
           headers: {"Accept": "Application/json"},
           body: {'sm_code': encrypt(code)}));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(decrypt(response.body));
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
+  }
+
+  Future getHepeTranHead(BuildContext context) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/gethepetranhead');
+      final response = await retry(() =>
+          http.post(url, headers: {"Accept": "Application/json"}, body: {}));
       if (response.statusCode == 200) {
         var convertedDatatoJson = jsonDecode(decrypt(response.body));
         return convertedDatatoJson;
@@ -4553,5 +4664,446 @@ class DatabaseHelper {
     var client = await db;
     return client.rawQuery(
         'SELECT * FROM tbl_order_limit WHERE code ="$code"', null);
+  }
+
+  ///////////////////////SELECTIVE SYNC TRANSACTIONS
+  Future getReturnedTranListSelective(
+      BuildContext context, String d1, String d2) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getreturnedlistselective');
+      final response = await retry(() => http.post(url, headers: {
+            "Accept": "Application/json"
+          }, body: {
+            'date1': encrypt(d1),
+            'date2': encrypt(d2),
+          }));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(decrypt(response.body));
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
+  }
+
+  Future getUnservedListSelective(
+      BuildContext context, String d1, String d2) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getunservedlistselective');
+      final response = await retry(() => http.post(url, headers: {
+            "Accept": "Application/json"
+          }, body: {
+            'date1': encrypt(d1),
+            'date2': encrypt(d2),
+          }));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(decrypt(response.body));
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
+  }
+
+  Future getTranLineSelective(
+      BuildContext context, String d1, String d2) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getalltranlineselective');
+      final response = await retry(() => http.post(url, headers: {
+            "Accept": "Application/json"
+          }, body: {
+            'date1': encrypt(d1),
+            'date2': encrypt(d2),
+          }));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(decrypt(response.body));
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
+  }
+
+  Future getHepeTranHeadSelective(
+      BuildContext context, String d1, String d2) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/gethepetranheadselective');
+      final response = await retry(() => http.post(url, headers: {
+            "Accept": "Application/json"
+          }, body: {
+            'date1': encrypt(d1),
+            'date2': encrypt(d2),
+          }));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(decrypt(response.body));
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
   }
 }
