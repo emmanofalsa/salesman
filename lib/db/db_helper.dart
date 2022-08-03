@@ -1175,6 +1175,11 @@ class DatabaseHelper {
     }
   }
 
+  Future getAllTran() async {
+    var client = await db;
+    return client.rawQuery('SELECT * FROM tb_tran_head ORDER BY id ASC', null);
+  }
+
   Future getTodayBooked(id) async {
     String orderby = "Salesman";
     String date = DateFormat("yyyy-MM-dd").format(new DateTime.now());

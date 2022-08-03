@@ -58,6 +58,13 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
   List _itmMsalesList = [];
   List _itmYsalesList = [];
 
+  String tSno = '';
+  String wSno = '';
+  String mSno = '';
+  String ySno = '';
+
+  List _temp = [];
+
   final formatCurrencyAmt =
       new NumberFormat.currency(locale: "en_US", symbol: "P");
   final formatCurrencyTot =
@@ -73,8 +80,15 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
   final String month = DateFormat("MMMM yyyy").format(new DateTime.now());
   final String year = DateFormat("yyyy").format(new DateTime.now());
 
+  DateTime sDate = DateTime.now();
+  DateTime eDate = DateTime.now();
+
+  String startDate = "";
+  String endDate = "";
+
   void initState() {
     super.initState();
+    getDataRange();
     loadImagePath();
     loadSales();
   }
@@ -83,6 +97,21 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
     var documentDirectory = await getApplicationDocumentsDirectory();
     var firstPath = documentDirectory.path + '/';
     imgPath = firstPath;
+  }
+
+  getDataRange() async {
+    var rsp = await db.getAllTran();
+    _temp = rsp;
+    // print(_temp);
+    // print(_temp.last);
+    sDate = DateTime.parse(_temp[0]['date_req'].toString());
+    eDate = DateTime.parse(_temp.last['date_req'].toString());
+    setState(() {
+      startDate = DateFormat("MMM. dd, yyyy").format(sDate);
+      endDate = DateFormat("MMM. dd, yyyy").format(eDate);
+    });
+    print(startDate);
+    print(endDate);
   }
 
   loadSales() async {
@@ -933,6 +962,34 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
                       ),
                     ],
                   ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Note:',
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic, fontSize: 12),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Data shown above is base on the date stated in header.',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic, fontSize: 12),
+                            ),
+                            Text(
+                              'If you want to load the accurate data. Kindly perform a full sync.',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -1419,8 +1476,55 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
       child: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
-            Column(
+            Row(
               children: <Widget>[
+                Expanded(
+                  child: Row(
+                    children: [
+                      SizedBox(width: 10),
+                      Text(
+                        'As of ',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        startDate,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        ' to ',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        endDate,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        '.',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Row(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -1525,17 +1629,32 @@ class _HepeSalesPageState extends State<HepeSalesPage> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.end,
                                               children: <Widget>[
-                                                Text(
-                                                  formatCurrencyAmt
-                                                      .format(double.parse(
-                                                          SalesData.salesToday
-                                                              .toString()))
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 24,
-                                                  ),
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      formatCurrencyAmt
+                                                          .format(double.parse(
+                                                              SalesData
+                                                                  .salesToday
+                                                                  .toString()))
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 24,
+                                                      ),
+                                                    ),
+                                                    // Text(
+                                                    //   tSno + ' Order(s)',
+                                                    //   style: TextStyle(
+                                                    //     color: Colors.white,
+                                                    //     fontWeight:
+                                                    //         FontWeight.w400,
+                                                    //     fontSize: 14,
+                                                    //   ),
+                                                    // )
+                                                  ],
                                                 ),
                                               ],
                                             ),

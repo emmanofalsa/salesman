@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 class AppData {
   static String appName = 'E-COMMERCE(My NETgosyo App)';
@@ -152,8 +153,11 @@ class GlobalVariables {
   static bool passExp = false;
   static String? deviceData;
   static bool fullSync = false;
-  static String? syncStartDate;
-  static String? syncEndDate;
+  // static String? syncStartDate;
+  // static String? syncEndDate;
+  static String syncStartDate = DateFormat("yyyy-MM-dd")
+      .format(DateTime.now().subtract(Duration(days: 15)));
+  static String syncEndDate = DateFormat("yyyy-MM-dd").format(DateTime.now());
 }
 
 class GlobalTimer {

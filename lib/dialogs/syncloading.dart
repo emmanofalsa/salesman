@@ -44,9 +44,11 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
     animationController = new AnimationController(
         vsync: this, duration: const Duration(seconds: 1));
     if (GlobalVariables.updateType == 'Transactions') {
-      if (!GlobalVariables.fullSync) {
+      if (GlobalVariables.fullSync == true) {
+        print('NISUD SA FULL SYNC');
         updateTransactions();
       } else {
+        print('NISUD SA SELECTIVE');
         updateSelectiveTransactions();
       }
     }
@@ -211,7 +213,10 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
   ///
   updateSelectiveTransactions() async {
     //RETURNED TRAN LIST
+
     print('Updating Selective Transactions');
+    print(GlobalVariables.syncStartDate);
+    print(GlobalVariables.syncEndDate);
     Provider.of<SyncCaption>(context, listen: false)
         .changeCap('Updating Returned List...');
     var retlist = await db.getReturnedTranListSelective(

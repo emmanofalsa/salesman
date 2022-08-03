@@ -25,6 +25,14 @@ class _SalesmanBookedState extends State<SalesmanBooked> {
   String weekStart = "";
   String weekEnd = "";
 
+  String startDate = "";
+  String endDate = "";
+
+  DateTime sDate = DateTime.now();
+  DateTime eDate = DateTime.now();
+
+  List _temp = [];
+
   final db = DatabaseHelper();
 
   final String today =
@@ -44,6 +52,7 @@ class _SalesmanBookedState extends State<SalesmanBooked> {
     super.initState();
     viewBooked();
     // getWeek();
+    getDataRange();
     print(UserData.id);
   }
 
@@ -52,6 +61,21 @@ class _SalesmanBookedState extends State<SalesmanBooked> {
     getWeeklyBooked();
     getMonthlyBooked();
     getYearlyBooked();
+  }
+
+  getDataRange() async {
+    var rsp = await db.getAllTran();
+    _temp = rsp;
+    print(_temp[0]['date_req'].toString());
+    print(_temp.last['date_req'].toString());
+    sDate = DateTime.parse(_temp[0]['date_req'].toString());
+    eDate = DateTime.parse(_temp.last['date_req'].toString());
+    setState(() {
+      startDate = DateFormat("MMM. dd, yyyy").format(sDate);
+      endDate = DateFormat("MMM. dd, yyyy").format(eDate);
+    });
+    print(startDate);
+    print(endDate);
   }
 
   getTodayBooked() async {
@@ -185,6 +209,33 @@ class _SalesmanBookedState extends State<SalesmanBooked> {
                 Expanded(child: yearCont()),
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Note:',
+                    style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Data shown above is base on the date stated in header.',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, fontSize: 12),
+                      ),
+                      Text(
+                        'If you want to load the accurate data. Kindly perform a full sync.',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -193,7 +244,7 @@ class _SalesmanBookedState extends State<SalesmanBooked> {
 
   Container headerCont() => Container(
         margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-        height: 30,
+        height: 50,
         // width: MediaQuery.of(context).size.width / 2 - 30,
         decoration: BoxDecoration(
             color: Colors.grey[300],
@@ -219,6 +270,52 @@ class _SalesmanBookedState extends State<SalesmanBooked> {
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    SizedBox(width: 10),
+                    Text(
+                      'As of ',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      startDate,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      ' to ',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      endDate,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      '.',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
                         fontSize: 12,
                       ),
                     ),
