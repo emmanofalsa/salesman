@@ -12,6 +12,7 @@ import 'package:salesman/dialogs/syncsuccess.dart';
 import 'package:salesman/dialogs/uploadloading.dart';
 import 'package:salesman/providers/sync_cap.dart';
 import 'package:salesman/providers/upload_count.dart';
+import 'package:salesman/salesman_sync/sync_option.dart';
 // import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/session/session_timer.dart';
 // import 'package:salesman/url/url.dart';
@@ -379,15 +380,22 @@ class _SyncSalesmanState extends State<SyncSalesman> {
 
                                           GlobalVariables.updateType =
                                               'Transactions';
+                                          print('TRANSACTIONS CLICKED!');
+                                          GlobalVariables.updateType =
+                                              'Transactions';
                                           showDialog(
                                               context: context,
                                               builder: (context) =>
-                                                  ConfirmDialog(
-                                                    title: 'Confirmation',
-                                                    description:
-                                                        'Are you sure you want to update transactions?',
-                                                    buttonText: 'Confirm',
-                                                  ));
+                                                  SyncOption());
+                                          // showDialog(
+                                          //     context: context,
+                                          //     builder: (context) =>
+                                          //         ConfirmDialog(
+                                          //           title: 'Confirmation',
+                                          //           description:
+                                          //               'Are you sure you want to update transactions?',
+                                          //           buttonText: 'Confirm',
+                                          //         ));
                                         }
                                       } else {
                                         showGlobalSnackbar(

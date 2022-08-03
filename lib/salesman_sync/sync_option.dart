@@ -47,7 +47,7 @@ class _SyncOptionState extends State<SyncOption> {
     // startDate = DateTime.now();
     DateTime? dt = await showDatePicker(
       context: context,
-      initialDate: endDate,
+      initialDate: startDate,
       firstDate: DateTime(DateTime.now().year - 5),
       lastDate: DateTime(DateTime.now().year + 5),
     );

@@ -1090,7 +1090,7 @@ class DatabaseHelper {
   Future customerSearch(text) async {
     var client = await db;
     return client.rawQuery(
-        "SELECT * FROM customer_master_files WHERE location_name LIKE '%$text%'",
+        "SELECT * FROM customer_master_files WHERE location_name LIKE '%$text%' AND status ='1'",
         null);
   }
 
@@ -1257,14 +1257,14 @@ class DatabaseHelper {
   Future viewAllCustomers() async {
     var client = await db;
     return client.rawQuery(
-        'SELECT * FROM customer_master_files ORDER BY doc_no ASC LIMIT 100',
+        "SELECT * FROM customer_master_files WHERE status ='1' ORDER BY doc_no ASC LIMIT 100",
         null);
   }
 
   Future viewMultiCustomersList(String code) async {
     var client = await db;
     return client.rawQuery(
-        'SELECT * FROM customer_master_files WHERE account_code = "$code" ORDER BY doc_no ASC LIMIT 100',
+        "SELECT * FROM customer_master_files WHERE account_code = '$code' AND status='1' ORDER BY doc_no ASC LIMIT 100",
         null);
   }
 
@@ -3289,7 +3289,7 @@ class DatabaseHelper {
   Future getApprovedOrders() async {
     var client = await db;
     return client.rawQuery(
-        'SELECT * FROM tb_tran_head WHERE tran_stat ="Approved" AND hepe_upload = "FALSE"  ORDER BY store_name ASC',
+        "SELECT * FROM tb_tran_head WHERE tran_stat ='Approved' AND hepe_upload = 'FALSE' AND (sm_code='MNG-04' OR sm_code='MNG-05') ORDER BY store_name ASC",
         null);
   }
 
@@ -5006,6 +5006,117 @@ class DatabaseHelper {
           }, body: {
             'date1': encrypt(d1),
             'date2': encrypt(d2),
+          }));
+      if (response.statusCode == 200) {
+        var convertedDatatoJson = jsonDecode(decrypt(response.body));
+        return convertedDatatoJson;
+      } else if (response.statusCode >= 400 || response.statusCode <= 499) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text(
+                "Error: ${response.statusCode}. Your client has issued a malformed or illegal request.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      } else if (response.statusCode >= 500 || response.statusCode <= 599) {
+        customModal(
+            context,
+            Icon(CupertinoIcons.exclamationmark_circle,
+                size: 50, color: Colors.red),
+            Text("Error: ${response.statusCode}. Internal server error.",
+                textAlign: TextAlign.center),
+            true,
+            Icon(
+              CupertinoIcons.checkmark_alt,
+              size: 25,
+              color: Colors.greenAccent,
+            ),
+            '',
+            () {});
+      }
+    } on TimeoutException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on SocketException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text(
+              "Connection timed out. Please check internet connection or proxy server configurations.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on HttpException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("An HTTP error eccured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    } on FormatException {
+      customModal(
+          context,
+          Icon(CupertinoIcons.exclamationmark_circle,
+              size: 50, color: Colors.red),
+          Text("Format exception error occured. Please try again later.",
+              textAlign: TextAlign.center),
+          true,
+          Icon(
+            CupertinoIcons.checkmark_alt,
+            size: 25,
+            color: Colors.greenAccent,
+          ),
+          'Okay',
+          () {});
+    }
+  }
+
+  Future getTranHeadSelective(
+      BuildContext context, String code, String d1, String d2) async {
+    try {
+      var url = Uri.parse(UrlAddress.url + '/getalltranheadselective');
+      final response = await retry(() => http.post(url, headers: {
+            "Accept": "Application/json"
+          }, body: {
+            'sm_code': encrypt(code),
+            'date1': encrypt(d1),
+            'date2': encrypt(d2)
           }));
       if (response.statusCode == 200) {
         var convertedDatatoJson = jsonDecode(decrypt(response.body));

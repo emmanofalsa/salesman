@@ -99,7 +99,7 @@ class _HomeState extends State<Home> {
     setState(() {
       // _toList = getP;
       _toList = json.decode(json.encode(getP));
-      // print(_toList);
+      print(_toList);
       if (_toList.isNotEmpty) {
         emptyApprovedTran = false;
         viewSpinkit = false;

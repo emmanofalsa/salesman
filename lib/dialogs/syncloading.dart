@@ -307,7 +307,11 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
         .changeCap('Updating Transactions...');
     print(UserData.position);
     if (UserData.position == 'Salesman') {
-      var thead = await db.getTranHead(context, UserData.id.toString());
+      var thead = await db.getTranHeadSelective(
+          context,
+          UserData.id.toString(),
+          GlobalVariables.syncStartDate.toString(),
+          GlobalVariables.syncEndDate.toString());
       tranHeadList = thead;
     } else {
       var thead = await db.getHepeTranHeadSelective(
