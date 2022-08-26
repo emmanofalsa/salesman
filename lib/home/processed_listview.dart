@@ -248,8 +248,8 @@ class _ProcessedListViewState extends State<ProcessedListView> {
 
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 1));
-    itmCat = "";
-    categ = false;
+    // itmCat = "";
+    // categ = false;
     loadOrders();
     // computeTotal();
     // return null;
@@ -285,7 +285,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: SingleChildScrollView(
-                    // physics: NeverScrollableScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(),
                     padding: EdgeInsets.only(
                         left: 16, right: 16, top: 30, bottom: 5),
                     child: Column(
@@ -734,6 +734,7 @@ class _ProcessedListViewState extends State<ProcessedListView> {
         padding: const EdgeInsets.only(top: 1),
         itemCount: _list.length,
         itemBuilder: (context, index) {
+          // print(_list[index]);
           if (OrderData.status == 'Approved') {
             itmQty = _list[index]['del_qty'];
             appBool = true;
@@ -742,9 +743,9 @@ class _ProcessedListViewState extends State<ProcessedListView> {
             appBool = false;
           }
           // itmQty = _list[index]['req_qty'];
-          // if (itmCat != _list[index]['itm_cat']) {
+          // if (itmCat != _list[index]['nav_invoice_no']) {
           //   categ = false;
-          //   itmCat = _list[index]['itm_cat'];
+          //   itmCat = _list[index]['nav_invoice_no'];
           //   // print(itmCat);
           // } else {
           //   categ = true;
@@ -858,19 +859,33 @@ class _ProcessedListViewState extends State<ProcessedListView> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Container(
-                                    // width: 260,
-                                    padding: EdgeInsets.all(3),
-                                    margin: EdgeInsets.only(left: 5),
-                                    child: Text(
-                                      _list[index]['itm_cat'],
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white),
-                                    ),
-                                  ),
+                                  // Container(
+                                  //   // width: 260,
+                                  //   padding: EdgeInsets.all(3),
+                                  //   margin: EdgeInsets.only(left: 5),
+                                  //   child: Text(
+                                  //     _list[index]['itm_cat'],
+                                  //     textAlign: TextAlign.left,
+                                  //     style: TextStyle(
+                                  //         fontSize: 10,
+                                  //         fontWeight: FontWeight.w400,
+                                  //         color: Colors.white),
+                                  //   ),
+                                  // ),
+                                  ////NAV INVOICE
+                                  // Container(
+                                  //   // width: 260,
+                                  //   padding: EdgeInsets.all(3),
+                                  //   margin: EdgeInsets.only(left: 5),
+                                  //   child: Text(
+                                  //     _list[index]['nav_invoice_no'],
+                                  //     textAlign: TextAlign.left,
+                                  //     style: TextStyle(
+                                  //         fontSize: 10,
+                                  //         fontWeight: FontWeight.w400,
+                                  //         color: Colors.white),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                               Row(

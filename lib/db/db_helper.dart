@@ -3326,7 +3326,7 @@ class DatabaseHelper {
   Future getOrders(tran) async {
     var client = await db;
     return client.rawQuery(
-        'SELECT *,(req_qty - del_qty) as outstock,(del_qty) as temp_qty FROM tb_tran_line WHERE tran_no ="$tran" ORDER BY item_desc ASC',
+        'SELECT *,(req_qty - del_qty) as outstock,(del_qty) as temp_qty FROM tb_tran_line WHERE tran_no ="$tran" ORDER BY nav_invoice_no ASC',
         null);
   }
 
