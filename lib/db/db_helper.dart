@@ -237,6 +237,7 @@ class DatabaseHelper {
         tran_stat TEXT,
         sm_code TEXT,
         hepe_code TEXT,
+        div_code TEXT,
         order_by TEXT,
         flag TEXT,
         signature TEXT,
@@ -266,6 +267,7 @@ class DatabaseHelper {
         itm_stat TEXT,
         flag TEXT,
         account_code TEXT,
+        div_code TEXT,
         date_req TEXT,
         date_del TEXT,
         lrate TEXT,
@@ -593,7 +595,7 @@ class DatabaseHelper {
   }
 
   Future addTempTranHead(tranNo, dateReq, accountCode, storeName, pMeth,
-      itmCount, totAmt, tranStat, smCode, signature) async {
+      itmCount, totAmt, tranStat, smCode, divCode, signature) async {
     String orderby = 'Salesman';
     String upStat = 'FALSE';
     double totalAmt = 0.00;
@@ -613,6 +615,7 @@ class DatabaseHelper {
         'tot_amt': totAmt,
         'tran_stat': tranStat,
         'sm_code': smCode,
+        'div_code': divCode,
         'order_by': orderby,
         'signature': signature,
         'sm_upload': upStat,
@@ -635,7 +638,7 @@ class DatabaseHelper {
   }
 
   Future addTempTranLine(tranNo, itemCode, itemDesc, itemQty, itemUom, itemAmt,
-      totAmt, itemCat, accountCode, date, image) async {
+      totAmt, itemCat, accountCode, divCode, date, image) async {
     int fqty = 0;
     double ftotal = 0.00;
     var client = await db;
@@ -661,6 +664,7 @@ class DatabaseHelper {
         'itm_stat': 'Pending',
         'flag': '0',
         'account_code': accountCode,
+        'div_code': divCode,
         'date_req': date,
         'image': image,
       });
@@ -3073,6 +3077,7 @@ class DatabaseHelper {
   Future saveTransactions(
       BuildContext context,
       String userId,
+      String divCode,
       String date,
       String custId,
       String storeName,
@@ -3090,6 +3095,7 @@ class DatabaseHelper {
             "Accept": "Application/json"
           }, body: {
             'sm_code': encrypt(userId),
+            'div_code': encrypt(divCode),
             'date_req': encrypt(date),
             'account_code': encrypt(custId),
             'store_name': encrypt(storeName),
@@ -5003,12 +5009,13 @@ class DatabaseHelper {
   }
 
   Future getHepeTranHeadSelective(
-      BuildContext context, String d1, String d2) async {
+      BuildContext context, String divCode, String d1, String d2) async {
     try {
       var url = Uri.parse(UrlAddress.url + '/gethepetranheadselective');
       final response = await retry(() => http.post(url, headers: {
             "Accept": "Application/json"
           }, body: {
+            'div_code': encrypt(divCode),
             'date1': encrypt(d1),
             'date2': encrypt(d2),
           }));

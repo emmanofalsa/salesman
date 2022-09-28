@@ -173,6 +173,7 @@ class _SyncSalesmanState extends State<SyncSalesman> {
         var rsp = await db.saveTransactions(
             context,
             element['sm_code'],
+            element['div_code'],
             element['date_req'],
             element['account_code'],
             element['store_name'],
@@ -214,6 +215,7 @@ class _SyncSalesmanState extends State<SyncSalesman> {
     if (!mounted) return;
     setState(() {
       _toList = getP;
+      // print(_toList);
       if (_toList.isEmpty) {
         uploading = false;
       } else {

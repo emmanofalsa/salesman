@@ -94,6 +94,7 @@ class _CheckOutState extends State<CheckOut> {
         CartData.totalAmount.toString(),
         status,
         UserData.id.toString(),
+        UserData.division.toString(),
         OrderData.signature.toString());
     print(getTranHead);
     GlobalVariables.tranNo = tranNo;
@@ -146,6 +147,7 @@ class _CheckOutState extends State<CheckOut> {
             totamt.toStringAsFixed(2),
             element['item_cat'],
             CustomerData.accountCode,
+            UserData.division.toString(),
             date,
             element['image']);
       });

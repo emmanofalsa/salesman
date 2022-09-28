@@ -321,6 +321,7 @@ class _SyncLoadingSpinkitState extends State<SyncLoadingSpinkit>
     } else {
       var thead = await db.getHepeTranHeadSelective(
           context,
+          UserData.division.toString(),
           GlobalVariables.syncStartDate.toString(),
           GlobalVariables.syncEndDate.toString());
       tranHeadList = thead;

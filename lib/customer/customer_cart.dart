@@ -731,11 +731,7 @@ class _CustomerCartState extends State<CustomerCart> {
     }
     if (emptyCart == true) {
       return Container(
-        // padding: EdgeInsets.all(50),
-        // margin: EdgeInsets.only(top: 200),
-        // height: MediaQuery.of(context).size.width,
         width: MediaQuery.of(context).size.width,
-        // color: Colors.deepOrange,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

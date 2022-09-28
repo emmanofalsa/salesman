@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AssetsValues {
   // static AssetImage loginLogo = AssetImage('assets/images/ldi2.png');
   // static AssetImage loginImg = AssetImage('assets/images/salesman.png');
-  static AssetImage loginLogo = AssetImage('assets/images/dtruck.png');
+  static AssetImage loginLogo = AssetImage('assets/images/truck.png');
   static AssetImage mainlogo = AssetImage('assets/images/icon_red.png');
   static AssetImage wallImg = AssetImage('assets/images/wall.png');
   static AssetImage hepeImg = AssetImage('assets/images/hepe.png');

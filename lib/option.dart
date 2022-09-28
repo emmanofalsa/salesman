@@ -496,7 +496,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
           .changeCap('Creating Salesman List...');
       var rsp = await db.getSalesmanList(context);
       salesmanList = rsp;
-      // print(salesmanList);
+      print(salesmanList);
       await db.insertSalesmanList(salesmanList);
       await db.addUpdateTable('salesman_lists ', 'SALESMAN', date.toString());
       print('Salesman List Created');
@@ -1155,6 +1155,73 @@ class _MyOptionPageState extends State<MyOptionPage> {
                     ),
                   ],
                 ),
+                // SizedBox(height: 10),
+                // Column(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     GestureDetector(
+                //       onTap: () async {
+                //         Navigator.push(context,
+                //             MaterialPageRoute(builder: (context) {
+                //           return SalesmanLoginPage();
+                //         }));
+                //         // sampleUpdate();
+                //         // viewSampleTable();
+                //         // print(itemImgList);
+                //       },
+                //       child: Container(
+                //         width: ScreenData.scrWidth * .3,
+                //         height: ScreenData.scrHeight * .19,
+                //         // color: Colors.grey,
+                //         decoration: BoxDecoration(
+                //             border: Border.all(width: 3, color: Colors.white),
+                //             borderRadius: BorderRadius.all(Radius.circular(5))),
+                //         child: Column(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: <Widget>[
+                //             Column(
+                //               children: <Widget>[
+                //                 Container(
+                //                     width: ScreenData.scrWidth * .3,
+                //                     height: ScreenData.scrHeight * .09,
+                //                     child: Image(image: AssetsValues.smImg)),
+                //               ],
+                //             ),
+                //             Column(
+                //               // crossAxisAlignment: CrossAxisAlignment.center,
+                //               children: <Widget>[
+                //                 Container(
+                //                   width: ScreenData.scrWidth * .3,
+                //                   // height: ScreenData.scrHeight * .09,
+                //                   child: Card(
+                //                       // elevation: 10,
+                //                       color: Colors.transparent,
+                //                       child: Padding(
+                //                         padding: const EdgeInsets.all(10.0),
+                //                         child: Center(
+                //                           child: Column(
+                //                             children: [
+                //                               Text(
+                //                                 'Ex-Truck',
+                //                                 style: TextStyle(
+                //                                   color: Colors.white,
+                //                                   fontSize: 10,
+                //                                   fontWeight: FontWeight.w500,
+                //                                 ),
+                //                               ),
+                //                             ],
+                //                           ),
+                //                         ),
+                //                       )),
+                //                 ),
+                //               ],
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // )
               ],
             ),
           ),
