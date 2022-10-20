@@ -1,5 +1,4 @@
 import 'dart:async';
-// import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
@@ -7,16 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:salesman/db/db_helper.dart';
 import 'package:salesman/dialogs/confirm_sync.dart';
 import 'package:salesman/dialogs/confirmupload.dart';
-// import 'package:salesman/dialogs/syncloading.dart';
 import 'package:salesman/dialogs/syncsuccess.dart';
 import 'package:salesman/dialogs/uploadloading.dart';
 import 'package:salesman/providers/sync_cap.dart';
 import 'package:salesman/providers/upload_count.dart';
 import 'package:salesman/salesman_sync/sync_option.dart';
-// import 'package:salesman/providers/upload_length.dart';
 import 'package:salesman/session/session_timer.dart';
-// import 'package:salesman/url/url.dart';
-// import 'package:http/http.dart' as http;
 import 'package:salesman/userdata.dart';
 import 'package:salesman/variables/colors.dart';
 import 'package:salesman/widgets/elevated_button.dart';
@@ -149,9 +144,6 @@ class _SyncSalesmanState extends State<SyncSalesman> {
   }
 
   upload() async {
-    // String tmpTranNo = '';
-    // String tranNo = '';
-    // List _rspList = [];
     int x = 0;
     Provider.of<UploadCount>(context, listen: false).setTotal(x);
     if (NetworkData.errorMsgShow == false &&
@@ -1504,7 +1496,7 @@ class _SyncSalesmanState extends State<SyncSalesman> {
                                           fontWeight: FontWeight.bold),
                                     )
                                   : Container(
-                                      child: Column(
+                                      child: Row(
                                         children: <Widget>[
                                           Text(
                                             'Uploading...',

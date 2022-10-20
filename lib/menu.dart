@@ -33,9 +33,9 @@ class _MenuState extends State<Menu> {
 
   int _currentIndex = 0;
 
-  String err1 = 'No Internet Connection';
-  String err2 = 'No Connection to Server';
-  String err3 = 'API Error';
+  // String err1 = 'No Internet Connection';
+  // String err2 = 'No Connection to Server';
+  // String err3 = 'API Error';
 
   final db = DatabaseHelper();
 
@@ -122,6 +122,7 @@ class _MenuState extends State<Menu> {
     var stat = await db.checkStat();
     // print('HEPE FORM NOT DISPOSED!');
     // setState(() {
+    // print(NetworkData.errorMsg);
     if (stat == 'Connected') {
       NetworkData.connected = true;
       NetworkData.errorMsgShow = false;
@@ -129,33 +130,7 @@ class _MenuState extends State<Menu> {
       NetworkData.errorMsg = '';
       // print('Connected to Internet!');
     } else {
-      if (stat == 'ERROR1') {
-        NetworkData.connected = false;
-        NetworkData.errorMsgShow = true;
-        NetworkData.errorMsg = err1;
-        NetworkData.errorNo = '1';
-        // print('Network Error...');
-      }
-      if (stat == 'ERROR2') {
-        NetworkData.connected = false;
-        NetworkData.errorMsgShow = true;
-        NetworkData.errorMsg = err2;
-        NetworkData.errorNo = '2';
-        // print('Connection to API Error...');
-      }
-      if (stat == 'ERROR3') {
-        NetworkData.connected = false;
-        NetworkData.errorMsgShow = true;
-        NetworkData.errorMsg = err3;
-        NetworkData.errorNo = '3';
-        // print('API Error...');
-      }
-      if (stat == 'Updating') {
-        NetworkData.connected = false;
-        NetworkData.errorMsgShow = true;
-        NetworkData.errorMsg = 'Updating Server';
-        // print('Updating Server...');
-      }
+      NetworkData.connected = false;
     }
     // });
     // checkDevice();

@@ -24,6 +24,7 @@ import 'package:salesman/variables/colors.dart';
 import 'package:salesman/widgets/custom_modals.dart';
 import 'package:salesman/widgets/dialogs.dart';
 import 'package:salesman/widgets/size_config.dart';
+// import 'package:salesman/widgets/snackbar.dart';
 
 class MyOptionPage extends StatefulWidget {
   @override
@@ -127,49 +128,27 @@ class _MyOptionPageState extends State<MyOptionPage> {
   }
 
   checkStatus() async {
+    Provider.of<Caption>(context, listen: false)
+        .changeCap('Checking Connection...');
     var stat = await db.checkStat();
     if (!mounted) return;
     setState(() {
+      print(stat);
       if (stat == 'Connected') {
-        // print('CONNECTED!');
         NetworkData.connected = true;
-
         NetworkData.errorMsgShow = false;
-        // upload();
         NetworkData.errorMsg = '';
-        // print('Connected to Internet!');
       } else {
-        if (stat == 'ERROR1') {
-          NetworkData.connected = false;
-          NetworkData.errorMsgShow = true;
-          NetworkData.errorNo = '1';
-          // print('Network Error...');
-        }
-        if (stat == 'ERROR2') {
-          NetworkData.connected = false;
-          NetworkData.errorMsgShow = true;
-          NetworkData.errorNo = '2';
-          // print('Connection to API Error...');
-        }
-        if (stat == 'ERROR3') {
-          NetworkData.connected = false;
-          NetworkData.errorMsgShow = true;
-          NetworkData.errorNo = '3';
-          // print('Cannot connect to the Server...');
-        }
-        if (stat == 'Updating') {
-          NetworkData.connected = false;
-          NetworkData.errorMsgShow = true;
-          NetworkData.errorMsg = 'Updating Server';
-          NetworkData.errorNo = '4';
-          // print('Updating Server...');
-        }
+        NetworkData.connected = false;
       }
       if (stat == '' || stat == null) {
         print('Checking Status');
+        unloadSpinkit();
       } else {
         // itemImage(); // OLD PROCESS
-        checkEmpty();
+        setState(() {
+          checkEmpty();
+        });
       }
     });
   }
@@ -195,8 +174,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
     setState(() {
       // _downloading = true;
       print('Downloading Images');
-      // GlobalVariables.statusCaption = 'Downloading Images...';
-      // context.read().changeCap('Downloading Images...');
       Provider.of<Caption>(context, listen: false)
           .changeCap('Downloading Images...');
     });
@@ -490,6 +467,7 @@ class _MyOptionPageState extends State<MyOptionPage> {
     //SALESMAN
     var sm = await db.ofFetchSalesmanList();
     salesmanList = sm;
+    // salesmanList = json.decode(json.encode(sm));
     if (salesmanList.isEmpty) {
       // context.read().changeCap('Creating Salesman List...');
       Provider.of<Caption>(context, listen: false)
@@ -500,26 +478,22 @@ class _MyOptionPageState extends State<MyOptionPage> {
       await db.insertSalesmanList(salesmanList);
       await db.addUpdateTable('salesman_lists ', 'SALESMAN', date.toString());
       print('Salesman List Created');
-
-      // setState(() {
-      //   GlobalVariables.processList.add('Salesman List Created');
-      //   GlobalVariables.statusCaption = 'SalesmanList Created';
-      // });
       loadHepe();
     } else {
-      final action = await Dialogs.openDialog(
-          context,
-          'Confirmation',
-          'Update data? It may take a while please secure a stable connection.',
-          false,
-          'No',
-          'Yes');
-      if (action == DialogAction.yes) {
-        // context.read().changeCap('Updating Salesman List...');
-        Provider.of<Caption>(context, listen: false)
-            .changeCap('Updating Order Limit...');
-        String updateType = 'Salesman';
-        if (NetworkData.connected == true) {
+      if (NetworkData.connected == true) {
+        final action = await Dialogs.openDialog(
+            context,
+            'Confirmation',
+            'Update data? It may take a while please secure a stable connection.',
+            false,
+            'No',
+            'Yes');
+        if (action == DialogAction.yes) {
+          // context.read().changeCap('Updating Salesman List...');
+          Provider.of<Caption>(context, listen: false)
+              .changeCap('Updating Order Limit...');
+          String updateType = 'Salesman';
+          // if (NetworkData.connected == true) {
           // print('NISUD SA CONNECTED!!');
           var resp = await db.getOrderLimitonLine(context);
           if (!mounted) return;
@@ -546,12 +520,11 @@ class _MyOptionPageState extends State<MyOptionPage> {
             });
           });
         } else {
-          print('NIDERETSO!!');
-          loadHepe();
+          Provider.of<Caption>(context, listen: false)
+              .changeCap('Updated Successfuly!');
+          unloadSpinkit();
         }
       } else {
-        Provider.of<Caption>(context, listen: false)
-            .changeCap('Updated Successfuly!');
         unloadSpinkit();
       }
     }
@@ -586,49 +559,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
       });
     });
   }
-
-// //CATEGORY
-//   loadCategory() async {
-//     var ctg = await db.ofFetchCategList();
-//     categList = ctg;
-//     if (categList.isEmpty) {
-//       var rsp = await db.getCategList();
-//       categList = rsp;
-//       int x = 1;
-//       categList.forEach((element) async {
-//         if (x < categList.length) {
-//           final imgBase64Str = await networkImageToBase64(
-//               UrlAddress.categImg + element['category_image']);
-//           setState(() {
-//             element['category_image'] = imgBase64Str;
-//             // print('CONVERTING.....');
-//           });
-//           x++;
-//           if (x == categList.length) {
-//             // print(categList.length);
-//             await db.insertCategList(categList);
-//             await db.addUpdateTable(
-//                 'tbl_category_masterfile', 'ITEM', date.toString());
-//             await db.addUpdateTable(
-//                 'tb_tran_head', 'TRANSACTIONS', date.toString());
-//             await db.addUpdateTable(
-//                 'tb_tran_line', 'TRANSACTIONS', date.toString());
-//             await db.addUpdateTable(
-//                 'tb_unserved_items', 'TRANSACTIONS', date.toString());
-//             await db.addUpdateTable(
-//                 'tb_returned_tran', 'TRANSACTIONS', date.toString());
-//             print('Categ List Created');
-//             GlobalVariables.tableProcessing = 'Categ List Created';
-//             unloadSpinkit();
-//           }
-//         }
-//       });
-//     } else {
-//       setState(() {
-//         unloadSpinkit();
-//       });
-//     }
-//   }
 
 //CATEGORY
   loadCategory() async {
@@ -858,7 +788,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
 
   //CUSTOMER_DISCOUNT
   loadCustomerDiscount() async {
-    // context.read().changeCap('Creating Customer Discount...');
     Provider.of<Caption>(context, listen: false)
         .changeCap('Creating Customer Discount...');
     var disc = await db.ofFetchDiscountList();
@@ -890,7 +819,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
 
   //CUSTOMER
   loadCustomer() async {
-    // context.read().changeCap('Creating Customer List...');
     Provider.of<Caption>(context, listen: false)
         .changeCap('Creating Customer List...');
     var cust = await db.ofFetchCustomerList();
@@ -924,7 +852,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var hepe = await db.ofFetchHepeList();
     hepeList = hepe;
     if (hepeList.isEmpty) {
-      // context.read().changeCap('Creating Hepe List...');
       Provider.of<Caption>(context, listen: false)
           .changeCap('Creating Hepe List...');
       var rsp = await db.getHepeList(context);
@@ -950,7 +877,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
     } else {
       // String updateType = 'Jefe';
       if (NetworkData.connected) {
-        // context.read().changeCap('Updating Hepe List...');
         Provider.of<Caption>(context, listen: false)
             .changeCap('Updating Hepe List...');
         var rsp = await db.getHepeList(context);
@@ -971,7 +897,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
       } else {
         loadCustomer();
       }
-      // loadCustomer();
     }
   }
 
@@ -979,7 +904,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
     var imgUri = Uri.parse(imageUrl);
     http.Response response = await http.get(imgUri);
     final bytes = response.bodyBytes;
-    // return (bytes != null ? base64Encode(bytes) : null);
     return (base64Encode(bytes));
   }
 
@@ -989,8 +913,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     ScreenData.scrWidth = screenWidth;
     ScreenData.scrHeight = screenHeight;
-    // print(screenWidth);
-    // print(screenHeight);
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
@@ -1012,7 +934,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
                 Container(
                   width: 40 * SizeConfig.imageSizeMultiplier,
                   child: Card(
-                      // elevation: 10,
                       color: Colors.transparent,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -1041,9 +962,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
                             MaterialPageRoute(builder: (context) {
                           return SalesmanLoginPage();
                         }));
-                        // sampleUpdate();
-                        // viewSampleTable();
-                        // print(itemImgList);
                       },
                       child: Container(
                         width: ScreenData.scrWidth * .3,
@@ -1064,7 +982,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
                               ],
                             ),
                             Column(
-                              // crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Container(
                                   width: ScreenData.scrWidth * .3,
@@ -1105,13 +1022,10 @@ class _MyOptionPageState extends State<MyOptionPage> {
                             MaterialPageRoute(builder: (context) {
                           return MyLoginPage();
                         }));
-                        // viewSampleTable();
                       },
                       child: Container(
                         width: ScreenData.scrWidth * .3,
                         height: ScreenData.scrHeight * .19,
-                        // height: MediaQuery.of(context).size.width / 2 - 50,
-                        // color: Colors.grey,
                         decoration: BoxDecoration(
                             border: Border.all(width: 3, color: Colors.white),
                             borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -1133,7 +1047,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
                                 Container(
                                   width: ScreenData.scrWidth * .3,
                                   child: Card(
-                                      // elevation: 10,
                                       color: Colors.transparent,
                                       child: Padding(
                                         padding: const EdgeInsets.all(10.0),
@@ -1155,73 +1068,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
                     ),
                   ],
                 ),
-                // SizedBox(height: 10),
-                // Column(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     GestureDetector(
-                //       onTap: () async {
-                //         Navigator.push(context,
-                //             MaterialPageRoute(builder: (context) {
-                //           return SalesmanLoginPage();
-                //         }));
-                //         // sampleUpdate();
-                //         // viewSampleTable();
-                //         // print(itemImgList);
-                //       },
-                //       child: Container(
-                //         width: ScreenData.scrWidth * .3,
-                //         height: ScreenData.scrHeight * .19,
-                //         // color: Colors.grey,
-                //         decoration: BoxDecoration(
-                //             border: Border.all(width: 3, color: Colors.white),
-                //             borderRadius: BorderRadius.all(Radius.circular(5))),
-                //         child: Column(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: <Widget>[
-                //             Column(
-                //               children: <Widget>[
-                //                 Container(
-                //                     width: ScreenData.scrWidth * .3,
-                //                     height: ScreenData.scrHeight * .09,
-                //                     child: Image(image: AssetsValues.smImg)),
-                //               ],
-                //             ),
-                //             Column(
-                //               // crossAxisAlignment: CrossAxisAlignment.center,
-                //               children: <Widget>[
-                //                 Container(
-                //                   width: ScreenData.scrWidth * .3,
-                //                   // height: ScreenData.scrHeight * .09,
-                //                   child: Card(
-                //                       // elevation: 10,
-                //                       color: Colors.transparent,
-                //                       child: Padding(
-                //                         padding: const EdgeInsets.all(10.0),
-                //                         child: Center(
-                //                           child: Column(
-                //                             children: [
-                //                               Text(
-                //                                 'Ex-Truck',
-                //                                 style: TextStyle(
-                //                                   color: Colors.white,
-                //                                   fontSize: 10,
-                //                                   fontWeight: FontWeight.w500,
-                //                                 ),
-                //                               ),
-                //                             ],
-                //                           ),
-                //                         ),
-                //                       )),
-                //                 ),
-                //               ],
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // )
               ],
             ),
           ),
@@ -1229,8 +1075,6 @@ class _MyOptionPageState extends State<MyOptionPage> {
             alignment: Alignment.bottomLeft,
             child: Container(
               width: MediaQuery.of(context).size.width,
-              // height: 30,
-              // color: Colors.grey,
               child: Text(
                 AppData.appName + AppData.appYear,
                 style: TextStyle(
@@ -1260,7 +1104,6 @@ class _LoadingSpinkitState extends State<LoadingSpinkit> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        // child: confirmContent(context),
         child: loadingContent(context),
       ),
     );
@@ -1270,7 +1113,6 @@ class _LoadingSpinkitState extends State<LoadingSpinkit> {
     return Stack(
       children: <Widget>[
         Container(
-            // width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.only(top: 50, bottom: 16, right: 5, left: 5),
             margin: EdgeInsets.only(top: 16),
             decoration: BoxDecoration(
@@ -1280,8 +1122,6 @@ class _LoadingSpinkitState extends State<LoadingSpinkit> {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.transparent,
-                    // blurRadius: 10.0,
-                    // offset: Offset(0.0, 10.0),
                   ),
                 ]),
             child: Column(
